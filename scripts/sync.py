@@ -17,7 +17,8 @@ from collections.abc import Iterator, Sequence
 from contextlib import contextmanager
 from pathlib import Path
 
-DEFAULT_REMOTE = "https://github.com/gr-peng/FYP.git"
+# SSH avoids a stale editor credential helper and does not put a PAT in a URL.
+DEFAULT_REMOTE = "git@github.com:gr-peng/FYP.git"
 DEFAULT_BRANCH = "main"
 DEFAULT_REMOTE_NAME = "origin"
 
@@ -78,13 +79,13 @@ def run_git(
         capture_output=True,
         check=False,
     )
+    if check and process.returncode:
+        detail = sanitize_text((process.stderr or process.stdout or "").strip())
+        raise SyncError(detail or f"git {' '.join(args)} failed")
     if not quiet:
         output = sanitize_text((process.stdout or "") + (process.stderr or ""))
         if output.strip():
             print(output.rstrip())
-    if check and process.returncode:
-        detail = sanitize_text((process.stderr or process.stdout or "").strip())
-        raise SyncError(detail or f"git {' '.join(args)} failed")
     return process
 
 
@@ -124,6 +125,32 @@ def ensure_remote(repo: Path, name: str, expected_url: str) -> None:
             f"远程 {name!r} 已指向另一个仓库；未自动改写。"
             "如确需更换目标，请先用 git remote set-url，或传入 --remote-url。"
         )
+
+
+def is_authentication_error(message: str) -> bool:
+    lowered = message.lower()
+    return any(
+        marker in lowered
+        for marker in (
+            "authentication failed",
+            "no anonymous write access",
+            "missing or invalid credentials",
+            "could not read username",
+            "permission denied (publickey)",
+            "credential helper",
+        )
+    )
+
+
+def authentication_hint(repo: Path, remote: str) -> str:
+    """Give a credential-free recovery path for GitHub write authentication."""
+    return (
+        "GitHub 写权限认证失败。若 HTTPS credential helper 不可用，可执行：\n"
+        f"  git -C {repo} remote set-url {remote} git@github.com:gr-peng/FYP.git\n"
+        "  ssh -T git@github.com\n"
+        "然后重新运行同步脚本。也可以先配置本机 Git credential helper；不要把 PAT/API key"
+        " 写进 remote URL。"
+    )
 
 
 def staged_sensitive_paths(repo: Path) -> list[str]:
@@ -352,7 +379,14 @@ def main(argv: Sequence[str] | None = None) -> int:
         print(f"同步完成：{args.remote}/{args.branch}（commit={committed}, merge={merge_result}）")
         return 0
     except (OSError, SyncError, subprocess.SubprocessError) as error:
-        print(f"同步失败：{sanitize_text(str(error))}", file=sys.stderr)
+        detail = sanitize_text(str(error))
+        if is_authentication_error(detail):
+            print(
+                authentication_hint(repo if "repo" in locals() else Path.cwd(), args.remote),
+                file=sys.stderr,
+            )
+        else:
+            print(f"同步失败：{detail}", file=sys.stderr)
         print("未执行强制 push；若发生 merge 冲突，请解决冲突后重新运行。", file=sys.stderr)
         return 1
 

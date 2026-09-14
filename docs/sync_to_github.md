@@ -23,10 +23,11 @@ python scripts/sync.py -b research --comment-file /tmp/research-message.txt
 python scripts/sync.py --no-push -b main -m "Dry-run sync"
 ```
 
-如果 `origin` 尚不存在，脚本会添加不含凭据的目标 URL。HTTPS 认证使用 Git 已配置的
-credential helper，SSH 认证使用 SSH agent；脚本不读取、保存或接收 API key/PAT，也不
-支持把 token 嵌进 `--remote-url`。需要 GitHub 权限时，应先在本机配置 credential helper
-或 SSH key。
+如果 `origin` 尚不存在，脚本会添加不含凭据的 SSH 目标 URL
+`git@github.com:gr-peng/FYP.git`。SSH 认证使用 SSH agent 或本机私钥；如果已有 remote
+仍是 HTTPS，脚本不会静默改写，可手动执行 `git remote set-url origin
+git@github.com:gr-peng/FYP.git`。脚本不读取、保存或接收 API key/PAT，也不支持把 token
+嵌进 `--remote-url`。需要 GitHub 权限时，应先配置 SSH key 或 Git credential helper。
 
 扫描器会阻止 `.env`、凭据/密钥文件、私钥和新增内容中的常见 key/token/password 赋值，
 并且只报告文件名或“疑似敏感信息”，不会打印具体值。扫描命中后改动保持 staged，便于
