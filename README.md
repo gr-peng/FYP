@@ -53,6 +53,17 @@ password、私钥文件和常见凭据文件，发现后停止且不执行 commi
 
 ## 项目边界
 
+## Meta Compute 2026 真实实验
+
+新增真实行情归档、事件时钟、SiliconFlow agent、历史回放和内生 CDA 实验。
+完整运行顺序、数据来源、执行假设及结论边界见
+[真实实验协议](docs/meta_compute_2026_protocol.md)。首轮采用 30 agents、3 seeds，
+规则/Vanilla/低羊群/高羊群四组，内生场景测试 0%、-2%、-5% 基础价值冲击。
+配置位于 `config/meta_compute_2026.json`，结果与报告保存在
+`outputs/meta_compute_2026/siliconflow/`，不会由同步脚本上传。
+
+## 参考项目
+
 参考仓库位于 `third_party/`，保留上游 Git 历史，且不导入我们的 Python 包。
 参考概念、复现实验假设和未来阶段分别见
 [参考说明](docs/third_party_notes.md)、[架构](docs/architecture.md)、

@@ -1,0 +1,1 @@
+"""Deterministic public population signals."""

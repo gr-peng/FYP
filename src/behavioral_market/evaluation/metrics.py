@@ -1,0 +1,93 @@
+import numpy as np
+
+
+def path_metrics(prices):
+    values = np.asarray(prices, dtype=float)
+    returns = values[1:] / values[:-1] - 1
+    drawdowns = 1 - values / np.maximum.accumulate(values)
+    return {
+        "return": float(values[-1] / values[0] - 1),
+        "daily_volatility": float(np.std(returns, ddof=1)) if len(returns) > 1 else 0.0,
+        "max_drawdown": float(drawdowns.max()),
+        "final_price": float(values[-1]),
+    }
+
+
+def run_metrics(market, orders, switches, initial_price, initial_shares):
+    prices = [initial_price, *market.close.astype(float)]
+    result = path_metrics(prices)
+    submitted = int(orders.quantity.sum())
+    result.update(
+        buy_rate=float((orders.action == "buy").mean()),
+        sell_rate=float((orders.action == "sell").mean()),
+        hold_rate=float((orders.action == "hold").mean()),
+        switch_rate=float((switches.decision == "switch").mean()) if len(switches) else 0.0,
+        switching_opportunities=len(switches),
+        submitted_quantity=submitted,
+        filled_order_quantity=int(orders.filled_quantity.sum()),
+        order_execution_rate=float(orders.filled_quantity.sum() / submitted) if submitted else 0.0,
+        constraint_violation_rate=float(
+            (orders.validation_status == "constraint_violation").mean()
+        ),
+        fallback_rate=float(orders.fallback.mean()),
+        mean_order_quantity=float(orders.quantity.mean()),
+        mean_aggressiveness=float(orders.aggressiveness.mean()),
+        turnover=float(market.simulated_volume.sum() / initial_shares),
+        mean_abs_fundamental_deviation=float(
+            (market.close / market.fundamental_value - 1).abs().mean()
+        ),
+        mean_order_imbalance=float(market.order_imbalance.mean()),
+    )
+    for day in ("2026-07-01", "2026-07-02", "2026-07-10"):
+        indices = market.index[market.session_date == day]
+        if len(indices):
+            i = indices[0]
+            previous = prices[i]
+            result[f"return_{day}"] = prices[i + 1] / previous - 1
+            result[f"three_session_drawdown_{day}"] = 1 - min(prices[i + 1 : i + 4]) / previous
+    after = market.loc[market.session_date >= "2026-07-02", "close"].astype(float)
+    before = market.loc[market.session_date < "2026-07-02", "close"].astype(float)
+    if len(after) and len(before):
+        anchor = before.iloc[-1]
+        trough = int(np.argmin(after.to_numpy()))
+        recovered = np.where(after.iloc[trough:].to_numpy() >= anchor)[0]
+        result["recovery_sessions_from_trough"] = int(recovered[0]) if len(recovered) else None
+        result["post_shock_recovery_slope"] = (
+            float(np.polyfit(np.arange(len(after)), after / anchor, 1)[0])
+            if len(after) > 1
+            else None
+        )
+    return result
+
+
+def event_study(bars, symbol, benchmark="QQQ", event="2026-07-01"):
+    prices = (
+        bars.pivot(index="session_date", columns="symbol", values="close")
+        .astype(float)
+        .sort_index()
+    )
+    returns = prices.pct_change()
+    pre = returns.loc[returns.index < "2026-06-15", [symbol, benchmark]].dropna()
+    beta, alpha = np.polyfit(pre[benchmark], pre[symbol], 1)
+    abnormal = returns[symbol] - (alpha + beta * returns[benchmark])
+    center = list(prices.index).index(event)
+    result = {
+        "symbol": symbol,
+        "event": event,
+        "benchmark": benchmark,
+        "estimation_window": "2026-04-01..2026-06-12",
+        "beta": float(beta),
+        "alpha": float(alpha),
+        "event_day_return": float(returns[symbol].loc[event]),
+    }
+    for radius in (1, 3):
+        window = returns[symbol].iloc[center - radius : center + radius + 1]
+        result[f"cumulative_return_{radius}"] = float((1 + window).prod() - 1)
+        result[f"CAR_{radius}"] = float(abnormal.iloc[center - radius : center + radius + 1].sum())
+    sample = prices.loc["2026-06-12":"2026-07-17", symbol]
+    result.update(path_metrics(sample))
+    volume = bars.loc[bars.symbol == symbol].set_index("session_date").volume.astype(float)
+    result["event_volume_ratio_previous20"] = float(
+        volume.loc[event] / volume.loc[volume.index < event].tail(20).mean()
+    )
+    return result

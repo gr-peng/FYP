@@ -7,6 +7,14 @@ __pycache__/
 build/
 dist/
 .env
+.env.*
+!.env.example
+*.pem
+*.key
+credentials*.json
+secrets*.json
+/data/
+/.cache/
 outputs/*
 !outputs/.gitkeep
 third_party/*

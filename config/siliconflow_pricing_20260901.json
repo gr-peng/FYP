@@ -1,0 +1,14 @@
+{
+  "model": "deepseek-ai/DeepSeek-V4-Flash",
+  "currency": "CNY",
+  "unit": "per_million_tokens",
+  "effective_from": "2026-09-01",
+  "verified_on": "2026-09-14",
+  "source": "https://docs.siliconflow.cn/docs/release-notes/overview",
+  "timezone": "Asia/Shanghai",
+  "off_peak_start_hour": 2,
+  "off_peak_end_hour": 8,
+  "off_peak": {"cached_input": 0.15, "input": 1.5, "output": 4.5},
+  "peak": {"cached_input": 0.3, "input": 3.0, "output": 9.0},
+  "note": "Estimate only; provider invoice is authoritative. Unknown cached input is billed at cache-miss price in this estimate."
+}

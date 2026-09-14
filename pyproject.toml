@@ -7,7 +7,11 @@ name = "behavioral-llm-market"
 version = "0.1.0"
 description = "Deterministic market core for behavioral LLM financial simulation"
 requires-python = ">=3.11"
-dependencies = []
+dependencies = [
+  "httpx>=0.28,<1", "pydantic>=2.10,<3", "python-dotenv>=1.1,<2",
+  "requests>=2.31,<3", "pandas>=2.2,<4", "numpy>=2,<3", "scipy>=1.13,<2",
+  "pyarrow>=17", "pandas-market-calendars>=4.6,<6", "matplotlib>=3.9,<4"
+]
 
 [project.optional-dependencies]
 dev = ["pytest>=8", "ruff>=0.10"]

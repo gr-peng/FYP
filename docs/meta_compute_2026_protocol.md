@@ -1,0 +1,111 @@
+# Meta Compute 2026 real-data pilot
+
+Configuration: `config/meta_compute_2026.json`. This implements the first real experiment
+from the parent `META_COMPUTE_2026_REAL_EXPERIMENT_PLAN.md`, retaining the original CDA.
+
+## Reproduce
+
+Use Python 3.11. The experiment environment records exact versions in each run.
+
+```bash
+python -m venv .venv
+.venv/bin/pip install -r requirements-experiment.lock
+.venv/bin/pip install -e . --no-deps
+cp .env.example .env  # only on a new checkout; preserve an existing .env
+chmod 600 .env
+# Set SILICONFLOW_API_KEY locally; never include it in a command or Git commit.
+.venv/bin/python scripts/download_meta_compute_2026.py
+.venv/bin/python -m pytest -q
+.venv/bin/python scripts/run_meta_compute_suite.py --provider mock --seeds 42 --shocks 0
+.venv/bin/python scripts/evaluate_meta_compute_2026.py --provider mock
+# Commit tested source before running live inference; a dirty worktree is rejected.
+.venv/bin/python scripts/run_historical_event.py --provider siliconflow --agents 1
+.venv/bin/python scripts/run_meta_compute_suite.py --modes historical
+.venv/bin/python scripts/run_meta_compute_suite.py --modes endogenous --shocks 0
+.venv/bin/python scripts/run_meta_compute_suite.py --modes endogenous --shocks -0.02 -0.05
+.venv/bin/python scripts/evaluate_meta_compute_2026.py
+.venv/bin/python scripts/report_api_usage.py
+```
+
+Run from the repository root. Wrappers also locate the project from other working
+directories. A completed run is reused only if config, dataset and source hashes match.
+An interrupted run reconstructs state from the start using cached responses; it does
+not repeat paid requests already cached. Attempt logs remain append-only. Observations
+and final tables are rebuilt. To run a fresh replicate, change the simulator seed.
+The cloud model itself may be nondeterministic despite temperature 0.2; reproducibility
+means replaying archived responses, not claiming identical future model outputs.
+
+## Data and clock
+
+- Yahoo chart fallback: 11 symbols, April 1–July 17 daily OHLCV, 74 XNYS sessions each.
+  Alpha Vantage daily/news adapters are present; no key was supplied for that service.
+- OHLC is the provider-returned basis without dividend adjustment. Corporate actions
+  are archived. No NVDA split/dividend occurs within the simulation window. KLAC has
+  a pre-window split on June 12; its raw provider series is used only for robustness
+  event studies. Returns are price returns, not total returns.
+- Two canonical source-verified neutral events enter prompts. E1 July 1 10:39 ET becomes
+  visible July 2 at 09:30 ET; E2 July 9 14:04 ET becomes visible July 10 at 09:30 ET.
+  See event config for original URLs. GDELT discovery is archived separately: its
+  observation time is not treated as publication time. No price-reaction headlines
+  or future-return summaries are inserted into event text.
+- SEC companyfacts use only records with `filed < decision date` and fiscal period
+  before the decision. This conservatively delays same-date filings. Unknown ratios
+  stay null. Fundamental value is the June 12 close plus a controlled shock, not a
+  discounted-cash-flow estimate. SEC retrieval time is not confused with filing time.
+- XNYS open/close timezone conversions include holidays, early closes and DST.
+
+## Experimental design
+
+30 agents, initial cash USD 10,000 and 100 NVDA shares each, 15 fundamental and 15
+technical. Each submits one daily JSON order; style is reviewed after 10 and 20 sessions.
+Memory holds 10 sessions. Population context is lagged one session. Low/high herding
+use means 0.2/0.8 and otherwise identical seeded persona draws. Vanilla sees no persona
+trait block. Rule ABM uses deterministic fundamental/momentum signals plus seeded noise.
+No Calibrated treatment is claimed: empirical human calibration data are unavailable.
+
+Stage A fixes market prices to history. An order is filled only after the decision:
+buy limit >= daily low or sell limit <= daily high, at its own limit price. This is
+an OHLC-touch execution approximation without queue priority, slippage or fees.
+It may be pessimistic for marketable limits; it does not identify intraday execution.
+
+Stage B owns only pre-start real bars. Subsequent primary price, volume and indicators
+come solely from agent CDA trades. Context benchmark returns after start are omitted;
+there is no hidden real-price anchor or injected market maker. Existing exchange
+reservations, price/time priority and DAY expiration remain authoritative. Cash/shares
+are conserved. The -2%/-5% shock changes only the fundamental signal when E1 becomes
+visible; a 0% shock is news-only. It does not force a market price drop.
+
+The alternative-style return is a deterministic frictionless long/cash signal proxy,
+explicitly labeled in prompts. Actual and proxy block returns reset after style review.
+This is cheaper than shadow LLMs but is not a matched executable counterfactual account.
+
+Primary pilot: historical 4 treatments × 3 seeds = 12 runs, followed by endogenous
+4 treatments × 3 shocks × 3 seeds = 36 runs. Each LLM run has 690 order decisions and
+60 style decisions. Rule runs call no model. N=1 preflight is separate from statistics.
+E1-only, alternate agent counts and 20-seed calibrated experiments remain follow-ups.
+
+## Reliability, security and analysis
+
+SiliconFlow model availability is checked before inference, with no silent model
+substitution. JSON/schema errors get one repair request, then HOLD/stay. Unaffordable
+orders or overselling become HOLD without retry. Retryable transport failures have
+five retries with backoff; authorization/quota/unsupported requests stop the run.
+Suite expansion stops if order fallback exceeds 5%. Per-run progress and per-attempt
+logs are saved. Global request concurrency is eight even with concurrent runs.
+
+Credentials stay in ignored `.env` (0600), never in prompts, cache keys, output config
+or URLs. Data, outputs and cache are Git-ignored. Raw data are content-addressed with
+SHA-256 metadata; processed and run artifacts have hashes. Transport errors do not
+print authenticated request URLs. The API key is redacted from response logs.
+
+Evaluation distinguishes micro behavior from macro path fit. Event-study alpha/beta
+use pre-experiment returns and QQQ/SPY benchmarks. Statistics use seed-level runs,
+with mean/std/range, exploratory Mann–Whitney and Cliff's delta, plus paired seed
+differences. Three seeds do not establish significance or human behavioral validity.
+Volume in a 3,000-share toy market is not compared to real float turnover without a
+verified real float denominator. Pricing is a separate dated configuration, not
+embedded in the policy; an estimate is not the account invoice.
+
+The current server's base Conda site-packages had incomplete async dependencies and
+NumPy-1 compiled optional extensions. Local venv overlays repair these; a fresh
+isolated venv with the lock file avoids relying on the shared base installation.

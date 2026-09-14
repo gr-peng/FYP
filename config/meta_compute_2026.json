@@ -1,0 +1,23 @@
+{
+  "experiment": {"name": "meta_compute_2026_nvda", "seed": 42, "timezone": "America/New_York"},
+  "data": {
+    "history_start": "2026-04-01", "experiment_start": "2026-06-15",
+    "experiment_end": "2026-07-17", "primary_symbol": "NVDA",
+    "context_symbols": ["META", "SOXX", "QQQ", "SPY"],
+    "robustness_symbols": ["MU", "AMD", "AVGO", "KLAC", "AMAT", "LRCX"],
+    "market_provider": "yahoo", "news_provider": "canonical_registry", "news_backup": "gdelt",
+    "dataset_dir": "data/processed/meta_compute_2026", "calendar": "XNYS"
+  },
+  "population": {"n_agents": 30, "initial_cash": "10000.00", "initial_shares": 100, "initial_fundamental_share": 0.5},
+  "behavior": {"strategy_switch_interval": 10, "memory_window": 10, "mean_field_lag": 1},
+  "events": {"primary": "META_COMPUTE_20260701", "secondary": "META_COMPUTE_20260709", "include_secondary": true},
+  "fundamental_shock": {"magnitude": 0.0, "anchor": "last_pre_start_close"},
+  "llm": {
+    "provider": "siliconflow", "model": "deepseek-ai/DeepSeek-V4-Flash",
+    "base_url": "https://api.siliconflow.cn/v1", "temperature": 0.2, "max_tokens": 512,
+    "enable_thinking": false, "max_concurrency": 8, "transport_retries": 5,
+    "timeout_seconds": 120, "cache_dir": ".cache/siliconflow"
+  },
+  "suite": {"seeds": [42, 43, 44], "treatments": ["rule_abm", "vanilla_llm", "low_herding", "high_herding"], "shocks": [0.0, -0.02, -0.05]},
+  "exchange": {"order_ttl": "day", "transaction_price_rule": "resting_order", "allow_margin": false, "allow_short": false}
+}
