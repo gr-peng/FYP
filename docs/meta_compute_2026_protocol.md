@@ -24,6 +24,7 @@ chmod 600 .env
 .venv/bin/python scripts/run_meta_compute_suite.py --modes endogenous --shocks 0
 .venv/bin/python scripts/run_meta_compute_suite.py --modes endogenous --shocks -0.02 -0.05
 .venv/bin/python scripts/evaluate_meta_compute_2026.py
+.venv/bin/python scripts/audit_meta_compute_2026.py
 .venv/bin/python scripts/report_api_usage.py
 # When the API is unavailable, replay only fully cached runs without a key:
 .venv/bin/python scripts/run_meta_compute_suite.py --cache-only --modes historical
