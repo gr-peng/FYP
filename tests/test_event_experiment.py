@@ -227,6 +227,9 @@ def test_mock_replay_immutable_prices_and_lag(config, bars, events, tmp_path):
     market = pd.read_parquet(tmp_path / "first/market.parquet")
     real = bars[(bars.symbol == "NVDA") & (bars.session_date >= "2026-06-15")]
     assert list(market.close) == list(real.close)
+    assert list(market.open) == list(real.open)
+    assert list(market.high) == list(real.high)
+    assert list(market.low) == list(real.low)
     observations = [
         json.loads(x) for x in (tmp_path / "first/observations.jsonl").read_text().splitlines()
     ]

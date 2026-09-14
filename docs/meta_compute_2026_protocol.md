@@ -91,7 +91,11 @@ substitution. JSON/schema errors get one repair request, then HOLD/stay. Unaffor
 orders or overselling become HOLD without retry. Retryable transport failures have
 five retries with backoff; authorization/quota/unsupported requests stop the run.
 Suite expansion stops if order fallback exceeds 5%. Per-run progress and per-attempt
-logs are saved. Global request concurrency is eight even with concurrent runs.
+logs are saved. Concurrency began at eight; after more than 140 successful calls with
+no 429 or transport failures, the default global request cap was raised to 32.
+This affects throughput only; all decisions are gathered before seeded CDA arrival.
+Preflight and interrupted-attempt metadata retain the initial setting. HTTP failures
+and retries remain audited; no retry is used to change an undesirable valid decision.
 
 Credentials stay in ignored `.env` (0600), never in prompts, cache keys, output config
 or URLs. Data, outputs and cache are Git-ignored. Raw data are content-addressed with

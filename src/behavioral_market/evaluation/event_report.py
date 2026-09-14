@@ -48,6 +48,8 @@ def evaluate(config, directory, destination):
     studies.to_parquet(destination / "real_event_study.parquet", index=False)
     records, paths = [], {}
     for path in sorted(directory.rglob("run_metadata.json")):
+        if "_superseded" in path.parts:
+            continue
         metadata = json.loads(path.read_text())
         if (
             metadata["status"] != "complete"

@@ -123,6 +123,8 @@ async def run_experiment(
             ):
                 raise RuntimeError("output directory belongs to different inputs")
             return json.loads((output / "metrics.json").read_text())
+        with (output / "run_attempts.jsonl").open("a") as handle:
+            handle.write(json.dumps(old) + "\n")
     output.mkdir(parents=True, exist_ok=True)
     dependency_names = [
         "httpx",
@@ -402,7 +404,10 @@ async def run_experiment(
             market_rows.append(
                 {
                     "session_date": session,
-                    "open": last,
+                    "open": float(environment.history.open.iloc[-1]),
+                    "high": float(environment.history.high.iloc[-1]),
+                    "low": float(environment.history.low.iloc[-1]),
+                    "previous_close": last,
                     "close": close,
                     "volume": volume,
                     "simulated_volume": sum(t["quantity"] for t in fills),
