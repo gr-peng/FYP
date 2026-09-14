@@ -1,0 +1,37 @@
+# Behavioral LLM Market
+
+可复现的 LLM 投资者行为与内生金融市场模拟研究原型。研究目标和后续阶段见
+[技术设计文档](docs/TDD.md)。当前交付的是 **MVP-0：确定性单资产市场核心**；
+不调用模型 API，也不把脚本代理的交易结果当作行为或市场真实性证据。
+
+## 已实现
+
+- 单资产连续双向竞价（CDA）：价格优先、时间优先、挂单价成交、部分成交。
+- DAY 限价单、取消及日终过期；禁止自成交、卖空、透支和重复占用资金/持仓。
+- 使用 `Decimal` 做成交和组合核算；只有成交会改变市场价格。
+- 可复现的 N 个脚本代理、交易日志、账户快照、配置快照和运行元数据。
+- 行为代理、历史回放、均值场、LLM 接口与校准将按 TDD 后续阶段实现。
+
+## 运行
+
+需要 Python 3.11+。在本目录执行：
+
+```bash
+python -m pip install -e '.[dev]'
+python -m pytest -q
+python -m ruff check src tests
+behavioral-market-demo --config config/mvp0.json --output outputs/demo
+```
+
+默认示例是 30 个脚本代理、30 个交易期，随机种子固定为 42。
+输出在 `outputs/demo/`，包括 `orders.csv`、`trades.csv`、`market.csv`、
+`agents.csv`、`config_snapshot.json` 和 `run_metadata.json`。资金与份额在整个
+运行中守恒；日末未成交订单会失效。脚本代理的报价仅用于软件验收，不构成
+投资策略或真实市场标定。
+
+## 项目边界
+
+参考仓库位于 `third_party/`，保留上游 Git 历史，且不导入我们的 Python 包。
+参考概念、复现实验假设和未来阶段分别见
+[参考说明](docs/third_party_notes.md)、[架构](docs/architecture.md)、
+[实验协议](docs/experiment_protocol.md) 与 [ADR](docs/adr/README.md)。

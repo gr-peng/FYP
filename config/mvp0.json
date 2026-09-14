@@ -1,0 +1,6 @@
+{
+  "experiment": {"name": "scripted_cda_smoke", "seed": 42},
+  "market": {"asset": "SYNTHETIC_A", "initial_price": "100.00", "periods": 30},
+  "population": {"n_agents": 30, "initial_cash": "10000.00", "initial_shares": 100},
+  "exchange": {"order_ttl": "day", "transaction_price_rule": "resting_order", "allow_margin": false, "allow_short": false}
+}
