@@ -25,6 +25,8 @@ chmod 600 .env
 .venv/bin/python scripts/run_meta_compute_suite.py --modes endogenous --shocks -0.02 -0.05
 .venv/bin/python scripts/evaluate_meta_compute_2026.py
 .venv/bin/python scripts/report_api_usage.py
+# When the API is unavailable, replay only fully cached runs without a key:
+.venv/bin/python scripts/run_meta_compute_suite.py --cache-only --modes historical
 ```
 
 Run from the repository root. Wrappers also locate the project from other working
@@ -92,10 +94,25 @@ orders or overselling become HOLD without retry. Retryable transport failures ha
 five retries with backoff; authorization/quota/unsupported requests stop the run.
 Suite expansion stops if order fallback exceeds 5%. Per-run progress and per-attempt
 logs are saved. Concurrency began at eight; after more than 140 successful calls with
-no 429 or transport failures, the default global request cap was raised to 32.
-This affects throughput only; all decisions are gathered before seeded CDA arrival.
-Preflight and interrupted-attempt metadata retain the initial setting. HTTP failures
-and retries remain audited; no retry is used to change an undesirable valid decision.
+no 429 or transport failures, the concurrent request cap was raised to 32. Four parallel
+runs later produced 912 recorded 429 replies during the Sept 14 pilot. SiliconFlow says
+429 may be RPM/RPD/TPM/TPD/IPM/IPD; the provider response body was not archived, so the
+specific quota dimension is unknown. The resumed suite now shares a dispatch pacer at
+four requests/second and honors numeric Retry-After. This cap is conservative given the
+observed historical throughput; it is not a claim about the account's published limit.
+If a 429 lacks Retry-After, all runs pause dispatch for at least 30 seconds before
+another attempt, avoiding a simultaneous retry burst.
+[Provider error guide](https://docs.siliconflow.cn/en/faqs/error-code).
+The run stopped on HTTP 402, which requires account/payment state to be checked by the
+key owner before paid inference can continue. No model substitution is automatic.
+All decisions are gathered before seeded CDA arrival. Earlier run metadata preserves
+the initial settings. No retry is used to change an undesirable valid decision.
+
+`--cache-only` accepts no API key and fails on any missing cached response; it will not
+turn a missing model decision into HOLD. A historical batch whose entire response set
+is cached can be rebuilt with no completion calls. Partial endogenous runs still need
+a valid API account to complete. Logs are append-only across restarts; a resumed run
+reconstructs state from the beginning and verifies the same input hash.
 
 Credentials stay in ignored `.env` (0600), never in prompts, cache keys, output config
 or URLs. Data, outputs and cache are Git-ignored. Raw data are content-addressed with
@@ -109,6 +126,11 @@ differences. Three seeds do not establish significance or human behavioral valid
 Volume in a 3,000-share toy market is not compared to real float turnover without a
 verified real float denominator. Pricing is a separate dated configuration, not
 embedded in the policy; an estimate is not the account invoice.
+Simulated CAR differences reuse the real NVDA pre-event beta and real QQQ path only
+during ex-post evaluation. Historical replay should have zero CAR difference by
+construction. An endogenous agent never sees future QQQ returns. The first funded
+batch stopped at 24 of 48 main runs: all 12 historical, 9 rule-based endogenous and
+3 LLM endogenous runs. This is a partial pilot, not the completed treatment matrix.
 
 The current server's base Conda site-packages had incomplete async dependencies and
 NumPy-1 compiled optional extensions. Local venv overlays repair these; a fresh

@@ -17,7 +17,9 @@ from behavioral_market.data.features import historical_features
 from behavioral_market.data.news_dedup import deduplicate, normalize_url
 from behavioral_market.data.schemas import DailyBar, MarketEvent, NewsItem
 from behavioral_market.environments.observations import available_fundamentals
-from behavioral_market.llm.client import SiliconFlowClient
+from behavioral_market.evaluation.event_report import simulated_event_cars
+from behavioral_market.evaluation.metrics import event_study, run_metrics
+from behavioral_market.llm.client import FatalAPIError, RequestPacer, SiliconFlowClient
 from behavioral_market.llm.schemas import OrderDecision
 from behavioral_market.simulation.event_runner import run_experiment
 
@@ -174,7 +176,13 @@ def test_api_repair_fallback_cache_and_no_key_leak(config, tmp_path):
         def respond(request):
             nonlocal count
             count += 1
-            return httpx.Response(200, json={"choices": [{"message": {"content": "bad"}}]})
+            return httpx.Response(
+                200,
+                json={
+                    "model": config["llm"]["model"],
+                    "choices": [{"message": {"content": "bad"}}],
+                },
+            )
 
         client = SiliconFlowClient(
             config["llm"], "unit-test-secret", tmp_path / "logs", tmp_path / "cache"
@@ -196,6 +204,100 @@ def test_api_repair_fallback_cache_and_no_key_leak(config, tmp_path):
         )
 
     asyncio.run(execute())
+
+
+def test_shared_pacer_backoff_and_cache_only(config, tmp_path):
+    async def execute():
+        calls = []
+
+        def respond(request):
+            calls.append(asyncio.get_running_loop().time())
+            if len(calls) == 1:
+                return httpx.Response(429, headers={"Retry-After": "0.05"})
+            return httpx.Response(
+                200,
+                json={
+                    "choices": [
+                        {
+                            "message": {
+                                "content": '{"action":"hold","quantity":0,"limit_price":null,'
+                                '"rationale":"ok","sentiment":"neutral"}'
+                            }
+                        }
+                    ],
+                    "model": config["llm"]["model"],
+                    "usage": {"prompt_tokens": 10, "completion_tokens": 5},
+                },
+            )
+
+        pacer = RequestPacer(100)
+        client = SiliconFlowClient(
+            config["llm"], "unit-test-secret", tmp_path / "live", tmp_path / "cache", pacer=pacer
+        )
+        await client.http.aclose()
+        client.http = httpx.AsyncClient(
+            transport=httpx.MockTransport(respond), base_url="https://api.siliconflow.cn/v1/"
+        )
+        result, meta = await client.decide("system", "{}", OrderDecision, {"seed": 99})
+        await client.close()
+        assert result.action == "hold" and meta["status"] == "ok"
+        assert len(calls) == 2 and calls[1] - calls[0] >= 0.045
+        attempts = [
+            json.loads(x) for x in (tmp_path / "live/llm_attempts.jsonl").read_text().splitlines()
+        ]
+        assert [a["retry_count"] for a in attempts] == [0, 1]
+        responses = [
+            json.loads(x) for x in (tmp_path / "live/llm_responses.jsonl").read_text().splitlines()
+        ]
+        assert [r["http_status"] for r in responses] == [429, 200]
+        assert all(r["requested_at"] <= r["response_received_at"] for r in responses)
+        offline = SiliconFlowClient(
+            config["llm"], None, tmp_path / "offline", tmp_path / "cache", cache_only=True
+        )
+        replay, replay_meta = await offline.decide("system", "{}", OrderDecision, {"seed": 99})
+        assert replay.action == "hold" and replay_meta["cache_hit"]
+        with pytest.raises(FatalAPIError, match="missing response"):
+            await offline.decide("system", "{}", OrderDecision, {"seed": 100})
+        await offline.close()
+
+    asyncio.run(execute())
+
+
+def test_three_session_drawdown_cannot_be_negative():
+    market = pd.DataFrame(
+        {
+            "session_date": ["2026-07-01", "2026-07-02", "2026-07-06"],
+            "close": [101.0, 102.0, 103.0],
+            "simulated_volume": [0, 0, 0],
+            "fundamental_value": [100.0, 100.0, 100.0],
+            "order_imbalance": [0.0, 0.0, 0.0],
+        }
+    )
+    orders = pd.DataFrame(
+        {
+            "action": ["hold"],
+            "quantity": [0],
+            "filled_quantity": [0],
+            "validation_status": ["ok"],
+            "fallback": [False],
+            "aggressiveness": [0.0],
+        }
+    )
+    result = run_metrics(market, orders, pd.DataFrame(), 100.0, 100)
+    assert result["three_session_drawdown_2026-07-01"] == 0
+
+
+def test_historical_path_has_zero_car_difference(bars):
+    primary = bars[bars.symbol == "NVDA"].sort_values("session_date")
+    market = primary[primary.session_date >= "2026-06-15"][["session_date", "close"]]
+    initial = float(primary.loc[primary.session_date == "2026-06-12", "close"].iloc[0])
+    studies = pd.DataFrame(
+        [event_study(bars, "NVDA", "QQQ", event) for event in ["2026-07-01", "2026-07-09"]]
+    )
+    diagnostics = simulated_event_cars(market, bars, studies, initial)
+    assert all(
+        abs(value) < 1e-12 for key, value in diagnostics.items() if key.startswith("CAR_difference")
+    )
 
 
 def test_mock_replay_immutable_prices_and_lag(config, bars, events, tmp_path):

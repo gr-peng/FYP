@@ -44,7 +44,9 @@ def run_metrics(market, orders, switches, initial_price, initial_shares):
             i = indices[0]
             previous = prices[i]
             result[f"return_{day}"] = prices[i + 1] / previous - 1
-            result[f"three_session_drawdown_{day}"] = 1 - min(prices[i + 1 : i + 4]) / previous
+            result[f"three_session_drawdown_{day}"] = max(
+                0.0, 1 - min(prices[i + 1 : i + 4]) / previous
+            )
     after = market.loc[market.session_date >= "2026-07-02", "close"].astype(float)
     before = market.loc[market.session_date < "2026-07-02", "close"].astype(float)
     if len(after) and len(before):

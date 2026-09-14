@@ -23,7 +23,7 @@ from behavioral_market.environments.endogenous_event import EndogenousEventEnvir
 from behavioral_market.environments.historical_replay import HistoricalReplayEnvironment
 from behavioral_market.environments.observations import available_fundamentals, build_observation
 from behavioral_market.evaluation.metrics import run_metrics
-from behavioral_market.llm.client import MockLLMClient, SiliconFlowClient
+from behavioral_market.llm.client import MockLLMClient, RequestPacer, SiliconFlowClient
 from behavioral_market.llm.prompts import PROMPT_VERSION, prompts
 from behavioral_market.llm.schemas import OrderDecision, StyleDecision
 from behavioral_market.population.mean_field import compute_mean_field
@@ -98,12 +98,16 @@ async def run_experiment(
     client=None,
     require_clean=True,
     semaphore=None,
+    pacer=None,
+    cache_only=False,
 ):
     config = copy.deepcopy(config)
     if mode not in {"historical", "endogenous"} or treatment not in TREATMENTS:
         raise ValueError("unsupported experiment mode/treatment")
     if provider not in {"mock", "siliconflow"}:
         raise ValueError("unsupported provider")
+    if provider == "siliconflow" and treatment != "rule_abm" and client is None and pacer is None:
+        pacer = RequestPacer(4.0)
     config["run"] = {"mode": mode, "treatment": treatment, "provider": provider}
     if bars is None:
         bars, events, facts, manifest_hash = load_dataset(config)
@@ -158,6 +162,8 @@ async def run_experiment(
         "include_secondary": config["events"]["include_secondary"],
         "llm_parameters": config["llm"],
         "n_agents": config["population"]["n_agents"],
+        "request_rate_limit_rps": pacer.requests_per_second if pacer else None,
+        "cache_only_replay": cache_only,
     }
     write_json(metadata_path, metadata)
     write_json(output / "config_snapshot.json", config)
@@ -201,15 +207,17 @@ async def run_experiment(
         client = (
             SiliconFlowClient(
                 config["llm"],
-                os.getenv("SILICONFLOW_API_KEY"),
+                None if cache_only else os.getenv("SILICONFLOW_API_KEY"),
                 output,
                 ROOT / config["llm"]["cache_dir"],
                 semaphore,
+                pacer,
+                cache_only,
             )
             if provider == "siliconflow" and treatment != "rule_abm"
             else MockLLMClient()
         )
-    if isinstance(client, SiliconFlowClient):
+    if isinstance(client, SiliconFlowClient) and not cache_only:
         await client.verify_model()
     order_rows, trade_rows, market_rows, agent_rows, mean_rows, switch_rows, event_rows = (
         [],
@@ -431,6 +439,14 @@ async def run_experiment(
                 f"{day + 1}/{len(schedule)} close={close:.4f} trades={len(fills)}",
                 flush=True,
             )
+    except (Exception, asyncio.CancelledError) as exc:
+        metadata.update(
+            status="interrupted",
+            finished_at=datetime.now(UTC).isoformat(),
+            error_type=type(exc).__name__,
+        )
+        write_json(metadata_path, metadata)
+        raise
     finally:
         if owned and isinstance(client, SiliconFlowClient):
             await client.close()
@@ -484,6 +500,7 @@ def main(mode=None):
     parser.add_argument("--seed", type=int)
     parser.add_argument("--agents", type=int)
     parser.add_argument("--shock", type=float)
+    parser.add_argument("--cache-only", action="store_true")
     args = parser.parse_args()
     config = json.loads(args.config.read_text())
     if args.seed is not None:
@@ -492,4 +509,12 @@ def main(mode=None):
         config["population"]["n_agents"] = args.agents
     if args.shock is not None:
         config["fundamental_shock"]["magnitude"] = args.shock
-    print(json.dumps(asyncio.run(run_experiment(config, args.mode, args.treatment, args.provider))))
+    print(
+        json.dumps(
+            asyncio.run(
+                run_experiment(
+                    config, args.mode, args.treatment, args.provider, cache_only=args.cache_only
+                )
+            )
+        )
+    )

@@ -51,8 +51,6 @@ password、私钥文件和常见凭据文件，发现后停止且不执行 commi
 发生冲突时脚本保留现场并退出，不会强制 push 或自动丢弃冲突；解决冲突并执行
 `git add` 后重新运行即可继续完成 merge。
 
-## 项目边界
-
 ## Meta Compute 2026 真实实验
 
 新增真实行情归档、事件时钟、SiliconFlow agent、历史回放和内生 CDA 实验。

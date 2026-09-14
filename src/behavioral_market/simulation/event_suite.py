@@ -7,11 +7,23 @@ import json
 from pathlib import Path
 
 from behavioral_market.data.archive import write_json
+from behavioral_market.llm.client import RequestPacer
 from behavioral_market.simulation.event_runner import ROOT, run_experiment
 
 
-async def run_suite(config, provider, modes, treatments, seeds, shocks, parallel_runs=2):
+async def run_suite(
+    config,
+    provider,
+    modes,
+    treatments,
+    seeds,
+    shocks,
+    parallel_runs=2,
+    max_rps=4.0,
+    cache_only=False,
+):
     requests = asyncio.Semaphore(config["llm"]["max_concurrency"])
+    pacer = RequestPacer(max_rps)
     runs = asyncio.Semaphore(parallel_runs)
     jobs = []
     results = []
@@ -19,7 +31,15 @@ async def run_suite(config, provider, modes, treatments, seeds, shocks, parallel
 
     async def execute(spec, mode, treatment):
         async with runs:
-            metrics = await run_experiment(spec, mode, treatment, provider, semaphore=requests)
+            metrics = await run_experiment(
+                spec,
+                mode,
+                treatment,
+                provider,
+                semaphore=requests,
+                pacer=pacer,
+                cache_only=cache_only,
+            )
             results.append(
                 {
                     "mode": mode,
@@ -61,6 +81,8 @@ def main():
     parser.add_argument("--seeds", nargs="+", type=int)
     parser.add_argument("--shocks", nargs="+", type=float)
     parser.add_argument("--parallel-runs", type=int, default=2)
+    parser.add_argument("--max-rps", type=float, default=4.0)
+    parser.add_argument("--cache-only", action="store_true")
     args = parser.parse_args()
     config = json.loads(args.config.read_text())
     asyncio.run(
@@ -72,6 +94,8 @@ def main():
             args.seeds or config["suite"]["seeds"],
             args.shocks if args.shocks is not None else config["suite"]["shocks"],
             args.parallel_runs,
+            args.max_rps,
+            args.cache_only,
         )
     )
 
