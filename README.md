@@ -31,15 +31,15 @@ behavioral-market-demo --config config/mvp0.json --output outputs/demo
 
 ## 同步到 GitHub
 
-使用 [scripts/sync_to_github.py](scripts/sync_to_github.py) 将当前项目提交并同步到
+使用 [scripts/sync.py](scripts/sync.py) 将当前项目提交并同步到
 `https://github.com/gr-peng/FYP`。脚本默认目标 branch 为 `main`，`-m/--comment`
 是本次本地提交和真正 merge commit 使用的说明；也可以用 `--comment-file` 提供多行
 说明。先用 `--no-push` 做本地预检查：
 
 ```bash
-python scripts/sync_to_github.py --no-push \
+python scripts/sync.py --no-push \
   --comment "Implement deterministic market core"
-python scripts/sync_to_github.py --branch research \
+python scripts/sync.py --branch research \
   --comment-file /path/to/merge-message.txt
 ```
 
@@ -47,7 +47,8 @@ python scripts/sync_to_github.py --branch research \
 本机 Git credential helper 或 SSH agent。`git add --all` 后会检查疑似 API key、token、
 password、私钥文件和常见凭据文件，发现后停止且不执行 commit/push。真正的远程分支
 分叉会用指定 comment 创建 merge commit；可以快进时不会制造多余的 merge commit。
-发生冲突时脚本保留现场并退出，不会强制 push 或自动丢弃冲突。
+发生冲突时脚本保留现场并退出，不会强制 push 或自动丢弃冲突；解决冲突并执行
+`git add` 后重新运行即可继续完成 merge。
 
 ## 项目边界
 

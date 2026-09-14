@@ -3,8 +3,8 @@ from pathlib import Path
 
 import pytest
 
-import scripts.sync_to_github as sync_script
-from scripts.sync_to_github import (
+import scripts.sync as sync_script
+from scripts.sync import (
     SyncError,
     canonical_remote,
     sanitize_text,

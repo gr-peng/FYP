@@ -206,6 +206,38 @@ def remote_branch_exists(repo: Path, remote: str, branch: str) -> bool:
     return bool(result.stdout.strip())
 
 
+def merge_in_progress(repo: Path) -> bool:
+    """Return whether Git has an unfinished merge in this worktree."""
+    result = run_git(repo, ["rev-parse", "--git-path", "MERGE_HEAD"], quiet=True)
+    merge_head = Path(result.stdout.strip())
+    if not merge_head.is_absolute():
+        merge_head = repo / merge_head
+    return merge_head.exists()
+
+
+def continue_existing_merge(repo: Path, comment: str) -> str:
+    """Finish a user-resolved merge while keeping the requested message."""
+    unmerged = run_git(
+        repo,
+        ["diff", "--name-only", "--diff-filter=U"],
+        check=False,
+        quiet=True,
+    )
+    if unmerged.returncode:
+        raise SyncError("无法检查 merge 冲突状态")
+    if unmerged.stdout.strip():
+        raise SyncError("仍有未解决的 merge 冲突；请编辑文件并执行 git add 后重试")
+    staged = run_git(repo, ["diff", "--cached", "--quiet"], check=False, quiet=True)
+    if staged.returncode == 0:
+        raise SyncError("merge 冲突已标记解决前，请先执行 git add <已解决文件>")
+    if staged.returncode != 1:
+        raise SyncError("无法读取 merge 的 staged 改动")
+    scan_staged(repo)
+    with message_file(comment) as path:
+        run_git(repo, ["commit", "--file", str(path)])
+    return "continued"
+
+
 def switch_to_branch(repo: Path, branch: str, remote: str, has_remote: bool) -> None:
     current = run_git(repo, ["branch", "--show-current"], quiet=True).stdout.strip()
     dirty = bool(run_git(repo, ["status", "--porcelain"], quiet=True).stdout.strip())
@@ -305,8 +337,12 @@ def main(argv: Sequence[str] | None = None) -> int:
         if has_remote:
             run_git(repo, ["fetch", args.remote, args.branch])
         switch_to_branch(repo, args.branch, args.remote, has_remote)
-        committed = commit_local_changes(repo, comment)
-        merge_result = merge_remote(repo, args.remote, args.branch, comment, has_remote)
+        if merge_in_progress(repo):
+            committed = False
+            merge_result = continue_existing_merge(repo, comment)
+        else:
+            committed = commit_local_changes(repo, comment)
+            merge_result = merge_remote(repo, args.remote, args.branch, comment, has_remote)
         if args.no_push:
             print(
                 f"预检查完成（commit={committed}, merge={merge_result}）；由于 --no-push 未上传。"
