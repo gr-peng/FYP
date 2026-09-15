@@ -82,10 +82,15 @@ def main():
         "directory", type=Path, nargs="?", default=ROOT / "outputs/meta_compute_2026/siliconflow"
     )
     parser.add_argument(
-        "--pricing", type=Path, default=ROOT / "config/siliconflow_pricing_20260901.json"
+        "--pricing", type=Path, help="optional provider pricing JSON; omit for token-only usage"
     )
     args = parser.parse_args()
-    result = usage_report(args.directory, json.loads(args.pricing.read_text()))
+    pricing_path = args.pricing
+    if pricing_path is None and args.directory.name == "siliconflow":
+        pricing_path = ROOT / "config/siliconflow_pricing_20260901.json"
+    result = usage_report(
+        args.directory, json.loads(pricing_path.read_text()) if pricing_path else None
+    )
     write_json(args.directory / "api_usage.json", result)
     print(json.dumps(result, indent=2))
 

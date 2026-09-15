@@ -21,7 +21,7 @@ from behavioral_market.evaluation.event_report import simulated_event_cars
 from behavioral_market.evaluation.metrics import event_study, run_metrics
 from behavioral_market.llm.client import FatalAPIError, RequestPacer, SiliconFlowClient
 from behavioral_market.llm.schemas import OrderDecision
-from behavioral_market.simulation.event_runner import run_experiment
+from behavioral_market.simulation.event_runner import llm_config, run_experiment
 
 ROOT = Path(__file__).resolve().parents[1]
 
@@ -171,6 +171,7 @@ def test_sec_future_restatements_hidden():
 
 def test_api_repair_fallback_cache_and_no_key_leak(config, tmp_path):
     async def execute():
+        live = llm_config(config, "siliconflow")
         count = 0
 
         def respond(request):
@@ -179,13 +180,13 @@ def test_api_repair_fallback_cache_and_no_key_leak(config, tmp_path):
             return httpx.Response(
                 200,
                 json={
-                    "model": config["llm"]["model"],
+                    "model": live["model"],
                     "choices": [{"message": {"content": "bad"}}],
                 },
             )
 
         client = SiliconFlowClient(
-            config["llm"], "unit-test-secret", tmp_path / "logs", tmp_path / "cache"
+            live, "unit-test-secret", tmp_path / "logs", tmp_path / "cache"
         )
         await client.http.aclose()
         client.http = httpx.AsyncClient(
@@ -208,6 +209,7 @@ def test_api_repair_fallback_cache_and_no_key_leak(config, tmp_path):
 
 def test_shared_pacer_backoff_and_cache_only(config, tmp_path):
     async def execute():
+        live = llm_config(config, "siliconflow")
         calls = []
 
         def respond(request):
@@ -225,14 +227,14 @@ def test_shared_pacer_backoff_and_cache_only(config, tmp_path):
                             }
                         }
                     ],
-                    "model": config["llm"]["model"],
+                    "model": live["model"],
                     "usage": {"prompt_tokens": 10, "completion_tokens": 5},
                 },
             )
 
         pacer = RequestPacer(100)
         client = SiliconFlowClient(
-            config["llm"], "unit-test-secret", tmp_path / "live", tmp_path / "cache", pacer=pacer
+            live, "unit-test-secret", tmp_path / "live", tmp_path / "cache", pacer=pacer
         )
         await client.http.aclose()
         client.http = httpx.AsyncClient(
@@ -252,7 +254,7 @@ def test_shared_pacer_backoff_and_cache_only(config, tmp_path):
         assert [r["http_status"] for r in responses] == [429, 200]
         assert all(r["requested_at"] <= r["response_received_at"] for r in responses)
         offline = SiliconFlowClient(
-            config["llm"], None, tmp_path / "offline", tmp_path / "cache", cache_only=True
+            live, None, tmp_path / "offline", tmp_path / "cache", cache_only=True
         )
         replay, replay_meta = await offline.decide("system", "{}", OrderDecision, {"seed": 99})
         assert replay.action == "hold" and replay_meta["cache_hit"]
@@ -261,6 +263,13 @@ def test_shared_pacer_backoff_and_cache_only(config, tmp_path):
         await offline.close()
 
     asyncio.run(execute())
+
+
+def test_live_client_rejects_credential_host_mismatch(config, tmp_path):
+    live = llm_config(config, "aigc_relay")
+    live["models_url"] = "https://example.com/api/v2/models"
+    with pytest.raises(FatalAPIError, match="credentials may only be sent"):
+        SiliconFlowClient(live, "unit-test-secret", tmp_path / "logs", tmp_path / "cache")
 
 
 def test_three_session_drawdown_cannot_be_negative():

@@ -8,7 +8,7 @@ from pathlib import Path
 
 from behavioral_market.data.archive import write_json
 from behavioral_market.llm.client import RequestPacer
-from behavioral_market.simulation.event_runner import ROOT, run_experiment
+from behavioral_market.simulation.event_runner import LIVE_PROVIDERS, ROOT, run_experiment
 
 
 async def run_suite(
@@ -75,7 +75,9 @@ async def run_suite(
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--config", type=Path, default=ROOT / "config/meta_compute_2026.json")
-    parser.add_argument("--provider", choices=["mock", "siliconflow"], default="siliconflow")
+    parser.add_argument(
+        "--provider", choices=["mock", *LIVE_PROVIDERS], default="siliconflow"
+    )
     parser.add_argument("--modes", nargs="+", default=["historical", "endogenous"])
     parser.add_argument("--treatments", nargs="+")
     parser.add_argument("--seeds", nargs="+", type=int)

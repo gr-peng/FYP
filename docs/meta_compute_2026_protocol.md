@@ -26,6 +26,13 @@ chmod 600 .env
 .venv/bin/python scripts/evaluate_meta_compute_2026.py
 .venv/bin/python scripts/audit_meta_compute_2026.py
 .venv/bin/python scripts/report_api_usage.py
+# Alternative HKUST(GZ) relay batch (uses an independent output/cache namespace):
+# Set AIGC_API_KEY in the ignored .env file.
+.venv/bin/python scripts/run_historical_event.py --provider aigc_relay --agents 1
+.venv/bin/python scripts/run_meta_compute_suite.py --provider aigc_relay
+.venv/bin/python scripts/evaluate_meta_compute_2026.py --provider aigc_relay
+.venv/bin/python scripts/audit_meta_compute_2026.py --provider aigc_relay
+.venv/bin/python scripts/report_api_usage.py outputs/meta_compute_2026/aigc_relay
 # When the API is unavailable, replay only fully cached runs without a key:
 .venv/bin/python scripts/run_meta_compute_suite.py --cache-only --modes historical
 ```
@@ -86,6 +93,12 @@ Primary pilot: historical 4 treatments × 3 seeds = 12 runs, followed by endogen
 4 treatments × 3 shocks × 3 seeds = 36 runs. Each LLM run has 690 order decisions and
 60 style decisions. Rule runs call no model. N=1 preflight is separate from statistics.
 E1-only, alternate agent counts and 20-seed calibrated experiments remain follow-ups.
+
+The `aigc_relay` provider uses the exact allowlisted endpoint recorded in the checked-in
+configuration and reads only `AIGC_API_KEY` from `.env`. Its advertised model identifier
+is `DeepSeek-V4-Flash`, while SiliconFlow reports `deepseek-ai/DeepSeek-V4-Flash`.
+Relay results use separate outputs and caches and form a complete provider/time batch;
+do not fill missing SiliconFlow cells with relay runs in a single treatment comparison.
 
 ## Reliability, security and analysis
 

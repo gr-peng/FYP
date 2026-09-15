@@ -13,10 +13,22 @@
   "events": {"primary": "META_COMPUTE_20260701", "secondary": "META_COMPUTE_20260709", "include_secondary": true},
   "fundamental_shock": {"magnitude": 0.0, "anchor": "last_pre_start_close"},
   "llm": {
-    "provider": "siliconflow", "model": "deepseek-ai/DeepSeek-V4-Flash",
-    "base_url": "https://api.siliconflow.cn/v1", "temperature": 0.2, "max_tokens": 512,
-    "enable_thinking": false, "max_concurrency": 32, "transport_retries": 5,
-    "timeout_seconds": 120, "cache_dir": ".cache/siliconflow"
+    "temperature": 0.2, "max_tokens": 512, "enable_thinking": false,
+    "max_concurrency": 32, "transport_retries": 5, "timeout_seconds": 120,
+    "providers": {
+      "siliconflow": {
+        "model": "deepseek-ai/DeepSeek-V4-Flash", "api_key_env": "SILICONFLOW_API_KEY",
+        "chat_completions_url": "https://api.siliconflow.cn/v1/chat/completions",
+        "models_url": "https://api.siliconflow.cn/v1/models", "models_params": {"sub_type": "chat"},
+        "allowed_host": "api.siliconflow.cn", "cache_dir": ".cache/siliconflow", "trust_env": true
+      },
+      "aigc_relay": {
+        "model": "DeepSeek-V4-Flash", "api_key_env": "AIGC_API_KEY",
+        "chat_completions_url": "https://aigc-api.hkust-gz.edu.cn/api/v2/chat/completions",
+        "models_url": "https://aigc-api.hkust-gz.edu.cn/api/v2/models",
+        "allowed_host": "aigc-api.hkust-gz.edu.cn", "cache_dir": ".cache/aigc_relay", "trust_env": false
+      }
+    }
   },
   "suite": {"seeds": [42, 43, 44], "treatments": ["rule_abm", "vanilla_llm", "low_herding", "high_herding"], "shocks": [0.0, -0.02, -0.05]},
   "exchange": {"order_ttl": "day", "transaction_price_rule": "resting_order", "allow_margin": false, "allow_short": false}

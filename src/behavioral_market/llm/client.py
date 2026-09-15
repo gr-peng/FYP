@@ -5,6 +5,7 @@ import time
 from datetime import UTC, datetime
 from pathlib import Path
 from typing import Protocol
+from urllib.parse import urlparse
 
 import httpx
 from pydantic import BaseModel, ValidationError
@@ -78,7 +79,7 @@ class MockLLMClient:
         return schema.model_validate(raw), {"status": "mock", "provider": "mock"}
 
 
-class SiliconFlowClient:
+class OpenAICompatibleClient:
     def __init__(
         self,
         config,
@@ -90,18 +91,21 @@ class SiliconFlowClient:
         cache_only=False,
     ):
         if not api_key and not cache_only:
-            raise FatalAPIError("SILICONFLOW_API_KEY is missing")
-        if config["base_url"].rstrip("/") != "https://api.siliconflow.cn/v1":
-            raise FatalAPIError("SiliconFlow credentials may only be sent to api.siliconflow.cn")
+            raise FatalAPIError(f"{config['api_key_env']} is missing")
+        completion_url = config["chat_completions_url"]
+        models_url = config["models_url"]
+        allowed_host = config["allowed_host"]
+        if any(urlparse(url).hostname != allowed_host for url in (completion_url, models_url)):
+            raise FatalAPIError(f"credentials may only be sent to {allowed_host}")
         self.config, self.output, self.cache = config, output, cache
         self._key = api_key or ""
         self.semaphore = semaphore or asyncio.Semaphore(config["max_concurrency"])
         self.pacer = pacer
         self.cache_only = cache_only
         self.http = httpx.AsyncClient(
-            base_url=config["base_url"].rstrip("/") + "/",
             headers={"Authorization": "Bearer " + api_key} if api_key else {},
             timeout=config["timeout_seconds"],
+            trust_env=config.get("trust_env", True),
         )
         output.mkdir(parents=True, exist_ok=True)
         cache.mkdir(parents=True, exist_ok=True)
@@ -118,7 +122,9 @@ class SiliconFlowClient:
 
     async def verify_model(self):
         try:
-            response = await self.http.get("models", params={"sub_type": "chat"})
+            response = await self.http.get(
+                self.config["models_url"], params=self.config.get("models_params")
+            )
         except httpx.HTTPError as exc:
             raise FatalAPIError(f"model registry transport failure: {type(exc).__name__}") from None
         if response.status_code != 200:
@@ -126,7 +132,7 @@ class SiliconFlowClient:
         models = response.json()
         write_json(self.output / "model_registry.json", models)
         if self.config["model"] not in {row["id"] for row in models.get("data", [])}:
-            raise FatalAPIError("requested model is absent from SiliconFlow model registry")
+            raise FatalAPIError("requested model is absent from provider model registry")
         return self.config["model"]
 
     async def completion(self, messages, identity):
@@ -174,9 +180,13 @@ class SiliconFlowClient:
                             "dispatched_at": dispatched_at,
                         },
                     )
-                    response = await self.http.post("chat/completions", json=payload)
+                    response = await self.http.post(
+                        self.config["chat_completions_url"], json=payload
+                    )
                 status = response.status_code
-                trace = response.headers.get("x-siliconcloud-trace-id")
+                trace = response.headers.get("x-siliconcloud-trace-id") or response.headers.get(
+                    "x-request-id"
+                )
                 value = response.headers.get("retry-after")
                 retry_after = (
                     float(value) if value and value.replace(".", "", 1).isdigit() else None
@@ -266,3 +276,7 @@ class SiliconFlowClient:
             current = json.loads(user)["agent_state"]["current_style"]
             decision = StyleDecision(decision="stay", target_style=current, rationale=error)
         return decision, {"status": error, "fallback": True}
+
+
+class SiliconFlowClient(OpenAICompatibleClient):
+    """Backward-compatible name for the OpenAI-compatible transport."""

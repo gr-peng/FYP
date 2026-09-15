@@ -107,6 +107,8 @@ def audit(provider="siliconflow"):
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--provider", choices=["siliconflow", "mock"], default="siliconflow")
+    parser.add_argument(
+        "--provider", choices=["siliconflow", "aigc_relay", "mock"], default="siliconflow"
+    )
     args = parser.parse_args()
     audit(args.provider)

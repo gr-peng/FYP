@@ -23,13 +23,19 @@ from behavioral_market.environments.endogenous_event import EndogenousEventEnvir
 from behavioral_market.environments.historical_replay import HistoricalReplayEnvironment
 from behavioral_market.environments.observations import available_fundamentals, build_observation
 from behavioral_market.evaluation.metrics import run_metrics
-from behavioral_market.llm.client import MockLLMClient, RequestPacer, SiliconFlowClient
+from behavioral_market.llm.client import MockLLMClient, OpenAICompatibleClient, RequestPacer
 from behavioral_market.llm.prompts import PROMPT_VERSION, prompts
 from behavioral_market.llm.schemas import OrderDecision, StyleDecision
 from behavioral_market.population.mean_field import compute_mean_field
 
 ROOT = Path(__file__).resolve().parents[3]
 TREATMENTS = ("rule_abm", "vanilla_llm", "low_herding", "high_herding")
+LIVE_PROVIDERS = ("siliconflow", "aigc_relay")
+
+
+def llm_config(config, provider):
+    common = {k: v for k, v in config["llm"].items() if k != "providers"}
+    return {**common, **config["llm"]["providers"][provider]}
 
 
 def git_state(root=ROOT):
@@ -104,9 +110,9 @@ async def run_experiment(
     config = copy.deepcopy(config)
     if mode not in {"historical", "endogenous"} or treatment not in TREATMENTS:
         raise ValueError("unsupported experiment mode/treatment")
-    if provider not in {"mock", "siliconflow"}:
+    if provider not in {"mock", *LIVE_PROVIDERS}:
         raise ValueError("unsupported provider")
-    if provider == "siliconflow" and treatment != "rule_abm" and client is None and pacer is None:
+    if provider in LIVE_PROVIDERS and treatment != "rule_abm" and client is None and pacer is None:
         pacer = RequestPacer(4.0)
     config["run"] = {"mode": mode, "treatment": treatment, "provider": provider}
     if bars is None:
@@ -114,7 +120,7 @@ async def run_experiment(
     output = output or output_path(config, mode, treatment, provider)
     config_hash = digest(json.dumps(config, sort_keys=True).encode())
     commit, dirty = git_state()
-    if provider == "siliconflow" and treatment != "rule_abm" and require_clean and dirty:
+    if provider in LIVE_PROVIDERS and treatment != "rule_abm" and require_clean and dirty:
         raise RuntimeError("live experiments require a clean worktree; commit validated code first")
     metadata_path = output / "run_metadata.json"
     if metadata_path.exists():
@@ -153,7 +159,7 @@ async def run_experiment(
         "started_at": datetime.now(UTC).isoformat(),
         "model": "rule"
         if treatment == "rule_abm"
-        else (config["llm"]["model"] if provider == "siliconflow" else provider),
+        else (llm_config(config, provider)["model"] if provider in LIVE_PROVIDERS else provider),
         "prompt_version": PROMPT_VERSION,
         "mode": mode,
         "treatment": treatment,
@@ -205,19 +211,21 @@ async def run_experiment(
     if client is None:
         load_dotenv(ROOT / ".env")
         client = (
-            SiliconFlowClient(
-                config["llm"],
-                None if cache_only else os.getenv("SILICONFLOW_API_KEY"),
+            OpenAICompatibleClient(
+                llm_config(config, provider),
+                None
+                if cache_only
+                else os.getenv(llm_config(config, provider)["api_key_env"]),
                 output,
-                ROOT / config["llm"]["cache_dir"],
+                ROOT / llm_config(config, provider)["cache_dir"],
                 semaphore,
                 pacer,
                 cache_only,
             )
-            if provider == "siliconflow" and treatment != "rule_abm"
+            if provider in LIVE_PROVIDERS and treatment != "rule_abm"
             else MockLLMClient()
         )
-    if isinstance(client, SiliconFlowClient) and not cache_only:
+    if isinstance(client, OpenAICompatibleClient) and not cache_only:
         await client.verify_model()
     order_rows, trade_rows, market_rows, agent_rows, mean_rows, switch_rows, event_rows = (
         [],
@@ -448,7 +456,7 @@ async def run_experiment(
         write_json(metadata_path, metadata)
         raise
     finally:
-        if owned and isinstance(client, SiliconFlowClient):
+        if owned and isinstance(client, OpenAICompatibleClient):
             await client.close()
     tables = {
         "agents": agent_rows,
@@ -496,7 +504,9 @@ def main(mode=None):
         "--mode", choices=["historical", "endogenous"], default=mode or "historical"
     )
     parser.add_argument("--treatment", choices=TREATMENTS, default="vanilla_llm")
-    parser.add_argument("--provider", choices=["mock", "siliconflow"], default="siliconflow")
+    parser.add_argument(
+        "--provider", choices=["mock", *LIVE_PROVIDERS], default="siliconflow"
+    )
     parser.add_argument("--seed", type=int)
     parser.add_argument("--agents", type=int)
     parser.add_argument("--shock", type=float)

@@ -14,7 +14,7 @@ from scipy.stats import mannwhitneyu
 from behavioral_market.data.archive import digest, write_json
 from behavioral_market.evaluation.metrics import event_study, path_metrics
 from behavioral_market.evaluation.usage import usage_report
-from behavioral_market.simulation.event_runner import ROOT, load_dataset
+from behavioral_market.simulation.event_runner import ROOT, llm_config, load_dataset
 
 
 def markdown_table(frame):
@@ -53,6 +53,7 @@ def simulated_event_cars(market, bars, studies, initial_price):
 
 def evaluate(config, directory, destination):
     is_mock = directory.name == "mock"
+    provider = directory.name
     bars, _, _, manifest_hash = load_dataset(config)
     destination.mkdir(parents=True, exist_ok=True)
     actual = bars[bars.symbol == config["data"]["primary_symbol"]].sort_values("session_date")
@@ -129,7 +130,11 @@ def evaluate(config, directory, destination):
     frame = pd.DataFrame(records)
     frame.to_csv(destination / "run_metrics.csv", index=False)
     frame.to_parquet(destination / "run_metrics.parquet", index=False)
-    pricing = json.loads((ROOT / "config/siliconflow_pricing_20260901.json").read_text())
+    pricing = (
+        json.loads((ROOT / "config/siliconflow_pricing_20260901.json").read_text())
+        if provider == "siliconflow"
+        else None
+    )
     usage = usage_report(directory, pricing)
     write_json(destination / "api_usage.json", usage)
     manifest = json.loads((ROOT / "data/manifests/meta_compute_2026_manifest.json").read_text())
@@ -313,10 +318,14 @@ def evaluate(config, directory, destination):
         (
             "模型：确定性 MockLLMClient，无真实 LLM API 调用。"
             if is_mock
-            else f"模型：{config['llm']['model']}；temperature={config['llm']['temperature']}，max_tokens={config['llm']['max_tokens']}，thinking 关闭，全局并发上限 {config['llm']['max_concurrency']}。"
+            else f"Provider：{provider}；模型：{llm_config(config, provider)['model']}；temperature={config['llm']['temperature']}，max_tokens={config['llm']['max_tokens']}，thinking 关闭，全局并发上限 {config['llm']['max_concurrency']}。"
         ),
         f"已记录的 chat/completions 响应 {usage['calls']} 次，HTTP 200 有 {usage['successful_http_calls']} 次，非 200/传输失败 {usage['failed_calls']} 次，其中重试请求 {usage['retry_calls']} 次；本地缓存命中 {usage['local_cache_hits']} 次。输入 {usage['input_tokens']:,} tokens，输出 {usage['output_tokens']:,} tokens。",
-        f"按调用时段与可见缓存 token 估算费用 ¥{usage['estimated_cost_cny']:.4f}，不等同到账单实扣。[定价公告](https://docs.siliconflow.cn/docs/release-notes/overview)。",
+        (
+            f"按调用时段与可见缓存 token 估算费用 ¥{usage['estimated_cost_cny']:.4f}，不等同到账单实扣。[定价公告](https://docs.siliconflow.cn/docs/release-notes/overview)。"
+            if pricing
+            else "中转站价格规则未归档，因此只报告 token 用量，不估算费用。"
+        ),
         "单 agent 预检也计入 API 用量，但不混入 30-agent 主实验统计。请求/响应、trace、usage、配置、源码 hash、Git commit、数据 hash 及依赖版本均保存在 outputs 下；原始行情与新闻存 data/raw，模型响应存输出日志及 .cache。API key 仅存在本地忽略文件 .env。",
         "9 月 14 日内生并行批次曾触发 429 限流，随后出现 HTTP 402，未完成运行保留以供断点续跑。早期日志的 requested_at 是响应结束时刻；后续版本分别记录派发和接收时间。价格只是公告价估算，未返回 usage 的在途请求无法计费估算。",
         "## 结论边界与后续实验",
@@ -341,7 +350,9 @@ def evaluate(config, directory, destination):
 
 def main():
     parser = argparse.ArgumentParser()
-    parser.add_argument("--provider", choices=["siliconflow", "mock"], default="siliconflow")
+    parser.add_argument(
+        "--provider", choices=["siliconflow", "aigc_relay", "mock"], default="siliconflow"
+    )
     args = parser.parse_args()
     config = json.loads((ROOT / "config/meta_compute_2026.json").read_text())
     directory = ROOT / "outputs/meta_compute_2026" / args.provider
