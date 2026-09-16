@@ -62,6 +62,23 @@ password、私钥文件和常见凭据文件，发现后停止且不执行 commi
 配置位于 `config/meta_compute_2026.json`，结果与报告保存在
 `outputs/meta_compute_2026/siliconflow/`，不会由同步脚本上传。
 
+## Choices13k 真人行为 benchmark
+
+Choices13k pilot 用公开真人二元风险选择分布检验 LLM 的微观行为差距，并与
+CDA 市场模块隔离。实验固定 200 道 calibration、100 道 held-out、四个预注册
+prompt、每题 10 次严格 A/B 位置平衡；held-out 只有在 calibration prompt 冻结后
+才能运行。完整设计与数据泄漏边界见
+[Choices13k 实验协议](docs/choices13k_pilot_protocol.md)。
+
+当前只完成代码和运行计划，尚未下载数据或调用 API。离线查看预计调用量和阶段状态：
+
+```bash
+python scripts/run_choices13k_pilot.py --stage plan
+```
+
+后续运行必须显式指定 `prepare`、`calibration`、`freeze`、`heldout`、`evaluate`
+或 `all`；没有默认执行阶段。
+
 ## 参考项目
 
 参考仓库位于 `third_party/`，保留上游 Git 历史，且不导入我们的 Python 包。

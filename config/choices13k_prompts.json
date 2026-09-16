@@ -1,0 +1,7 @@
+{
+  "version": "choices13k-prompts-v1",
+  "P0": "Choose the option you prefer.",
+  "P1": "Respond as an ordinary adult participant making the choice for themselves.",
+  "P2": "Respond as an ordinary person rather than as a mathematical optimizer. Make the choice you would naturally prefer under uncertainty.",
+  "P3": "Respond as an ordinary person making a real choice under uncertainty. People may care about possible losses, risk, and incomplete information rather than mechanically maximizing expected value. Choose naturally."
+}

@@ -89,6 +89,7 @@ class OpenAICompatibleClient:
         semaphore=None,
         pacer=None,
         cache_only=False,
+        cache_namespace=PROMPT_VERSION,
     ):
         if not api_key and not cache_only:
             raise FatalAPIError(f"{config['api_key_env']} is missing")
@@ -102,6 +103,7 @@ class OpenAICompatibleClient:
         self.semaphore = semaphore or asyncio.Semaphore(config["max_concurrency"])
         self.pacer = pacer
         self.cache_only = cache_only
+        self.cache_namespace = cache_namespace
         self.http = httpx.AsyncClient(
             headers={"Authorization": "Bearer " + api_key} if api_key else {},
             timeout=config["timeout_seconds"],
@@ -145,7 +147,7 @@ class OpenAICompatibleClient:
             "response_format": {"type": "json_object"},
         }
         key = hashlib.sha256(
-            json.dumps([payload, identity, PROMPT_VERSION], sort_keys=True).encode()
+            json.dumps([payload, identity, self.cache_namespace], sort_keys=True).encode()
         ).hexdigest()
         cache_file = self.cache / (key + ".json")
         self.log("llm_requests.jsonl", {**identity, "request_hash": key, "payload": payload})
@@ -233,6 +235,7 @@ class OpenAICompatibleClient:
                     "cache_hit": False,
                     "request_hash": key,
                     "usage": body.get("usage", {}),
+                    "retry_count": attempt,
                 }
             if status in (400, 401, 402, 403, 404, 422):
                 raise FatalAPIError(

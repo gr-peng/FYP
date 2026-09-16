@@ -1,0 +1,69 @@
+{
+  "experiment": {
+    "name": "choices13k_deepseek_pilot",
+    "seed": 20260916,
+    "output_dir": "outputs/human_benchmark/choices13k_deepseek_pilot"
+  },
+  "dataset": {
+    "name": "choices13k",
+    "source_repo": "https://github.com/jcpeterson/choices13k.git",
+    "source_commit": "821ae7e88386b508ebb46fae76fac63cb62ec876",
+    "third_party_dir": "third_party/choices13k",
+    "raw_dir": "data/raw/human_benchmarks/choices13k",
+    "processed_dir": "data/processed/human_benchmarks/choices13k",
+    "manifest": "data/manifests/choices13k_manifest.json",
+    "calibration_items": 200,
+    "heldout_items": 100,
+    "ev_gap_quantiles": 3
+  },
+  "sampling": {
+    "repeats_per_item": 10,
+    "counterbalance_option_order": true
+  },
+  "prompts": {
+    "file": "config/choices13k_prompts.json",
+    "candidate_ids": ["P0", "P1", "P2", "P3"],
+    "vanilla_id": "P0",
+    "tie_break_order": ["P0", "P1", "P2", "P3"]
+  },
+  "llm": {
+    "provider": "siliconflow",
+    "temperature": 0.7,
+    "max_tokens": 32,
+    "enable_thinking": false,
+    "max_concurrency": 16,
+    "transport_retries": 5,
+    "timeout_seconds": 120,
+    "max_rps": 4.0,
+    "providers": {
+      "siliconflow": {
+        "model": "deepseek-ai/DeepSeek-V4-Flash",
+        "api_key_env": "SILICONFLOW_API_KEY",
+        "chat_completions_url": "https://api.siliconflow.cn/v1/chat/completions",
+        "models_url": "https://api.siliconflow.cn/v1/models",
+        "models_params": {"sub_type": "chat"},
+        "allowed_host": "api.siliconflow.cn",
+        "cache_dir": ".cache/choices13k/siliconflow",
+        "trust_env": true
+      },
+      "aigc_relay": {
+        "model": "DeepSeek-V4-Flash",
+        "api_key_env": "AIGC_API_KEY",
+        "chat_completions_url": "https://aigc-api.hkust-gz.edu.cn/api/v2/chat/completions",
+        "models_url": "https://aigc-api.hkust-gz.edu.cn/api/v2/models",
+        "allowed_host": "aigc-api.hkust-gz.edu.cn",
+        "cache_dir": ".cache/choices13k/aigc_relay",
+        "trust_env": false
+      }
+    }
+  },
+  "calibration": {
+    "selection_metric": "mae"
+  },
+  "evaluation": {
+    "bootstrap_samples": 2000,
+    "calibration_bins": 10,
+    "invalid_rate_gate": 0.01,
+    "degenerate_item_rate_gate": 0.8
+  }
+}

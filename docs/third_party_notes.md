@@ -11,6 +11,7 @@ These directories were not modified by this project.
 | ACL24-EconAgent | `bfada091eaa1` |
 | LAMP | `16fda6db84b0` |
 | StockAgent | `e2a9c052b816` |
+| Choices13k (planned, pinned) | `821ae7e88386` |
 
 | Reference | Inspected / intended role | Our implementation choice |
 | --- | --- | --- |
@@ -20,6 +21,7 @@ These directories were not modified by this project.
 | ACL24-EconAgent | Recent-experience and reflection pattern | Future bounded memory layer. |
 | LAMP | Long-term retrieval pattern | Deferred beyond MVP. |
 | StockAgent | Run loop and structured logging pattern | Separate scripted loop and CSV/JSON records; its matching logic is not used. |
+| Choices13k | Official human choice-rate benchmark and original gamble displays | Isolated `benchmarks/` parser, frozen stratified split, counterbalanced prompts, and item-level evaluation. The source is fetched only by the explicit prepare stage. |
 
 No source file from these repositories is copied into our package. The behavioral switching
 paper has no verified implementation repository in the TDD, so its behavior layer will be
