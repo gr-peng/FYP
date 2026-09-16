@@ -3,7 +3,12 @@ from decimal import Decimal
 from behavioral_market.llm.schemas import OrderDecision, StyleDecision, hold
 
 
-def enforce_portfolio(decision, portfolio):
+def enforce_portfolio(decision, portfolio, price_floor=None, price_ceiling=None):
+    if decision.action != "hold" and (
+        (price_floor is not None and decision.limit_price < price_floor)
+        or (price_ceiling is not None and decision.limit_price > price_ceiling)
+    ):
+        return hold("limit price outside permitted band"), "price_band_violation"
     if (
         decision.action == "buy"
         and Decimal(str(decision.limit_price)) * decision.quantity > portfolio.cash

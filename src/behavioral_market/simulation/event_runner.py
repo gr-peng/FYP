@@ -52,7 +52,9 @@ def git_state(root=ROOT):
 
 def load_dataset(config):
     directory = ROOT / config["data"]["dataset_dir"]
-    manifest_path = ROOT / "data/manifests/meta_compute_2026_manifest.json"
+    manifest_path = ROOT / config["data"].get(
+        "manifest", "data/manifests/meta_compute_2026_manifest.json"
+    )
     manifest = json.loads(manifest_path.read_text())
     for record in manifest["processed_files"]:
         if digest((ROOT / record["path"]).read_bytes()) != record["sha256"]:
@@ -62,11 +64,17 @@ def load_dataset(config):
         MarketEvent.model_validate(row)
         for row in json.loads((directory / "events.json").read_text())
     ]
+    sec_by_symbol = directory / "sec_companyfacts_by_symbol.json"
     sec = directory / "sec_companyfacts.json"
+    facts = (
+        json.loads(sec_by_symbol.read_text()).get(config["data"]["primary_symbol"])
+        if sec_by_symbol.exists()
+        else (json.loads(sec.read_text()) if sec.exists() else None)
+    )
     return (
         bars,
         events,
-        (json.loads(sec.read_text()) if sec.exists() else None),
+        facts,
         digest(manifest_path.read_bytes()),
     )
 
@@ -74,16 +82,31 @@ def load_dataset(config):
 def output_path(config, mode, treatment, provider):
     seed = config["experiment"]["seed"]
     shock = config["fundamental_shock"]["magnitude"]
-    secondary = config["events"]["include_secondary"]
+    condition = event_condition(config)
     count = config["population"]["n_agents"]
-    return (
-        ROOT
-        / "outputs/meta_compute_2026"
-        / provider
-        / mode
-        / treatment
-        / f"n{count}_seed{seed}_shock{shock:g}_e2{int(secondary)}"
-    )
+    root = ROOT / "outputs/meta_compute_2026" / provider
+    batch = config["experiment"].get("output_batch")
+    if batch:
+        root = root / batch / config["data"]["primary_symbol"]
+        suffix = f"n{count}_seed{seed}_shock{shock:g}_{condition}"
+    else:
+        suffix = f"n{count}_seed{seed}_shock{shock:g}_e2{int(condition == 'e1_e2')}"
+    return root / mode / treatment / suffix
+
+
+def output_root(config, provider):
+    root = ROOT / "outputs/meta_compute_2026" / provider
+    batch = config["experiment"].get("output_batch")
+    return root / batch if batch else root
+
+
+def event_condition(config):
+    condition = config["events"].get("condition")
+    if condition is None:
+        condition = "e1_e2" if config["events"].get("include_secondary", True) else "e1_only"
+    if condition not in {"no_event", "e1_only", "e1_e2"}:
+        raise ValueError("events.condition must be no_event, e1_only or e1_e2")
+    return condition
 
 
 def source_hash():
@@ -115,6 +138,7 @@ async def run_experiment(
     if provider in LIVE_PROVIDERS and treatment != "rule_abm" and client is None and pacer is None:
         pacer = RequestPacer(4.0)
     config["run"] = {"mode": mode, "treatment": treatment, "provider": provider}
+    condition = event_condition(config)
     if bars is None:
         bars, events, facts, manifest_hash = load_dataset(config)
     output = output or output_path(config, mode, treatment, provider)
@@ -165,7 +189,9 @@ async def run_experiment(
         "treatment": treatment,
         "seed": config["experiment"]["seed"],
         "shock": config["fundamental_shock"]["magnitude"],
-        "include_secondary": config["events"]["include_secondary"],
+        "event_condition": condition,
+        "include_secondary": condition == "e1_e2",
+        "symbol": config["data"]["primary_symbol"],
         "llm_parameters": config["llm"],
         "n_agents": config["population"]["n_agents"],
         "request_rate_limit_rps": pacer.requests_per_second if pacer else None,
@@ -195,16 +221,20 @@ async def run_experiment(
     previous_cutoff = sessions(
         environment.history.session_date.iloc[-1], environment.history.session_date.iloc[-1]
     ).market_open.iloc[-1]
-    events = [
-        event
-        for event in events
-        if config["events"]["include_secondary"] or event.event_id != config["events"]["secondary"]
-    ]
+    if condition == "no_event":
+        events = []
+    elif condition == "e1_only":
+        events = [event for event in events if event.event_id == config["events"]["primary"]]
     rng = random.Random(config["experiment"]["seed"] + 991)
     policy_rngs = [
         random.Random(config["experiment"]["seed"] * 1000 + i) for i in range(len(agents))
     ]
-    mean_field = compute_mean_field(agents, as_of_session=environment.history.session_date.iloc[-1])
+    majority_threshold = config["behavior"].get("majority_threshold", 0.1)
+    mean_field = compute_mean_field(
+        agents,
+        as_of_session=environment.history.session_date.iloc[-1],
+        majority_threshold=majority_threshold,
+    )
     fundamental = initial_price
     shock_applied = False
     owned = client is None
@@ -227,15 +257,9 @@ async def run_experiment(
         )
     if isinstance(client, OpenAICompatibleClient) and not cache_only:
         await client.verify_model()
-    order_rows, trade_rows, market_rows, agent_rows, mean_rows, switch_rows, event_rows = (
-        [],
-        [],
-        [],
-        [],
-        [],
-        [],
-        [],
-    )
+    tables = ([], [], [], [], [], [], [], [])
+    order_rows, trade_rows, market_rows, agent_rows = tables[:4]
+    mean_rows, switch_rows, event_rows, book_rows = tables[4:]
 
     async def decide(agent, observation, kind):
         system, user = prompts(agent, observation, treatment, kind, config["experiment"]["seed"])
@@ -247,7 +271,8 @@ async def run_experiment(
             "mode": mode,
             "seed": config["experiment"]["seed"],
             "shock": config["fundamental_shock"]["magnitude"],
-            "include_secondary": config["events"]["include_secondary"],
+            "event_condition": condition,
+            "decision_batch": observation.get("decision_batch"),
         }
         return await client.decide(
             system, user, OrderDecision if kind == "order" else StyleDecision, identity
@@ -285,6 +310,28 @@ async def run_experiment(
             observation.update(
                 symbol=spec["primary_symbol"], **available_fundamentals(facts, session)
             )
+            price_band = config["behavior"].get("limit_price_band", [0.95, 1.05])
+            price_floor = observation["last_close"] * price_band[0]
+            price_ceiling = observation["last_close"] * price_band[1]
+            observation["permitted_price_band"] = {
+                "minimum": round(price_floor, 6),
+                "maximum": round(price_ceiling, 6),
+                "reference": "session_open_last_trade",
+            }
+            observation["order_book"] = (
+                environment.book_context()
+                if mode == "endogenous"
+                else {
+                    "best_bid": None,
+                    "best_ask": None,
+                    "spread": None,
+                    "spread_bps": None,
+                    "last_trade": observation["last_close"],
+                    "bid_depth": 0,
+                    "ask_depth": 0,
+                    "scope": "unavailable_in_historical_replay",
+                }
+            )
             with (output / "observations.jsonl").open("a", encoding="utf-8") as handle:
                 handle.write(json.dumps(observation, ensure_ascii=False, allow_nan=False) + "\n")
             previous_cutoff = cutoff
@@ -302,28 +349,81 @@ async def run_experiment(
                     }
                 )
             before = [float(a.portfolio.total_equity) for a in agents]
-            if treatment == "rule_abm":
+            arrival = list(range(len(agents)))
+            rng.shuffle(arrival)
+            batch_size = config["behavior"].get("order_decision_batch_size", len(agents))
+            microbatch = (
+                mode == "endogenous"
+                and treatment != "rule_abm"
+                and batch_size < len(agents)
+            )
+            decision_contexts = [observation] * len(agents)
+            if microbatch:
+                environment.start_session(session)
+                results = [None] * len(agents)
+                decisions = [None] * len(agents)
+                validations = [None] * len(agents)
+                for batch_number, start in enumerate(range(0, len(arrival), batch_size)):
+                    indices = arrival[start : start + batch_size]
+                    batch_observation = {
+                        **observation,
+                        "order_book": environment.book_context(),
+                        "decision_batch": batch_number,
+                    }
+                    book_rows.append(
+                        {
+                            "session_date": session,
+                            "decision_batch": batch_number,
+                            "agent_ids": [agents[index].persona.agent_id for index in indices],
+                            **batch_observation["order_book"],
+                        }
+                    )
+                    batch_results = await asyncio.gather(
+                        *(decide(agents[index], batch_observation, "order") for index in indices)
+                    )
+                    for index, result in zip(indices, batch_results, strict=True):
+                        results[index] = result
+                        decision_contexts[index] = batch_observation
+                        valid, violation = enforce_portfolio(
+                            result[0], agents[index].portfolio, price_floor, price_ceiling
+                        )
+                        decisions[index] = valid
+                        validations[index] = violation or result[1]["status"]
+                        environment.submit(agents[index], valid)
+                close, volume, execution, fills = environment.finish_session(agents)
+            elif treatment == "rule_abm":
                 results = [
                     (rule_order(a, observation, policy_rngs[i]), {"status": "rule"})
                     for i, a in enumerate(agents)
                 ]
+                decisions, validations = [], []
+                for agent, (decision, meta) in zip(agents, results, strict=True):
+                    valid, violation = enforce_portfolio(
+                        decision, agent.portfolio, price_floor, price_ceiling
+                    )
+                    decisions.append(valid)
+                    validations.append(violation or meta["status"])
+                close, volume, execution, fills = environment.settle(
+                    session, agents, decisions, arrival
+                )
             else:
                 results = await asyncio.gather(*(decide(a, observation, "order") for a in agents))
-            decisions, validations = [], []
-            for agent, (decision, meta) in zip(agents, results, strict=True):
-                valid, violation = enforce_portfolio(decision, agent.portfolio)
-                decisions.append(valid)
-                validations.append(violation or meta["status"])
-            arrival = list(range(len(agents)))
-            rng.shuffle(arrival)
-            close, volume, execution, fills = environment.settle(
-                session, agents, decisions, arrival
-            )
+                decisions, validations = [], []
+                for agent, (decision, meta) in zip(agents, results, strict=True):
+                    valid, violation = enforce_portfolio(
+                        decision, agent.portfolio, price_floor, price_ceiling
+                    )
+                    decisions.append(valid)
+                    validations.append(violation or meta["status"])
+                close, volume, execution, fills = environment.settle(
+                    session, agents, decisions, arrival
+                )
             trade_rows.extend(fills)
             execution = {row["agent_id"]: row for row in execution}
             last = observation["last_close"]
             for i, (agent, decision) in enumerate(zip(agents, decisions, strict=True)):
                 fill = execution[agent.persona.agent_id]
+                book = decision_contexts[i]["order_book"]
                 order_rows.append(
                     {
                         "session_date": session,
@@ -335,6 +435,22 @@ async def run_experiment(
                         "fallback": bool(results[i][1].get("fallback")),
                         "requested_action": results[i][0].action,
                         "requested_quantity": results[i][0].quantity,
+                        "decision_batch": decision_contexts[i].get("decision_batch"),
+                        "seen_best_bid": book["best_bid"],
+                        "seen_best_ask": book["best_ask"],
+                        "seen_spread_bps": book["spread_bps"],
+                        "bid_distance_to_ask_bps": (
+                            (book["best_ask"] - decision.limit_price) / last * 10_000
+                            if decision.action == "buy" and book["best_ask"] is not None
+                            else None
+                        ),
+                        "ask_distance_to_bid_bps": (
+                            (decision.limit_price - book["best_bid"]) / last * 10_000
+                            if decision.action == "sell" and book["best_bid"] is not None
+                            else None
+                        ),
+                        "prior_majority_action": mean_field["majority_action"],
+                        "prior_majority_strength": mean_field["majority_strength"],
                         "aggressiveness": (
                             (decision.limit_price / last - 1)
                             * (1 if decision.action == "buy" else -1)
@@ -415,7 +531,9 @@ async def run_experiment(
                         agent.current_style = decision.target_style
                     agent.block_start_equity = float(agent.portfolio.total_equity)
                     agent.shadow_growth = 1.0
-            mean_field = compute_mean_field(agents, decisions, session)
+            mean_field = compute_mean_field(
+                agents, decisions, session, majority_threshold=majority_threshold
+            )
             mean_rows.append({"session_date": session, **mean_field})
             market_rows.append(
                 {
@@ -466,6 +584,7 @@ async def run_experiment(
         "mean_field": mean_rows,
         "events_seen": event_rows,
         "style_switches": switch_rows,
+        "order_book_snapshots": book_rows,
     }
     for name, rows in tables.items():
         frame = pd.DataFrame(rows)
@@ -510,6 +629,10 @@ def main(mode=None):
     parser.add_argument("--seed", type=int)
     parser.add_argument("--agents", type=int)
     parser.add_argument("--shock", type=float)
+    parser.add_argument("--symbol")
+    parser.add_argument(
+        "--event-condition", choices=["no_event", "e1_only", "e1_e2"]
+    )
     parser.add_argument("--cache-only", action="store_true")
     args = parser.parse_args()
     config = json.loads(args.config.read_text())
@@ -519,6 +642,10 @@ def main(mode=None):
         config["population"]["n_agents"] = args.agents
     if args.shock is not None:
         config["fundamental_shock"]["magnitude"] = args.shock
+    if args.symbol is not None:
+        config["data"]["primary_symbol"] = args.symbol
+    if args.event_condition is not None:
+        config["events"]["condition"] = args.event_condition
     print(
         json.dumps(
             asyncio.run(

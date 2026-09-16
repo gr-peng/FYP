@@ -21,7 +21,8 @@ from behavioral_market.evaluation.event_report import simulated_event_cars
 from behavioral_market.evaluation.metrics import event_study, run_metrics
 from behavioral_market.llm.client import FatalAPIError, RequestPacer, SiliconFlowClient
 from behavioral_market.llm.schemas import OrderDecision
-from behavioral_market.simulation.event_runner import llm_config, run_experiment
+from behavioral_market.population.mean_field import compute_mean_field
+from behavioral_market.simulation.event_runner import event_condition, llm_config, run_experiment
 
 ROOT = Path(__file__).resolve().parents[1]
 
@@ -294,6 +295,69 @@ def test_three_session_drawdown_cannot_be_negative():
     )
     result = run_metrics(market, orders, pd.DataFrame(), 100.0, 100)
     assert result["three_session_drawdown_2026-07-01"] == 0
+
+
+def test_price_band_and_lagged_majority_metrics(config):
+    agents = population(config, "high_herding", "100")
+    decisions = [
+        OrderDecision(
+            action="buy", quantity=2, limit_price=100, rationale="test", sentiment="bullish"
+        ),
+        OrderDecision(
+            action="sell", quantity=1, limit_price=100, rationale="test", sentiment="bearish"
+        ),
+    ]
+    field = compute_mean_field(agents, decisions, "2026-06-15", majority_threshold=0.1)
+    assert field["majority_action"] == "buy"
+    assert field["majority_strength"] == pytest.approx(1 / 3)
+    outside = decisions[0].model_copy(update={"limit_price": 106})
+    valid, status = enforce_portfolio(outside, agents[0].portfolio, 95, 105)
+    assert valid.action == "hold" and status == "price_band_violation"
+
+
+def test_event_conditions_and_microbatch_book_context(config, bars, events, tmp_path):
+    spec = copy.deepcopy(config)
+    spec["events"]["condition"] = "e1_only"
+    spec["behavior"].update(
+        order_decision_batch_size=2, limit_price_band=[0.95, 1.05], majority_threshold=0.1
+    )
+    assert event_condition(spec) == "e1_only"
+    asyncio.run(
+        run_experiment(
+            spec,
+            "endogenous",
+            "high_herding",
+            "mock",
+            tmp_path / "microbatch",
+            bars=bars,
+            events=events,
+        )
+    )
+    snapshots = pd.read_parquet(tmp_path / "microbatch/order_book_snapshots.parquet")
+    orders = pd.read_parquet(tmp_path / "microbatch/orders.parquet")
+    seen = pd.read_parquet(tmp_path / "microbatch/events_seen.parquet")
+    assert len(snapshots) == 46
+    assert set(snapshots.decision_batch) == {0, 1}
+    assert orders.decision_batch.notna().all()
+    later = orders[orders.decision_batch == 1]
+    assert (later.seen_best_bid.notna() | later.seen_best_ask.notna()).any()
+    assert not (orders.validation_status == "price_band_violation").any()
+    assert set(seen.event_id) == {"META_COMPUTE_20260701"}
+
+    no_event = copy.deepcopy(spec)
+    no_event["events"]["condition"] = "no_event"
+    asyncio.run(
+        run_experiment(
+            no_event,
+            "endogenous",
+            "high_herding",
+            "mock",
+            tmp_path / "no_event",
+            bars=bars,
+            events=events,
+        )
+    )
+    assert pd.read_parquet(tmp_path / "no_event/events_seen.parquet").empty
 
 
 def test_historical_path_has_zero_car_difference(bars):

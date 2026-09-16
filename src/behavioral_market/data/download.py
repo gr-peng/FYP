@@ -30,7 +30,15 @@ def download(config, root=ROOT):
         if spec["market_provider"] == "yahoo"
         else AlphaVantageProvider(archive, os.getenv("ALPHA_VANTAGE_API_KEY"))
     )
-    symbols = [spec["primary_symbol"], *spec["context_symbols"], *spec["robustness_symbols"]]
+    symbols = list(
+        dict.fromkeys(
+            [
+                *spec.get("primary_symbols", [spec["primary_symbol"]]),
+                *spec["context_symbols"],
+                *spec["robustness_symbols"],
+            ]
+        )
+    )
     schedule = sessions(spec["history_start"], spec["experiment_end"])
     rows = []
     for symbol in symbols:
@@ -63,14 +71,15 @@ def download(config, root=ROOT):
     if isinstance(provider, YahooProvider):
         write_json(directory / "corporate_actions.json", provider.actions)
         # No silent split adjustment inside a fixed-share simulator.
-        for split in provider.actions.get(spec["primary_symbol"], {}).get("splits", {}).values():
-            if (
-                datetime.fromtimestamp(split["date"], UTC).date().isoformat()
-                >= spec["experiment_start"]
-            ):
-                raise RuntimeError(
-                    "primary asset split during simulation requires explicit adjustment"
-                )
+        for primary_symbol in spec.get("primary_symbols", [spec["primary_symbol"]]):
+            for split in provider.actions.get(primary_symbol, {}).get("splits", {}).values():
+                if (
+                    datetime.fromtimestamp(split["date"], UTC).date().isoformat()
+                    >= spec["experiment_start"]
+                ):
+                    raise RuntimeError(
+                        f"{primary_symbol}: split during simulation requires explicit adjustment"
+                    )
         issues.append(
             "Yahoo chart fallback used: no Alpha Vantage key supplied; OHLC as returned, "
             "without dividend adjustment. Corporate actions archived; "
@@ -78,7 +87,9 @@ def download(config, root=ROOT):
         )
     events = [
         MarketEvent.model_validate(x)
-        for x in json.loads((root / "config/meta_compute_2026_events.json").read_text())
+        for x in json.loads(
+            (root / spec.get("event_registry", "config/meta_compute_2026_events.json")).read_text()
+        )
     ]
     registry = [e.model_dump(mode="json") for e in events]
     write_json(directory / "events.json", registry)
@@ -104,7 +115,7 @@ def download(config, root=ROOT):
             news = deduplicate(
                 [
                     item
-                    for symbol in ["META", "NVDA"]
+                    for symbol in spec.get("news_symbols", ["META", spec["primary_symbol"]])
                     for item in news_provider.news(symbol, "20260615T0000", "20260718T0000")
                 ]
             )
@@ -122,20 +133,23 @@ def download(config, root=ROOT):
         print(f"GDELT discovered {len(articles)} source URLs", flush=True)
     except (RuntimeError, ValueError) as exc:
         issues.append(f"GDELT unavailable: {exc}")
-    try:
-        body, _ = archive.get(
-            "sec",
-            "https://data.sec.gov/api/xbrl/companyfacts/CIK0001045810.json",
-            headers={"User-Agent": "FYP academic research gpeng615@connect.hkust-gz.edu.cn"},
-        )
-        facts = json.loads(body)
-        write_json(directory / "sec_companyfacts.json", facts)
-    except (RuntimeError, ValueError) as exc:
-        issues.append(
-            f"Optional SEC facts unavailable: {exc}; financial statement fields remain null."
-        )
+    facts_by_symbol = {}
+    for symbol, cik in spec.get("sec_ciks", {"NVDA": "0001045810"}).items():
+        try:
+            body, _ = archive.get(
+                "sec",
+                f"https://data.sec.gov/api/xbrl/companyfacts/CIK{str(cik).zfill(10)}.json",
+                headers={"User-Agent": "FYP academic research gpeng615@connect.hkust-gz.edu.cn"},
+            )
+            facts_by_symbol[symbol] = json.loads(body)
+        except (RuntimeError, ValueError) as exc:
+            issues.append(
+                f"{symbol} optional SEC facts unavailable: {exc}; statement fields remain null."
+            )
+    if facts_by_symbol:
+        write_json(directory / "sec_companyfacts_by_symbol.json", facts_by_symbol)
     manifest = {
-        "dataset": "meta_compute_2026",
+        "dataset": spec.get("dataset_name", "meta_compute_2026"),
         "created_at": datetime.now(UTC).isoformat(),
         "market_provider": spec["market_provider"],
         "issues": issues,
@@ -146,7 +160,10 @@ def download(config, root=ROOT):
             if p.is_file()
         ],
     }
-    write_json(root / "data/manifests/meta_compute_2026_manifest.json", manifest)
+    manifest_path = root / spec.get(
+        "manifest", "data/manifests/meta_compute_2026_manifest.json"
+    )
+    write_json(manifest_path, manifest)
     print(json.dumps({"rows": len(frame), "symbols": len(symbols), "issues": issues}), flush=True)
     return manifest
 

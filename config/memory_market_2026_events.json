@@ -1,0 +1,22 @@
+[
+  {
+    "event_id": "META_COMPUTE_20260701",
+    "first_seen_at": "2026-07-01T14:39:00+00:00",
+    "published_at_et": "2026-07-01T10:39:00-04:00",
+    "headline": "Meta explores selling outside access to AI infrastructure",
+    "neutral_summary": "Bloomberg reports that Meta is considering a cloud service offering external customers computing capacity and AI models. The proposal could monetize capacity beyond its own requirements. Details remain under development.",
+    "related_symbols": ["META", "MU", "SNDK", "NVDA"],
+    "source_urls": ["https://news.bloomberglaw.com/artificial-intelligence/meta-is-building-a-cloud-business-to-sell-excess-ai-compute-1", "https://www.reuters.com/business/meta-sell-excess-ai-computing-capacity-via-cloud-business-bloomberg-news-reports-2026-07-01/"],
+    "confidence": "reported"
+  },
+  {
+    "event_id": "META_COMPUTE_20260709",
+    "first_seen_at": "2026-07-09T18:04:00+00:00",
+    "published_at_et": "2026-07-09T14:04:00-04:00",
+    "headline": "Zuckerberg discusses the economics of renting computing capacity",
+    "neutral_summary": "In a Bloomberg interview, Zuckerberg described outside offers for computing capacity as sufficiently attractive that Meta may sometimes consider renting it out instead of using it internally. He also described Meta as needing substantial computing resources.",
+    "related_symbols": ["META", "MU", "SNDK", "NVDA"],
+    "source_urls": ["https://news.bloomberglaw.com/artificial-intelligence/metas-zuckerberg-says-exploring-ai-cloud-business-makes-sense"],
+    "confidence": "confirmed"
+  }
+]

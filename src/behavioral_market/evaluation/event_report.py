@@ -2,6 +2,7 @@
 # ruff: noqa: E501
 import argparse
 import json
+from pathlib import Path
 
 import matplotlib
 
@@ -28,7 +29,7 @@ def markdown_table(frame):
     return "\n".join(lines)
 
 
-def simulated_event_cars(market, bars, studies, initial_price):
+def simulated_event_cars(market, bars, studies, initial_price, symbol="NVDA"):
     """Ex-post CAR diagnostics; benchmark future bars never enter agent observations."""
     dates = ["2026-06-12", *market.session_date.tolist()]
     simulated = pd.Series([initial_price, *market.close.astype(float)], index=dates).pct_change()
@@ -37,7 +38,7 @@ def simulated_event_cars(market, bars, studies, initial_price):
     result = {}
     for event, name in [("2026-07-01", "e1"), ("2026-07-09", "e2")]:
         row = studies.loc[
-            (studies.symbol == "NVDA") & (studies.benchmark == "QQQ") & (studies.event == event)
+            (studies.symbol == symbol) & (studies.benchmark == "QQQ") & (studies.event == event)
         ].iloc[0]
         center = dates.index(event)
         for radius in (1, 3):
@@ -61,12 +62,18 @@ def evaluate(config, directory, destination):
     initial = float(actual.close.iloc[0])
     actual_normalized = actual.close.astype(float).to_numpy() / initial
     real_metrics = path_metrics(actual.close.astype(float))
+    primary_symbols = config["data"].get("primary_symbols", [config["data"]["primary_symbol"]])
+    study_symbols = list(
+        dict.fromkeys([*primary_symbols, "META", "SOXX", *config["data"]["robustness_symbols"]])
+    )
+    available = set(bars.symbol)
     studies = pd.DataFrame(
         [
             event_study(bars, symbol, benchmark, event)
-            for symbol in ["NVDA", "META", "SOXX", *config["data"]["robustness_symbols"]]
+            for symbol in study_symbols
             for benchmark in ["QQQ", "SPY"]
             for event in ["2026-07-01", "2026-07-09"]
+            if symbol in available and benchmark in available
         ]
     )
     studies.to_csv(destination / "real_event_study.csv", index=False)
@@ -94,7 +101,8 @@ def evaluate(config, directory, destination):
             drawdown_difference=metrics["max_drawdown"] - real_metrics["max_drawdown"],
             volatility_difference=metrics["daily_volatility"] - real_metrics["daily_volatility"],
         )
-        metrics.update(simulated_event_cars(market, bars, studies, initial))
+        symbol = metadata.get("symbol", config["data"]["primary_symbol"])
+        metrics.update(simulated_event_cars(market, bars, studies, initial, symbol))
         # A real float-turnover denominator is not available; do not compare it to toy float.
         record = {
             key: metadata[key]
@@ -108,6 +116,10 @@ def evaluate(config, directory, destination):
                 "source_hash",
             ]
         }
+        record["symbol"] = symbol
+        record["event_condition"] = metadata.get(
+            "event_condition", "e1_e2" if metadata["include_secondary"] else "e1_only"
+        )
         accounts = pd.read_parquet(path.parent / "agents.parquet")
         initial_equity = (
             float(config["population"]["initial_cash"])
@@ -124,7 +136,8 @@ def evaluate(config, directory, destination):
                 record["treatment"],
                 record["seed"],
                 record["shock"],
-                record["include_secondary"],
+                record["event_condition"],
+                record["symbol"],
             )
         ] = normalized
     frame = pd.DataFrame(records)
@@ -137,7 +150,7 @@ def evaluate(config, directory, destination):
     )
     usage = usage_report(directory, pricing)
     write_json(destination / "api_usage.json", usage)
-    manifest = json.loads((ROOT / "data/manifests/meta_compute_2026_manifest.json").read_text())
+    manifest = json.loads((ROOT / config["data"]["manifest"]).read_text())
     report = [
         "# Meta Compute 2026：真实数据与工程模拟校验"
         if is_mock
@@ -158,9 +171,9 @@ def evaluate(config, directory, destination):
         "SEC companyfacts 按 filed < 决策日期筛选，晚于时点的披露和更正不可见。GDELT 仅用于线索归档，seendate 不冒充发布时间。",
         "## 真实市场",
         "",
-        f"NVDA 从 6 月 12 日收盘到 7 月 17 日收盘收益 {real_metrics['return']:.2%}，窗口最大回撤 {real_metrics['max_drawdown']:.2%}。",
+        f"{config['data']['primary_symbol']} 从 6 月 12 日收盘到 7 月 17 日收盘收益 {real_metrics['return']:.2%}，窗口最大回撤 {real_metrics['max_drawdown']:.2%}。",
         markdown_table(
-            studies[(studies.symbol == "NVDA")][
+            studies[(studies.symbol == config["data"]["primary_symbol"])][
                 [
                     "event",
                     "benchmark",
@@ -188,7 +201,7 @@ def evaluate(config, directory, destination):
                 f"当前仅完成 {len(frame)}/{expected} 次计划运行；",
                 "尚未完成的情景不参与下列均值和检验。此次部分结果不能代表完整矩阵。",
             ]
-        groups = ["mode", "treatment", "shock", "include_secondary", "source_hash"]
+        groups = ["symbol", "event_condition", "mode", "treatment", "shock", "source_hash"]
         selected = [
             "return",
             "max_drawdown",
@@ -211,8 +224,8 @@ def evaluate(config, directory, destination):
         )
         uncertainties.to_csv(destination / "group_uncertainty.csv")
         comparisons = []
-        for (mode, shock, secondary, code), group in frame.groupby(
-            ["mode", "shock", "include_secondary", "source_hash"]
+        for (symbol, condition, mode, shock, code), group in frame.groupby(
+            ["symbol", "event_condition", "mode", "shock", "source_hash"]
         ):
             low, high = (
                 group[group.treatment == "low_herding"],
@@ -235,8 +248,9 @@ def evaluate(config, directory, destination):
                     comparisons.append(
                         {
                             "mode": mode,
+                            "symbol": symbol,
+                            "event_condition": condition,
                             "shock": shock,
-                            "include_secondary": secondary,
                             "metric": metric,
                             "n_low": len(x),
                             "n_high": len(y),
@@ -260,6 +274,8 @@ def evaluate(config, directory, destination):
                 averages[
                     [
                         "mode",
+                        "symbol",
+                        "event_condition",
                         "treatment",
                         "shock",
                         "runs",
@@ -274,7 +290,7 @@ def evaluate(config, directory, destination):
             "",
             "表内为 seed 均值；各 seed 明细、标准差及范围见 run_metrics.csv、group_uncertainty.csv。历史回放价格固定，因此各组市场价格指标相同；该阶段比较的是交易、持仓和风格变化。",
             "内生 CDA 只有这批 agent 提供流动性，不补造市商、成交或外部价格。低成交量、价格停滞也是结果，需要与行为效果分开解释。",
-            "CAR_difference_e1_1 / e2_1 是以真实 NVDA 预事件 beta 和真实 QQQ 事后基准计算的模拟 CAR 减真实 CAR；仅在评估时读取基准的未来日线，未传给 agent。历史回放差值应为零。E1/E2 的模型可见日分别比报道日晚一个交易日。",
+            "CAR_difference_e1_1 / e2_1 是以对应资产的真实预事件 beta 和真实 QQQ 事后基准计算的模拟 CAR 减真实 CAR；仅在评估时读取基准的未来日线，未传给 agent。历史回放差值应为零。E1/E2 的模型可见日分别比报道日晚一个交易日。",
             f"降级运行（订单 fallback >5%）：{int((frame.quality == 'degraded').sum())}。",
             "比较以运行/seed 为单位，禁止把 690 个 agent-day 当作 690 个独立样本。MWU 与 Cliff's delta 为探索性指标；同 seed 成对差异单独报告。3 个 seed 功效很低，多重比较未经校正，不能据此宣布稳健因果关系。",
         ]
@@ -285,12 +301,13 @@ def evaluate(config, directory, destination):
                 len(shock_values), 1, figsize=(10, 4 * len(shock_values)), squeeze=False
             )
             for ax, shock in zip(axes[:, 0], shock_values, strict=True):
-                ax.plot(actual.session_date, actual_normalized * 100, "k--", label="Real NVDA")
+                ax.plot(actual.session_date, actual_normalized * 100, "k--", label=f"Real {config['data']['primary_symbol']}")
                 for treatment in sorted(endogenous.treatment.unique()):
                     values = [
                         v
-                        for (m, t, _, s, secondary), v in paths.items()
-                        if m == "endogenous" and t == treatment and s == shock and secondary
+                        for (m, t, _, s, condition, symbol), v in paths.items()
+                        if m == "endogenous" and t == treatment and s == shock
+                        and condition == "e1_e2" and symbol == config["data"]["primary_symbol"]
                     ]
                     if values:
                         stack = np.array(values) * 100
@@ -357,10 +374,13 @@ def main():
     parser.add_argument(
         "--provider", choices=["siliconflow", "aigc_relay", "mock"], default="siliconflow"
     )
+    parser.add_argument("--config", type=Path, default=ROOT / "config/meta_compute_2026.json")
+    parser.add_argument("--directory", type=Path)
+    parser.add_argument("--destination", type=Path)
     args = parser.parse_args()
-    config = json.loads((ROOT / "config/meta_compute_2026.json").read_text())
-    directory = ROOT / "outputs/meta_compute_2026" / args.provider
-    evaluate(config, directory, directory / "evaluation")
+    config = json.loads(args.config.read_text())
+    directory = args.directory or ROOT / "outputs/meta_compute_2026" / args.provider
+    evaluate(config, directory, args.destination or directory / "evaluation")
 
 
 if __name__ == "__main__":

@@ -29,6 +29,12 @@ def run_metrics(market, orders, switches, initial_price, initial_shares):
         constraint_violation_rate=float(
             (orders.validation_status == "constraint_violation").mean()
         ),
+        invalid_order_rate=float(
+            (~orders.validation_status.isin(["ok", "mock", "rule"])).mean()
+        ),
+        price_band_violation_rate=float(
+            (orders.validation_status == "price_band_violation").mean()
+        ),
         fallback_rate=float(orders.fallback.mean()),
         mean_order_quantity=float(orders.quantity.mean()),
         mean_aggressiveness=float(orders.aggressiveness.mean()),
@@ -38,6 +44,34 @@ def run_metrics(market, orders, switches, initial_price, initial_shares):
         ),
         mean_order_imbalance=float(market.order_imbalance.mean()),
     )
+    if "prior_majority_action" in orders:
+        eligible = orders.prior_majority_action.isin(["buy", "sell"])
+        active = eligible & orders.action.isin(["buy", "sell"])
+        followed = orders.action == orders.prior_majority_action
+        result.update(
+            majority_signal_opportunities=int(eligible.sum()),
+            follow_majority_rate=float(followed[eligible].mean()) if eligible.any() else None,
+            active_follow_majority_rate=float(followed[active].mean()) if active.any() else None,
+        )
+    if "seen_best_ask" in orders:
+        buys = orders[(orders.action == "buy") & orders.seen_best_ask.notna()]
+        sells = orders[(orders.action == "sell") & orders.seen_best_bid.notna()]
+        result.update(
+            mean_bid_distance_to_ask_bps=float(buys.bid_distance_to_ask_bps.mean())
+            if len(buys)
+            else None,
+            mean_ask_distance_to_bid_bps=float(sells.ask_distance_to_bid_bps.mean())
+            if len(sells)
+            else None,
+            mean_seen_spread_bps=float(orders.seen_spread_bps.mean())
+            if orders.seen_spread_bps.notna().any()
+            else None,
+        )
+    group_key = "session_date" if "session_date" in orders else orders.index.to_series() * 0
+    by_day = orders.groupby(group_key).action.agg(
+        lambda values: {"buy", "sell"}.issubset(set(values))
+    )
+    result["both_sides_session_rate"] = float(by_day.mean()) if len(by_day) else 0.0
     for day in ("2026-07-01", "2026-07-02", "2026-07-10"):
         indices = market.index[market.session_date == day]
         if len(indices):

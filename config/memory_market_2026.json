@@ -1,0 +1,89 @@
+{
+  "experiment": {
+    "name": "memory_market_liquidity_v2",
+    "output_batch": "memory_market_v2",
+    "seed": 42,
+    "timezone": "America/New_York"
+  },
+  "data": {
+    "dataset_name": "memory_market_2026",
+    "history_start": "2026-04-01",
+    "experiment_start": "2026-06-15",
+    "experiment_end": "2026-07-17",
+    "primary_symbol": "MU",
+    "primary_symbols": ["MU", "SNDK"],
+    "context_symbols": ["META", "NVDA", "SOXX", "QQQ", "SPY"],
+    "robustness_symbols": [],
+    "news_symbols": ["META", "MU", "SNDK"],
+    "market_provider": "yahoo",
+    "news_provider": "canonical_registry",
+    "news_backup": "gdelt",
+    "dataset_dir": "data/processed/memory_market_2026",
+    "manifest": "data/manifests/memory_market_2026_manifest.json",
+    "event_registry": "config/memory_market_2026_events.json",
+    "sec_ciks": {"MU": "0000723125", "SNDK": "0002023554"},
+    "calendar": "XNYS"
+  },
+  "population": {
+    "n_agents": 30,
+    "initial_cash": "10000.00",
+    "initial_shares": 100,
+    "initial_fundamental_share": 0.5
+  },
+  "behavior": {
+    "strategy_switch_interval": 10,
+    "memory_window": 10,
+    "mean_field_lag": 1,
+    "majority_threshold": 0.1,
+    "order_decision_batch_size": 5,
+    "limit_price_band": [0.95, 1.05]
+  },
+  "events": {
+    "primary": "META_COMPUTE_20260701",
+    "secondary": "META_COMPUTE_20260709",
+    "condition": "e1_only"
+  },
+  "fundamental_shock": {"magnitude": 0.0, "anchor": "last_pre_start_close"},
+  "llm": {
+    "temperature": 0.2,
+    "max_tokens": 512,
+    "enable_thinking": false,
+    "max_concurrency": 32,
+    "transport_retries": 5,
+    "timeout_seconds": 120,
+    "providers": {
+      "siliconflow": {
+        "model": "deepseek-ai/DeepSeek-V4-Flash",
+        "api_key_env": "SILICONFLOW_API_KEY",
+        "chat_completions_url": "https://api.siliconflow.cn/v1/chat/completions",
+        "models_url": "https://api.siliconflow.cn/v1/models",
+        "models_params": {"sub_type": "chat"},
+        "allowed_host": "api.siliconflow.cn",
+        "cache_dir": ".cache/siliconflow_memory_v2",
+        "trust_env": true
+      },
+      "aigc_relay": {
+        "model": "DeepSeek-V4-Flash",
+        "api_key_env": "AIGC_API_KEY",
+        "chat_completions_url": "https://aigc-api.hkust-gz.edu.cn/api/v2/chat/completions",
+        "models_url": "https://aigc-api.hkust-gz.edu.cn/api/v2/models",
+        "allowed_host": "aigc-api.hkust-gz.edu.cn",
+        "cache_dir": ".cache/aigc_relay_memory_v2",
+        "trust_env": false
+      }
+    }
+  },
+  "suite": {
+    "seeds": [42, 43, 44],
+    "treatments": ["rule_abm", "vanilla_llm", "low_herding", "high_herding"],
+    "shocks": [0.0],
+    "event_conditions": ["no_event", "e1_only", "e1_e2"],
+    "symbols": ["MU", "SNDK"]
+  },
+  "exchange": {
+    "order_ttl": "day",
+    "transaction_price_rule": "resting_order",
+    "allow_margin": false,
+    "allow_short": false
+  }
+}

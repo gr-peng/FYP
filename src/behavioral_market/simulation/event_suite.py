@@ -8,7 +8,12 @@ from pathlib import Path
 
 from behavioral_market.data.archive import write_json
 from behavioral_market.llm.client import RequestPacer
-from behavioral_market.simulation.event_runner import LIVE_PROVIDERS, ROOT, run_experiment
+from behavioral_market.simulation.event_runner import (
+    LIVE_PROVIDERS,
+    ROOT,
+    output_root,
+    run_experiment,
+)
 
 
 async def run_suite(
@@ -21,13 +26,15 @@ async def run_suite(
     parallel_runs=2,
     max_rps=4.0,
     cache_only=False,
+    event_conditions=None,
+    symbols=None,
 ):
     requests = asyncio.Semaphore(config["llm"]["max_concurrency"])
     pacer = RequestPacer(max_rps)
     runs = asyncio.Semaphore(parallel_runs)
     jobs = []
     results = []
-    directory = ROOT / "outputs/meta_compute_2026" / provider
+    directory = output_root(config, provider)
 
     async def execute(spec, mode, treatment):
         async with runs:
@@ -60,14 +67,20 @@ async def run_suite(
             if metrics["fallback_rate"] > 0.05:
                 raise RuntimeError("pilot fallback rate exceeds 5%; inspect logs before expansion")
 
-    for mode in modes:
-        for shock in [0.0] if mode == "historical" else shocks:
-            for seed in seeds:
-                for treatment in treatments:
-                    spec = copy.deepcopy(config)
-                    spec["experiment"]["seed"] = seed
-                    spec["fundamental_shock"]["magnitude"] = shock
-                    jobs.append((spec, mode, treatment))
+    event_conditions = event_conditions or [config["events"].get("condition", "e1_e2")]
+    symbols = symbols or [config["data"]["primary_symbol"]]
+    for symbol in symbols:
+        for condition in event_conditions:
+            for mode in modes:
+                for shock in [0.0] if mode == "historical" else shocks:
+                    for seed in seeds:
+                        for treatment in treatments:
+                            spec = copy.deepcopy(config)
+                            spec["experiment"]["seed"] = seed
+                            spec["data"]["primary_symbol"] = symbol
+                            spec["events"]["condition"] = condition
+                            spec["fundamental_shock"]["magnitude"] = shock
+                            jobs.append((spec, mode, treatment))
     await asyncio.gather(*(execute(*job) for job in jobs))
     return results
 
@@ -85,6 +98,10 @@ def main():
     parser.add_argument("--parallel-runs", type=int, default=2)
     parser.add_argument("--max-rps", type=float, default=4.0)
     parser.add_argument("--cache-only", action="store_true")
+    parser.add_argument(
+        "--event-conditions", nargs="+", choices=["no_event", "e1_only", "e1_e2"]
+    )
+    parser.add_argument("--symbols", nargs="+")
     args = parser.parse_args()
     config = json.loads(args.config.read_text())
     asyncio.run(
@@ -98,6 +115,8 @@ def main():
             args.parallel_runs,
             args.max_rps,
             args.cache_only,
+            args.event_conditions or config["suite"].get("event_conditions"),
+            args.symbols or config["suite"].get("symbols"),
         )
     )
 

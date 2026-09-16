@@ -2,7 +2,7 @@ import json
 
 from .schemas import OrderDecision, StyleDecision
 
-PROMPT_VERSION = "meta-event-v1"
+PROMPT_VERSION = "memory-market-v2"
 
 
 def prompts(agent, observation, treatment, kind, seed):
@@ -25,10 +25,27 @@ def prompts(agent, observation, treatment, kind, seed):
             "greater independence from that population. Interpret other traits as risk tolerance, "
             "loss sensitivity, relative-performance sensitivity and valuation sensitivity. "
         )
+        if treatment == "high_herding":
+            system += (
+                "This is the high-herding treatment. When mean_field.majority_action is not null, "
+                "give that lagged majority direction substantial weight, proportional to "
+                "mean_field.majority_strength. You may override it only when supplied independent "
+                "evidence is materially stronger. "
+            )
+        else:
+            system += (
+                "This is the low-herding treatment. Treat mean_field.majority_action only as weak "
+                "context and form the order mainly from your own style evidence. "
+            )
     task = (
         "Choose today's order before the market opens. HOLD requires quantity=0 and "
         "limit_price=null. No margin or short sales. Buy notional must not exceed cash; "
-        "sell quantity must not exceed holdings. Only the primary symbol is tradable."
+        "sell quantity must not exceed holdings. Only the primary symbol is tradable. "
+        "For BUY or SELL, limit_price must be within observation.permitted_price_band, inclusive. "
+        "Use observation.order_book: best_bid/best_ask are real resting quotes submitted by prior "
+        "decision batches in the current session; null means that side is empty. last_trade is the "
+        "latest executable reference. A marketable BUY is at or above best_ask and a marketable "
+        "SELL is at or below best_bid. Do not invent a missing quote."
     )
     schema = OrderDecision
     if kind == "style":

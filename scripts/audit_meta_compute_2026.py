@@ -17,14 +17,14 @@ from behavioral_market.data.calendar import sessions  # noqa: E402
 from behavioral_market.simulation.event_runner import load_dataset  # noqa: E402
 
 
-def audit(provider="siliconflow"):
-    config = json.loads((ROOT / "config/meta_compute_2026.json").read_text())
+def audit(provider="siliconflow", config_path=None, directory=None):
+    config_path = config_path or ROOT / "config/meta_compute_2026.json"
+    config = json.loads(Path(config_path).read_text())
     bars, _, _, manifest_hash = load_dataset(config)
-    expected_sessions = list(sessions("2026-06-15", "2026-07-17").index)
-    primary = bars[bars.symbol == "NVDA"].set_index("session_date")
-    real_closes = primary.loc[expected_sessions, "close"].astype(float).to_numpy()
-    initial_price = float(primary.loc[primary.index < expected_sessions[0], "close"].iloc[-1])
-    root = ROOT / "outputs/meta_compute_2026" / provider
+    expected_sessions = list(
+        sessions(config["data"]["experiment_start"], config["data"]["experiment_end"]).index
+    )
+    root = Path(directory) if directory else ROOT / "outputs/meta_compute_2026" / provider
     completed = []
     for metadata_path in sorted(root.rglob("run_metadata.json")):
         if "_superseded" in metadata_path.parts:
@@ -33,6 +33,12 @@ def audit(provider="siliconflow"):
         if metadata["status"] != "complete" or metadata["n_agents"] != 30:
             continue
         path = metadata_path.parent
+        symbol = metadata.get("symbol", config["data"]["primary_symbol"])
+        primary = bars[bars.symbol == symbol].set_index("session_date")
+        real_closes = primary.loc[expected_sessions, "close"].astype(float).to_numpy()
+        initial_price = float(
+            primary.loc[primary.index < expected_sessions[0], "close"].iloc[-1]
+        )
         assert metadata["data_manifest_hash"] == manifest_hash, path
         for name, expected in metadata["artifact_hashes"].items():
             assert digest((path / name).read_bytes()) == expected, (path, name)
@@ -52,8 +58,13 @@ def audit(provider="siliconflow"):
         assert (orders.quantity >= 0).all(), path
         assert (orders.filled_quantity <= orders.quantity).all(), path
         assert len(trades) == market.trade_count.sum(), path
-        expected_seen = [("2026-07-02", "META_COMPUTE_20260701")]
-        if metadata["include_secondary"]:
+        condition = metadata.get(
+            "event_condition", "e1_e2" if metadata["include_secondary"] else "e1_only"
+        )
+        expected_seen = []
+        if condition != "no_event":
+            expected_seen.append(("2026-07-02", "META_COMPUTE_20260701"))
+        if condition == "e1_e2":
             expected_seen.append(("2026-07-10", "META_COMPUTE_20260709"))
         assert (
             list(seen[["session_date", "event_id"]].itertuples(index=False, name=None))
@@ -86,6 +97,8 @@ def audit(provider="siliconflow"):
         completed.append(
             {
                 "mode": metadata["mode"],
+                "symbol": symbol,
+                "event_condition": condition,
                 "treatment": metadata["treatment"],
                 "seed": metadata["seed"],
                 "shock": shock,
@@ -110,5 +123,7 @@ if __name__ == "__main__":
     parser.add_argument(
         "--provider", choices=["siliconflow", "aigc_relay", "mock"], default="siliconflow"
     )
+    parser.add_argument("--config", type=Path, default=ROOT / "config/meta_compute_2026.json")
+    parser.add_argument("--directory", type=Path)
     args = parser.parse_args()
-    audit(args.provider)
+    audit(args.provider, args.config, args.directory)
