@@ -66,10 +66,12 @@ def audit(provider="siliconflow", config_path=None, directory=None):
             expected_seen.append(("2026-07-02", "META_COMPUTE_20260701"))
         if condition == "e1_e2":
             expected_seen.append(("2026-07-10", "META_COMPUTE_20260709"))
-        assert (
+        actual_seen = (
             list(seen[["session_date", "event_id"]].itertuples(index=False, name=None))
-            == expected_seen
-        ), path
+            if len(seen)
+            else []
+        )
+        assert actual_seen == expected_seen, path
         for observation in observations:
             day = observation["session_date"]
             assert observation["history_last_session"] < day, (path, day)
