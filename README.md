@@ -87,10 +87,14 @@ python scripts/run_choices13k_confirmatory.py --stage plan
 
 运行必须显式指定 `prepare`、`run`、`evaluate` 或 `all`；没有默认执行阶段。
 
-在 persona prompt 未通过 confirmatory test 后，下一阶段比较 B0、冻结 B1 和
-基于真人 calibration examples 的 B2 few-shot 方法。设计、泄漏控制、冻结 split
-和执行门控见
-[Choices13k data-driven calibration 协议](docs/choices13k_data_driven_protocol.md)。
+Data-driven calibration experiment 也已完成。开发集从六个 B2 候选中冻结了
+`B2_matched_k4`；在 400 道全新 final-test 题目上，B2 的 MAE 为 0.2446，低于
+B0 的 0.2837 和 B1 的 0.2979。B2−B0 的配对 MAE 差为 −0.0391，5,000 次
+item-bootstrap 95% CI 为 `[−0.0609, −0.0181]`，达到预注册成功条件。设计、
+泄漏控制、冻结 split 和执行门控见
+[Choices13k data-driven calibration 协议](docs/choices13k_data_driven_protocol.md)，
+实际运行、审计和结论见
+[Choices13k data-driven calibration 结果](docs/choices13k_data_driven_results.md)。
 
 ## 参考项目
 
