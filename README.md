@@ -87,6 +87,11 @@ python scripts/run_choices13k_confirmatory.py --stage plan
 
 运行必须显式指定 `prepare`、`run`、`evaluate` 或 `all`；没有默认执行阶段。
 
+在 persona prompt 未通过 confirmatory test 后，下一阶段比较 B0、冻结 B1 和
+基于真人 calibration examples 的 B2 few-shot 方法。设计、泄漏控制、冻结 split
+和执行门控见
+[Choices13k data-driven calibration 协议](docs/choices13k_data_driven_protocol.md)。
+
 ## 参考项目
 
 参考仓库位于 `third_party/`，保留上游 Git 历史，且不导入我们的 Python 包。

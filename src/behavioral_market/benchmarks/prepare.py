@@ -26,6 +26,10 @@ def split_paths(config, root):
     }
     if "confirmatory_file" in config["dataset"]:
         paths["confirmatory"] = directory / config["dataset"]["confirmatory_file"]
+    for split in ("calibration_pool", "development_validation", "final_test"):
+        key = f"{split}_file"
+        if key in config["dataset"]:
+            paths[split] = directory / config["dataset"][key]
     return paths
 
 

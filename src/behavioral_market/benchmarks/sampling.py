@@ -95,6 +95,60 @@ def confirmatory_split(frame, excluded_item_ids, count, seed, ev_gap_bins=3):
     return selected.sort_values("item_id")
 
 
+def data_driven_splits(
+    frame,
+    excluded_item_ids,
+    calibration_count,
+    development_count,
+    final_count,
+    seed,
+    ev_gap_bins=3,
+):
+    """Build three disjoint no-feedback splits without using human target labels."""
+    if ev_gap_bins != 3:
+        raise ValueError("the data-driven protocol requires three EV-gap bins")
+    excluded = {int(item_id) for item_id in excluded_item_ids}
+    value = frame[(~frame.item_id.isin(excluded)) & (~frame.feedback)].copy()
+    requested = calibration_count + development_count + final_count
+    if requested > len(value):
+        raise ValueError(
+            f"requested {requested} no-feedback rows but only {len(value)} untouched rows exist"
+        )
+    ranks = value["ev_gap"].rank(method="first")
+    value["ev_gap_bin"] = pd.qcut(ranks, q=ev_gap_bins, labels=["small", "medium", "large"])
+    value["stratum"] = value.apply(
+        lambda row: "|".join(
+            [
+                f"loss={int(row.has_loss)}",
+                f"ambiguity={int(row.ambiguity)}",
+                f"ev_gap={row.ev_gap_bin}",
+            ]
+        ),
+        axis=1,
+    )
+    selected = proportional_stratified_sample(value, requested, seed)
+    calibration = proportional_stratified_sample(selected, calibration_count, seed + 1)
+    remaining = selected[~selected.item_id.isin(calibration.item_id)]
+    development = proportional_stratified_sample(remaining, development_count, seed + 2)
+    final = remaining[~remaining.item_id.isin(development.item_id)].copy()
+    if len(final) != final_count:
+        raise RuntimeError("invalid final-test split size")
+    for name, split in {
+        "calibration_pool": calibration,
+        "development_validation": development,
+        "final_test": final,
+    }.items():
+        split["split"] = name
+        if split.feedback.any() or split.item_id.isin(excluded).any():
+            raise RuntimeError(f"invalid {name} population")
+    split_sets = [set(calibration.item_id), set(development.item_id), set(final.item_id)]
+    if any(split_sets[i] & split_sets[j] for i in range(3) for j in range(i + 1, 3)):
+        raise RuntimeError("data-driven splits overlap")
+    return tuple(
+        split.sort_values("item_id") for split in (calibration, development, final)
+    )
+
+
 def orientations(item_id, repeats, seed):
     if repeats % 2:
         raise ValueError("exact position counterbalancing requires an even repeat count")

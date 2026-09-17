@@ -155,6 +155,11 @@ def subgroup_metrics(rates):
                 "medium": "medium_ev_gap",
                 "large": "large_ev_gap",
             }
+        if "human_consensus" in prompt:
+            dimensions["human_consensus"] = {
+                "strong": "strong_human_consensus",
+                "mixed": "mixed_human_preferences",
+            }
         for column, labels in dimensions.items():
             for value, label in labels.items():
                 subset = prompt[prompt[column] == value]
