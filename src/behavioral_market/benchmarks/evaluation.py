@@ -29,6 +29,8 @@ def aggregate_responses(responses, items, repeats):
     grouped = []
     for (prompt_id, item_id), group in responses.groupby(["prompt_id", "item_id"]):
         valid = group[group.status == "ok"]
+        b_first = valid[valid.display_order == "B_first"]
+        b_second = valid[valid.display_order == "A_first"]
         grouped.append(
             {
                 "prompt_id": prompt_id,
@@ -39,6 +41,14 @@ def aggregate_responses(responses, items, repeats):
                 "llm_b_rate": float(valid.original_b_choice.mean()) if len(valid) else np.nan,
                 "first_option_rate": float(valid.first_display_selected.mean())
                 if len(valid)
+                else np.nan,
+                "b_first_responses": len(b_first),
+                "b_second_responses": len(b_second),
+                "b_rate_when_b_first": float(b_first.original_b_choice.mean())
+                if len(b_first)
+                else np.nan,
+                "b_rate_when_b_second": float(b_second.original_b_choice.mean())
+                if len(b_second)
                 else np.nan,
             }
         )
@@ -88,6 +98,23 @@ def prompt_metrics(frame):
         1 - usable.loc[ev_mask, "human_b_rate"],
     )
     position = frame[frame.valid_responses > 0]
+    first_option_rate = (
+        float(np.average(position.first_option_rate, weights=position.valid_responses))
+        if len(position)
+        else None
+    )
+    b_first = frame.dropna(subset=["b_rate_when_b_first"])
+    b_second = frame.dropna(subset=["b_rate_when_b_second"])
+    b_rate_when_b_first = (
+        float(np.average(b_first.b_rate_when_b_first, weights=b_first.b_first_responses))
+        if len(b_first)
+        else None
+    )
+    b_rate_when_b_second = (
+        float(np.average(b_second.b_rate_when_b_second, weights=b_second.b_second_responses))
+        if len(b_second)
+        else None
+    )
     return {
         "items": len(frame),
         "usable_items": len(usable),
@@ -99,10 +126,10 @@ def prompt_metrics(frame):
         "pearson": pearson,
         "spearman": spearman,
         "invalid_rate": float(frame.invalid_responses.sum() / frame.responses.sum()),
-        "first_option_rate": float(
-            np.average(position.first_option_rate, weights=position.valid_responses)
-        )
-        if len(position)
+        "first_option_rate": first_option_rate,
+        "position_bias": first_option_rate - 0.5 if first_option_rate is not None else None,
+        "b_position_effect": b_rate_when_b_first - b_rate_when_b_second
+        if b_rate_when_b_first is not None and b_rate_when_b_second is not None
         else None,
         "degenerate_item_rate": float(usable.llm_b_rate.isin([0.0, 1.0]).mean())
         if len(usable)
@@ -117,13 +144,22 @@ def prompt_metrics(frame):
 def subgroup_metrics(rates):
     rows = []
     for prompt_id, prompt in rates.groupby("prompt_id"):
-        for column, labels in {
+        dimensions = {
             "has_loss": {True: "loss", False: "no_loss"},
             "ambiguity": {True: "ambiguous", False: "not_ambiguous"},
             "feedback": {True: "feedback", False: "no_feedback"},
-        }.items():
+        }
+        if "ev_gap_bin" in prompt:
+            dimensions["ev_gap_bin"] = {
+                "small": "small_ev_gap",
+                "medium": "medium_ev_gap",
+                "large": "large_ev_gap",
+            }
+        for column, labels in dimensions.items():
             for value, label in labels.items():
                 subset = prompt[prompt[column] == value]
+                if subset.empty:
+                    continue
                 rows.append(
                     {
                         "prompt_id": prompt_id,
@@ -160,14 +196,59 @@ def bootstrap(rates, samples, seed, vanilla_id, selected_id):
         if pd.notna(by_prompt[vanilla_id].loc[item_id, "llm_b_rate"])
         and pd.notna(by_prompt[selected_id].loc[item_id, "llm_b_rate"])
     ]
+    if not common:
+        raise ValueError("no common valid items are available for paired bootstrap")
+    arrays = {}
+    for prompt_id in dict.fromkeys([vanilla_id, selected_id]):
+        frame = by_prompt[prompt_id].loc[common]
+        arrays[prompt_id] = {
+            "absolute_error": (frame.llm_b_rate - frame.human_b_rate).abs().to_numpy(),
+            "js": np.asarray(
+                [
+                    bernoulli_js(row.llm_b_rate, row.human_b_rate)
+                    for row in frame.itertuples()
+                ]
+            ),
+            "first_selections": (
+                frame.first_option_rate * frame.valid_responses
+            ).to_numpy(),
+            "valid_responses": frame.valid_responses.to_numpy(),
+            "b_first_choices": (
+                frame.b_rate_when_b_first * frame.b_first_responses
+            ).to_numpy(),
+            "b_first_responses": frame.b_first_responses.to_numpy(),
+            "b_second_choices": (
+                frame.b_rate_when_b_second * frame.b_second_responses
+            ).to_numpy(),
+            "b_second_responses": frame.b_second_responses.to_numpy(),
+        }
+
+    def sampled_metrics(values, indices):
+        position_bias = (
+            values["first_selections"][indices].sum()
+            / values["valid_responses"][indices].sum()
+            - 0.5
+        )
+        b_position_effect = (
+            values["b_first_choices"][indices].sum()
+            / values["b_first_responses"][indices].sum()
+            - values["b_second_choices"][indices].sum()
+            / values["b_second_responses"][indices].sum()
+        )
+        return {
+            "mae": float(values["absolute_error"][indices].mean()),
+            "mean_js": float(values["js"][indices].mean()),
+            "position_bias": float(position_bias),
+            "b_position_effect": float(b_position_effect),
+        }
+
     rng = np.random.default_rng(seed)
     rows = []
     for replicate in range(samples):
-        ids = rng.choice(common, len(common), replace=True)
+        indices = rng.choice(len(common), len(common), replace=True)
         metrics = {}
         for prompt_id in dict.fromkeys([vanilla_id, selected_id]):
-            sample = by_prompt[prompt_id].loc[ids].reset_index()
-            current = prompt_metrics(sample)
+            current = sampled_metrics(arrays[prompt_id], indices)
             metrics[prompt_id] = current
             rows.append(
                 {
@@ -176,6 +257,8 @@ def bootstrap(rates, samples, seed, vanilla_id, selected_id):
                     "prompt_id": prompt_id,
                     "mae": current["mae"],
                     "mean_js": current["mean_js"],
+                    "position_bias": current["position_bias"],
+                    "b_position_effect": current["b_position_effect"],
                 }
             )
         rows.append(
@@ -185,6 +268,10 @@ def bootstrap(rates, samples, seed, vanilla_id, selected_id):
                 "prompt_id": f"{selected_id}-{vanilla_id}",
                 "mae": metrics[selected_id]["mae"] - metrics[vanilla_id]["mae"],
                 "mean_js": metrics[selected_id]["mean_js"] - metrics[vanilla_id]["mean_js"],
+                "position_bias": metrics[selected_id]["position_bias"]
+                - metrics[vanilla_id]["position_bias"],
+                "b_position_effect": metrics[selected_id]["b_position_effect"]
+                - metrics[vanilla_id]["b_position_effect"],
             }
         )
     return pd.DataFrame(rows)

@@ -1,0 +1,71 @@
+{
+  "experiment": {
+    "name": "choices13k_confirmatory",
+    "seed": 20260917,
+    "output_dir": "outputs/human_benchmark/choices13k_confirmatory"
+  },
+  "dataset": {
+    "name": "choices13k",
+    "source_repo": "https://github.com/jcpeterson/choices13k.git",
+    "source_commit": "821ae7e88386b508ebb46fae76fac63cb62ec876",
+    "third_party_dir": "third_party/choices13k",
+    "raw_dir": "data/raw/human_benchmarks/choices13k",
+    "processed_dir": "data/processed/human_benchmarks/choices13k",
+    "base_manifest": "data/manifests/choices13k_manifest.json",
+    "manifest": "data/manifests/choices13k_confirmatory_manifest.json",
+    "confirmatory_file": "confirmatory_items.parquet",
+    "confirmatory_items": 1000,
+    "primary_feedback": false,
+    "ev_gap_quantiles": 3,
+    "excluded_pilot_sha256": "f2aa1129a864f93a4b7b49d65bb7257b3fe62a7302c24bc77b8d64cfe9712472",
+    "confirmatory_split_sha256": "a339149e44014ec1a0ca8404070256c2798973fef5aa27f0aead5b08307ab659"
+  },
+  "sampling": {
+    "repeats_per_item": 10,
+    "counterbalance_option_order": true
+  },
+  "prompts": {
+    "file": "config/choices13k_prompts.json",
+    "candidate_ids": ["P0", "P1"],
+    "vanilla_id": "P0",
+    "treatment_id": "P1"
+  },
+  "llm": {
+    "provider": "aigc_relay",
+    "temperature": 0.7,
+    "max_tokens": 32,
+    "enable_thinking": false,
+    "max_concurrency": 16,
+    "transport_retries": 5,
+    "timeout_seconds": 120,
+    "max_rps": 4.0,
+    "providers": {
+      "siliconflow": {
+        "model": "deepseek-ai/DeepSeek-V4-Flash",
+        "api_key_env": "SILICONFLOW_API_KEY",
+        "chat_completions_url": "https://api.siliconflow.cn/v1/chat/completions",
+        "models_url": "https://api.siliconflow.cn/v1/models",
+        "models_params": {"sub_type": "chat"},
+        "allowed_host": "api.siliconflow.cn",
+        "cache_dir": ".cache/choices13k/siliconflow",
+        "trust_env": true
+      },
+      "aigc_relay": {
+        "model": "DeepSeek-V4-Flash",
+        "api_key_env": "AIGC_API_KEY",
+        "chat_completions_url": "https://aigc-api.hkust-gz.edu.cn/api/v2/chat/completions",
+        "models_url": "https://aigc-api.hkust-gz.edu.cn/api/v2/models",
+        "allowed_host": "aigc-api.hkust-gz.edu.cn",
+        "cache_dir": ".cache/choices13k/aigc_relay",
+        "trust_env": false
+      }
+    }
+  },
+  "evaluation": {
+    "primary_metric": "mae",
+    "bootstrap_samples": 5000,
+    "calibration_bins": 10,
+    "invalid_rate_gate": 0.01,
+    "degenerate_item_rate_gate": 0.8
+  }
+}

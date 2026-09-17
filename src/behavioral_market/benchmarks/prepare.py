@@ -1,4 +1,6 @@
 import json
+import tempfile
+from pathlib import Path
 
 import pandas as pd
 
@@ -11,17 +13,20 @@ from .choices13k import (
     verify_manifest,
     write_manifest,
 )
-from .sampling import stratified_split
+from .sampling import confirmatory_split, stratified_split
 
 
 def split_paths(config, root):
     directory = root / config["dataset"]["processed_dir"]
-    return {
+    paths = {
         "all": directory / "all_items.parquet",
         "pilot": directory / "pilot_items.parquet",
         "calibration": directory / "calibration_items.parquet",
         "heldout": directory / "heldout_items.parquet",
     }
+    if "confirmatory_file" in config["dataset"]:
+        paths["confirmatory"] = directory / config["dataset"]["confirmatory_file"]
+    return paths
 
 
 def prepare(config, root):
@@ -80,3 +85,76 @@ def load_split(config, root, split):
     if digest(path.read_bytes()) != expected:
         raise ValueError(f"frozen {split} split hash mismatch")
     return pd.read_parquet(path), manifest
+
+
+def build_confirmatory_split(config, root):
+    """Build the deterministic untouched split in memory from the frozen pilot data."""
+    dataset = config["dataset"]
+    base_manifest_path = root / dataset["base_manifest"]
+    base_manifest = json.loads(base_manifest_path.read_text())
+    verify_manifest(base_manifest, root)
+    paths = split_paths(config, root)
+    all_items = pd.read_parquet(paths["all"])
+    pilot_items = pd.read_parquet(paths["pilot"])
+    return confirmatory_split(
+        all_items,
+        pilot_items.item_id,
+        dataset["confirmatory_items"],
+        config["experiment"]["seed"],
+        dataset["ev_gap_quantiles"],
+    )
+
+
+def confirmatory_parquet_hash(config, root):
+    """Return the deterministic parquet hash without changing repository data."""
+    frame = build_confirmatory_split(config, root)
+    with tempfile.TemporaryDirectory(prefix="choices13k-confirmatory-") as directory:
+        path = Path(directory) / config["dataset"]["confirmatory_file"]
+        frame.to_parquet(path, index=False)
+        return digest(path.read_bytes())
+
+
+def prepare_confirmatory(config, root):
+    """Materialize and verify the preregistered untouched confirmatory split."""
+    dataset = config["dataset"]
+    base_manifest_path = root / dataset["base_manifest"]
+    base_manifest = json.loads(base_manifest_path.read_text())
+    verify_manifest(base_manifest, root)
+    paths = split_paths(config, root)
+    frame = build_confirmatory_split(config, root)
+    path = paths["confirmatory"]
+    path.parent.mkdir(parents=True, exist_ok=True)
+    frame.to_parquet(path, index=False)
+    actual_hash = digest(path.read_bytes())
+    expected_hash = dataset["confirmatory_split_sha256"]
+    if actual_hash != expected_hash:
+        raise ValueError(
+            f"confirmatory split hash mismatch: expected {expected_hash}, got {actual_hash}"
+        )
+    pilot_hash = digest(paths["pilot"].read_bytes())
+    if pilot_hash != dataset["excluded_pilot_sha256"]:
+        raise ValueError("pilot exclusion set no longer matches the preregistered hash")
+    manifest = {
+        "dataset": "choices13k_confirmatory",
+        "source_repo": dataset["source_repo"],
+        "source_commit": dataset["source_commit"],
+        "row_identity": "zero_based_csv_row_index_equals_c13k_problems_json_key",
+        "base_manifest": str(base_manifest_path.relative_to(root)),
+        "base_manifest_sha256": digest(base_manifest_path.read_bytes()),
+        "raw_files": base_manifest["raw_files"],
+        "processed_files": [
+            {"path": str(path.relative_to(root)), "sha256": actual_hash},
+        ],
+        "splits": {
+            "seed": config["experiment"]["seed"],
+            "confirmatory_items": len(frame),
+            "confirmatory_sha256": actual_hash,
+            "excluded_pilot_items": int(len(pd.read_parquet(paths["pilot"]))),
+            "excluded_pilot_sha256": pilot_hash,
+            "primary_feedback": False,
+        },
+    }
+    from behavioral_market.data.archive import write_json
+
+    write_json(root / dataset["manifest"], manifest)
+    return manifest

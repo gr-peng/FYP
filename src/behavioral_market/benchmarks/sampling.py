@@ -66,6 +66,35 @@ def stratified_split(frame, calibration_count, heldout_count, seed, ev_gap_bins=
     return calibration.sort_values("item_id"), heldout.sort_values("item_id"), combined
 
 
+def confirmatory_split(frame, excluded_item_ids, count, seed, ev_gap_bins=3):
+    """Sample the frozen no-feedback confirmatory population without using labels."""
+    if ev_gap_bins != 3:
+        raise ValueError("the preregistered confirmatory experiment requires three EV-gap bins")
+    excluded = {int(item_id) for item_id in excluded_item_ids}
+    value = frame[(~frame.item_id.isin(excluded)) & (~frame.feedback)].copy()
+    if value.item_id.isin(excluded).any() or value.feedback.any():
+        raise RuntimeError("invalid confirmatory candidate population")
+    ranks = value["ev_gap"].rank(method="first")
+    value["ev_gap_bin"] = pd.qcut(ranks, q=ev_gap_bins, labels=["small", "medium", "large"])
+    value["stratum"] = value.apply(
+        lambda row: "|".join(
+            [
+                f"loss={int(row.has_loss)}",
+                f"ambiguity={int(row.ambiguity)}",
+                f"ev_gap={row.ev_gap_bin}",
+            ]
+        ),
+        axis=1,
+    )
+    selected = proportional_stratified_sample(value, count, seed)
+    selected["split"] = "confirmatory"
+    if len(selected) != count or selected.item_id.isin(excluded).any():
+        raise RuntimeError("invalid Choices13k confirmatory split")
+    if selected.feedback.any():
+        raise RuntimeError("confirmatory primary population must contain only no-feedback rows")
+    return selected.sort_values("item_id")
+
+
 def orientations(item_id, repeats, seed):
     if repeats % 2:
         raise ValueError("exact position counterbalancing requires an even repeat count")

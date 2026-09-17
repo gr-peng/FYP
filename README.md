@@ -68,16 +68,21 @@ Choices13k pilot 用公开真人二元风险选择分布检验 LLM 的微观行�
 CDA 市场模块隔离。实验固定 200 道 calibration、100 道 held-out、四个预注册
 prompt、每题 10 次严格 A/B 位置平衡；held-out 只有在 calibration prompt 冻结后
 才能运行。完整设计与数据泄漏边界见
-[Choices13k 实验协议](docs/choices13k_pilot_protocol.md)。
+[Choices13k pilot 协议](docs/choices13k_pilot_protocol.md)。
 
-当前只完成代码和运行计划，尚未下载数据或调用 API。离线查看预计调用量和阶段状态：
+Choices13k pilot 已完成。实际运行、API 用量、审计和 held-out 结论见
+[Choices13k pilot 结果](docs/choices13k_pilot_results.md)。旧 held-out 已经观察，后续
+不再用于选择或调整 P1。
+
+下一阶段 confirmatory experiment 冻结 P0/P1，在排除旧 300 题的 1,000 道全新
+no-feedback 题目上进行验证；预注册设计见
+[Choices13k confirmatory 协议](docs/choices13k_confirmatory_protocol.md)。离线查看调用量和阶段状态：
 
 ```bash
-python scripts/run_choices13k_pilot.py --stage plan
+python scripts/run_choices13k_confirmatory.py --stage plan
 ```
 
-后续运行必须显式指定 `prepare`、`calibration`、`freeze`、`heldout`、`evaluate`
-或 `all`；没有默认执行阶段。
+运行必须显式指定 `prepare`、`run`、`evaluate` 或 `all`；没有默认执行阶段。
 
 ## 参考项目
 
