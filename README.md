@@ -74,9 +74,12 @@ Choices13k pilot 已完成。实际运行、API 用量、审计和 held-out 结�
 [Choices13k pilot 结果](docs/choices13k_pilot_results.md)。旧 held-out 已经观察，后续
 不再用于选择或调整 P1。
 
-下一阶段 confirmatory experiment 冻结 P0/P1，在排除旧 300 题的 1,000 道全新
-no-feedback 题目上进行验证；预注册设计见
-[Choices13k confirmatory 协议](docs/choices13k_confirmatory_protocol.md)。离线查看调用量和阶段状态：
+Confirmatory experiment 也已完成：冻结 P0/P1，在排除旧 300 题的 1,000 道全新
+no-feedback 题目上进行验证。P1 的 MAE 比 P0 高 0.0177，item-bootstrap 95% CI
+为 `[0.0059, 0.0297]`，说明 persona-style prompt 没有稳健改善本任务的人类行为校准。
+预注册设计和完整结果分别见
+[Choices13k confirmatory 协议](docs/choices13k_confirmatory_protocol.md)与
+[Choices13k confirmatory 结果](docs/choices13k_confirmatory_results.md)。离线查看阶段状态：
 
 ```bash
 python scripts/run_choices13k_confirmatory.py --stage plan
