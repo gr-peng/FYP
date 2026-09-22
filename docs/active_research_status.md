@@ -12,7 +12,7 @@ is active and is not satisfied by a new runner or a single calibration experimen
 - New semantic tests cover hidden-probability invariance, target/pool label
   isolation, visible structural duplicates, shuffled-label marginal preservation,
   neutral prompts, and response identity/counterbalance checks.
-- Full suite after probability experiment, JS correction and statistical controls: **95 passed**
+- Full suite after CPC18 implementation: **99 passed**
   in the project `.venv`; new-file Ruff checks passed.
 - The separate mock provider completed its 20-response smoke, 10,000-response
   development matrix, and evaluation. This is engineering evidence only.
@@ -105,16 +105,18 @@ is active and is not satisfied by a new runner or a single calibration experimen
 
 **Next actions**
 
-1. Implement and freeze the independent CPC18 runner described in
-   `docs/cpc18_external_next.md` (draft; no external calls/label reads yet). Use
+1. CPC18 runner, explicit outcome gate and participant cluster bootstrap are
+   implemented. All 99 tests and new-file Ruff pass; mock smoke 16/main 1,400 plus
+   synthetic-only evaluation pass without human outcome access. Freeze before
+   real smoke/main calls. See `docs/cpc18_external_protocol.md`. Use
    175 unique risk problems, four probability methods × two orders = 1,400 main
    forecasts plus smoke. Preserve selected P_true/alpha1 and include BOTH strong
    statistical controls fitted on the 487 pool cases. Keep their fitted checkpoint
    fixed; do not tune on CPC18. Live existing-route calls are already authorized.
-2. Freeze metrics, complete response/source hashes and label-opening protocol;
-   then score raw no-feedback trials 1–5 only. Human sampling uncertainty must
-   respect repeated participant records; draft suggests within-stratum participant
-   cluster resampling in addition to conditional problem bootstrap. Use corrected JS.
+2. Execute the frozen 1,400 main forecasts after the 16-call smoke; then score raw
+   no-feedback trials 1–5 only. The implemented protocol records response/source
+   hashes before label opening, and reports problem-only, within-stratum participant
+   cluster and joint bootstrap intervals. Joint uncertainty is primary. Use corrected JS.
 3. Reassess external results before choosing any calibration/policy intervention.
    Preserve negative mixture and mechanism findings. No current real job is running;
    completed Choices13k runs need no restart. Do not modify their frozen modules

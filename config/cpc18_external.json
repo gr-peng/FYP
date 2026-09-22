@@ -1,0 +1,18 @@
+{
+  "experiment": {
+    "name": "cpc18_external_probability_20260922",
+    "seed": 20260924,
+    "output_dir": "outputs/human_benchmark/cpc18_external"
+  },
+  "parent_config": "config/probability_calibration.json",
+  "selected_summary": "outputs/human_benchmark/probability_calibration/aigc_relay/development/evaluation_corrected/summary.json",
+  "statistical_model": "outputs/risk_statistical_baselines_20260922/model.json",
+  "statistical_results": "outputs/risk_statistical_baselines_20260922/results.json",
+  "input_folder": "data/raw/cpc18_external_20260922",
+  "expected_items": 175,
+  "evaluation": {
+    "bootstrap_samples": 5000,
+    "invalid_rate_gate": 0.01,
+    "minimum_common_coverage": 0.99
+  }
+}
