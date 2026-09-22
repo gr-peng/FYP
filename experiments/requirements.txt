@@ -1,0 +1,2 @@
+# Optional reader for the official external CPC18 workbook; shared core is unchanged.
+openpyxl==3.1.5
