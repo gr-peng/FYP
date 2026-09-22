@@ -1,13 +1,20 @@
 # Active research objective and continuation state
 
-Updated 2026-09-22. The user authorized continued experimentation, independent
+Updated 2026-09-23. The user authorized continued experimentation, independent
 gap analysis against the micro-to-macro research question, iterative improvements,
 and a real comparison of the recently released Jev with LLM agents. This objective
 is active and is not satisfied by a new runner or a single calibration experiment.
 
-**Execution stopped at the user's request after the current iteration.** The broad
-research objective is incomplete. The next actions below are backlog, not running
-jobs; do not start the next iteration unless the user resumes the work.
+**Jev experiments resumed by explicit user instruction on 2026-09-23.** The user
+provided TypeSafe access; the credential is stored only in ignored local `.env`.
+The four-request real contract probe and 16-request comparison smoke both passed
+with pinned `jev-1.13.0`. A 1,600-request reused-development comparison is running,
+frozen at `a4500ba`; see `docs/jev_development_protocol_20260923.md`.
+All 1,600 state/instruction/criteria payloads matched the historical LLM requests.
+The machine needs its configured proxy (direct connection timed out); explicit
+proxy support was committed at `7a5d9c8`. Earlier no-access statements below are
+historical. Financial validation and market experiments have not been resumed.
+The broad research objective remains incomplete.
 
 **Authoritative progress**
 
