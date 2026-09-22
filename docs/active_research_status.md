@@ -8,13 +8,30 @@ is active and is not satisfied by a new runner or a single calibration experimen
 **Jev experiments resumed by explicit user instruction on 2026-09-23.** The user
 provided TypeSafe access; the credential is stored only in ignored local `.env`.
 The four-request real contract probe and 16-request comparison smoke both passed
-with pinned `jev-1.13.0`. A 1,600-request reused-development comparison is running,
-frozen at `a4500ba`; see `docs/jev_development_protocol_20260923.md`.
+with pinned `jev-1.13.0`. The 1,600-request reused-development comparison completed,
+frozen at `a4500ba`; see `docs/jev_development_results_20260923.md`.
 All 1,600 state/instruction/criteria payloads matched the historical LLM requests.
 The machine needs its configured proxy (direct connection timed out); explicit
 proxy support was committed at `7a5d9c8`. Earlier no-access statements below are
 historical. Financial validation and market experiments have not been resumed.
 The broad research objective remains incomplete.
+
+**Latest Jev results (supersede historical access notes below)**
+
+- All 1,600 main forecasts valid, zero cache hits; one HTTP 503 recovered.
+  Main run/evaluation session 80694 exited 0. No job remains running for this batch.
+- MAE over 200 reused-development items: plain Jev .193593 vs plain LLM .179454;
+  human-example Jev .208199 vs same-condition LLM .163021. The latter difference
+  is +.045178, item-bootstrap 95% CI [+.023124,+.067821]. No Jev advantage established.
+- On the same 161 risk-only items: Jev plain .199434, Jev examples .221078,
+  LLM examples .158909, fixed logistic .086638, fixed kNN .100011.
+- Main successful usage 1,260,860 input /49,600 output tokens; including both
+  probes 1,273,716 /50,220. One failed attempt has no usage. No Jev monetary tariff
+  verified. Main median successful latency .356 s, not a controlled LLM speed test.
+- Independent raw-response reconstruction reproduced all primary Jev MAEs and
+  checked model/orientation mappings. Prior 110 tests plus two new runner tests
+  passed. Financial development/test remains closed. Do not directly replace the
+  LLM policy based on these negative reused-development results.
 
 **Authoritative progress**
 
@@ -198,9 +215,9 @@ The broad research objective remains incomplete.
    main market comparison, build a separately tested institution/quantity/price/
    arrival/cancel controller and replace recorded human history with generated
    private history. Exact order-book replay remains unavailable.
-4. Extend the implemented Jev adapter into a fair probability/action evaluation.
-   Run the contract probe after access is configured. Real execution awaits an authorized key or
-   a supported existing route. Continue independent work in the meantime.
+4. Jev access and first matched probability comparison are complete; results are
+   negative for human fidelity. Any calibration/hybrid extension requires its own
+   frozen design and evaluation. Do not repeat the completed probe or main calls.
 5. Validate persistent financial behavior before the main CDA comparison; calibrate the
    shared environment and define a human macro reference before interpreting
    market realism. Reassess the research gaps after each completed experiment.
