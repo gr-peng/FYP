@@ -1,7 +1,9 @@
 # Independent CPC18 evaluation: next execution design
 
-Draft for implementation; no CPC18 human responses have been read and no external
-forecast run has started. Freeze the complete executable/config/plan before calls.
+Historical design note, superseded by the frozen
+`docs/cpc18_external_protocol.md` and completed
+`docs/cpc18_external_results_20260922.md`. The following records the design before
+implementation; it is no longer the current execution status.
 
 Inputs: the 175 risk-only unique GameIDs in the audited source screen, excluding
 five visible overlaps with all Choices13k source gambles and the second member

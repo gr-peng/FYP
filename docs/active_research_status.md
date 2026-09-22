@@ -12,7 +12,7 @@ is active and is not satisfied by a new runner or a single calibration experimen
 - New semantic tests cover hidden-probability invariance, target/pool label
   isolation, visible structural duplicates, shuffled-label marginal preservation,
   neutral prompts, and response identity/counterbalance checks.
-- Full suite after CPC18 implementation: **99 passed**
+- Full suite after CPC18 and new-market metadata partitions: **102 passed**
   in the project `.venv`; new-file Ruff checks passed.
 - The separate mock provider completed its 20-response smoke, 10,000-response
   development matrix, and evaluation. This is engineering evidence only.
@@ -102,40 +102,67 @@ is active and is not satisfied by a new runner or a single calibration experimen
   preserves instructions but no task code found. See `financial_instructions_audit_20260922.md`.
 - The financial herding replication package has a verified public file listing;
   a local direct page fetch returned HTTP 403. Raw individual data not obtained.
+- CPC18 study **complete**, frozen at `0d41d6c`: smoke 16/16, main 1,400/1,400
+  valid; 175 common cases, 686 people, 84,860 no-feedback trials, 24 strata.
+  One format repair, no failed HTTP attempts/cache hits. Successful main usage:
+  769,596 input / 40,664 output tokens, including repair. Real run/evaluation
+  sessions 76439/34022 closed successfully; do not restart completed calls.
+  Human labels opened only after all forecasts and hashes, at 09:32:49 UTC.
+- External MAE: P0 **.192307**, selected P_true **.173899**, neutral **.179818**,
+  shuffled **.176063**, logistic **.113514**, aligned kNN **.119651**, constant
+  **.207766**. True−P0 joint CI [-.033610,-.003089]; true−logistic
+  [+.040580,+.077892]. Both correct-label contrasts cross zero under the primary
+  joint bootstrap: mechanism gate fails. No CPC18 tuning or mixture refit.
+  Raw-response reconstruction independently reproduced MAE/RMSE/corrected JS.
+  See `docs/cpc18_external_results_20260922.md` and
+  `outputs/human_benchmark/cpc18_external/aigc_relay/test/evaluation/summary.json`.
+- Located/downloaded a stronger human-market candidate via the authors' OSF
+  project `https://osf.io/5ypku/`: original software/instructions plus 50,478,080-byte
+  reproduction kit, SHA256 matching OSF
+  `642898545b74210f1d999eac2c2b501ae3f08074ec45ab61bcb19081dcfff6ae`.
+  Archives and source manifest are in `data/raw/finance_replication_20260922/`.
+  Only README, source code, CSV headers and explicit processed-metadata columns
+  read; no order/trade/account/price/skill outcomes or macro charts opened.
+- Author eligibility metadata yields 83 sessions, 166 markets, 1,544 people.
+  New plan committed as **041a0ac** before behavioral reads:
+  `config/frozen/market_replication_partitions_20260922.json`:
+  51 train /16 development /16 test sessions, 102/32/32 markets, 948/300/296 people.
+  All paired conditions and repetitions remain in the same session split.
+  No change to previous financial partitions. Source/software caveats and the
+  author's eligibility filtering are recorded in `docs/market_replication_data_protocol.md`.
+  Order/Trade have integer-second creation times; cancellation has no timestamp.
+  Browser prohibits crossing limit quotes; explicit market orders execute trades.
+  Exact historical book replay remains unproven, and core institution differs.
 
 **Next actions**
 
-1. CPC18 runner, explicit outcome gate and participant cluster bootstrap are
-   implemented. All 99 tests and new-file Ruff pass; mock smoke 16/main 1,400 plus
-   synthetic-only evaluation pass without human outcome access. Freeze before
-   real smoke/main calls. See `docs/cpc18_external_protocol.md`. Use
-   175 unique risk problems, four probability methods × two orders = 1,400 main
-   forecasts plus smoke. Preserve selected P_true/alpha1 and include BOTH strong
-   statistical controls fitted on the 487 pool cases. Keep their fitted checkpoint
-   fixed; do not tune on CPC18. Live existing-route calls are already authorized.
-2. Execute the frozen 1,400 main forecasts after the 16-call smoke; then score raw
-   no-feedback trials 1–5 only. The implemented protocol records response/source
-   hashes before label opening, and reports problem-only, within-stratum participant
-   cluster and joint bootstrap intervals. Joint uncertainty is primary. Use corrected JS.
-3. Reassess external results before choosing any calibration/policy intervention.
-   Preserve negative mixture and mechanism findings. No current real job is running;
-   completed Choices13k runs need no restart. Do not modify their frozen modules
-   merely to add a new study; use separate experiment code and hashes.
-4. Define/freeze plain versus calibrated LLM financial probability comparison on
+1. Audit ONLY the new replication archive's frozen 51 training sessions. Implement
+   a source-checked filtered loader; resolve cumulative export duplicates via UUID;
+   reconstruct trade/dividend ledgers and period boundaries; quantify cancellation
+   and same-second ambiguities. Original code inspected at
+   `/tmp/fyp_replication_20260922/`, but authoritative bytes are the archived ZIP.
+   Do not execute the external package or inspect held-out outcomes. Decide which
+   micro targets and human macro references are identifiable before new model calls.
+2. Preserve CPC18 as completed external evidence. Stop lottery prompt expansion;
+   numerical risk choices currently favor statistical policies. Do not assume an
+   arbitrary mapping from gamble probabilities to stock buy/sell actions.
+3. Define/freeze plain versus calibrated LLM financial probability comparison on
    the existing scopic development opportunities. Reuse statistical baselines;
    retain test sessions. Include confirmed announced treatment framing and document
    remaining within-period funding/settlement ambiguity. A sell-any predictor is
-   still not a coherent joint portfolio agent.
-5. Extend the implemented Jev adapter into a fair probability/action evaluation.
+   still not a coherent joint portfolio agent. First use the new training audit to
+   determine whether an institution-matched target can avoid a cross-dataset bridge.
+4. Extend the implemented Jev adapter into a fair probability/action evaluation.
    Run the contract probe after access is configured. Real execution awaits an authorized key or
    a supported existing route. Continue independent work in the meantime.
-6. Validate persistent financial behavior before the main CDA comparison; calibrate the
+5. Validate persistent financial behavior before the main CDA comparison; calibrate the
    shared environment and define a human macro reference before interpreting
    market realism. Reassess the research gaps after each completed experiment.
 
 **Completion requirements still open**
 
-Independent validation of the revised calibration; finance-specific behavioral
-fidelity; a controlled micro-to-macro comparison with meaningful human reference;
+CPC18 provides limited external probability evidence and a failed label-mechanism
+gate; it does not close the remaining requirements: finance-specific behavioral
+fidelity, coherent persistent policies, a controlled micro-to-macro comparison;
 Jev hypotheses tested with real model access; and a final evidence-based account
 of improvements, failures, and remaining scope. No claim of completion is warranted.
