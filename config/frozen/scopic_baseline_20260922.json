@@ -1,0 +1,10 @@
+{
+  "input_hashes": {
+    "config/frozen/financial_data_partitions_20260922.json": "72f68a8b39374e1ba05432887948a32b81740370b41fe5b24e6b4831028b90c8",
+    "docs/scopic_baseline_protocol.md": "fffde43c7714b1ac56525f506d75d15f82931cf1054b077c8c9e1c97a52f0668",
+    "experiments/finance_data.py": "065b435e9b6df4fe39db3e8a82348e03201daabd7ca366f3d21e53e28ae88e74",
+    "experiments/scopic_baselines.py": "eba36160ecd1e25453a99c53b0dfb7dff142845be3a0b31b90907e013cb227b8",
+    "experiments/scopic_states.py": "8bee85225c8eed175077282caade192be25c4f884390b55e540c3778ef352367",
+    "scripts/run_scopic_baselines.py": "878c824959f9bc99d28f17165d357c448247b3d7766af1ea9c1e3971ee38865b"
+  }
+}

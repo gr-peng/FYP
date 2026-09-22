@@ -59,6 +59,11 @@ parser; held-out action/outcome fields are not inspected or summarized.
 5. Freeze independent micro evaluation before opening test behavior. Only then
    define the institution-matched micro-to-macro comparison and its human reference.
 
+The completed training-only timing audit and restricted state adapter are described
+in `financial_training_audit_20260922.md`. In particular, `result_final` marks
+holdings at the next price realization, and the market workbook annotates quote
+rows with eventual acceptance. Neither is a safe current-state input.
+
 Future information (later prices, current action, post-action holdings, final
 wealth, post-trading risk answers and unrevealed peers' outcomes) is excluded from
 decision inputs unless the original interface made that value available already.
