@@ -5,6 +5,10 @@ gap analysis against the micro-to-macro research question, iterative improvement
 and a real comparison of the recently released Jev with LLM agents. This objective
 is active and is not satisfied by a new runner or a single calibration experiment.
 
+**Execution stopped at the user's request after the current iteration.** The broad
+research objective is incomplete. The next actions below are backlog, not running
+jobs; do not start the next iteration unless the user resumes the work.
+
 **Authoritative progress**
 
 - Implemented the isolated `experiments/calibration_v2.py` experiment and explicit
@@ -12,7 +16,7 @@ is active and is not satisfied by a new runner or a single calibration experimen
 - New semantic tests cover hidden-probability invariance, target/pool label
   isolation, visible structural duplicates, shuffled-label marginal preservation,
   neutral prompts, and response identity/counterbalance checks.
-- Full suite after CPC18 and new-market metadata partitions: **102 passed**
+- Full suite after financial training audit, quote states and statistical controls: **110 passed**
   in the project `.venv`; new-file Ruff checks passed.
 - The separate mock provider completed its 20-response smoke, 10,000-response
   development matrix, and evaluation. This is engineering evidence only.
@@ -121,8 +125,9 @@ is active and is not satisfied by a new runner or a single calibration experimen
   reproduction kit, SHA256 matching OSF
   `642898545b74210f1d999eac2c2b501ae3f08074ec45ab61bcb19081dcfff6ae`.
   Archives and source manifest are in `data/raw/finance_replication_20260922/`.
-  Only README, source code, CSV headers and explicit processed-metadata columns
-  read; no order/trade/account/price/skill outcomes or macro charts opened.
+  Initial inspection read only README, source, CSV headers and processed metadata;
+  subsequently the frozen 51 TRAIN sessions were opened as described below.
+  New-market development/test behavior and skill responses remain unopened.
 - Author eligibility metadata yields 83 sessions, 166 markets, 1,544 people.
   New plan committed as **041a0ac** before behavioral reads:
   `config/frozen/market_replication_partitions_20260922.json`:
@@ -133,25 +138,59 @@ is active and is not satisfied by a new runner or a single calibration experimen
   Order/Trade have integer-second creation times; cancellation has no timestamp.
   Browser prohibits crossing limit quotes; explicit market orders execute trades.
   Exact historical book replay remains unproven, and core institution differs.
+- Training audit completed successfully. Exact copies removed: 5,493 orders,
+  1,849 trades, 800 person-period rows; zero conflicting identities. Unique totals:
+  112,118 orders, 36,007 trades, 18,960 person-period accounts, 2,040 market-periods.
+  Of the orders, 18,232 are automatic partial-fill replacements, leaving 93,886
+  participant submissions. Every period cash/share/dividend/next-cash ledger checks;
+  all order/trade/replacement quantity and identity links reconcile.
+- Source anomalies retained: 17 self-trades across 14 sessions; 22 filled-and-cancelled
+  limits exactly explain the 21 person-period available-balance discrepancies
+  (7 cash, 14 shares). No cancellation time exists to identify the actual race.
+  Three negative second-boundary balances occur despite nonnegative period ends.
+  177 trades and 392 order records occur after nominal 120 seconds. Do not import
+  source execution defects into the core or call reconstructed book states exact.
+- Reproduced author training macro measures for 204 market-repetitions (paired,
+  not independent): RD/RAD maximum error 6.96e-8, peak deviation 1.15e-7; average
+  bias 3.05e-6 price points and exact at author's float32 precision. Two no-trade
+  periods remain missing-price observations. Core inputs/results and full report:
+  `docs/market_replication_training_audit_20260922.md` and
+  `outputs/market_replication_training_20260922/summary.json`.
+- New partial-observation quote prototype: 63,143 training states, 51 sessions,
+  948 people; 38,882 limit/24,261 market submissions. Exclusions account for all
+  93,886 submissions: 30,439 simultaneous seconds, 300 outside nominal time,
+  3 negative reconstructed accounts, 1 unrelated trade in the same second.
+  Current target fields and all future events are isolated from inputs by tests.
+  Unknown book/available funds remain omitted; this is conditional BUY/SELL given
+  an active order, not a HOLD rate, full information set or autonomous policy.
+- Five-fold session CV entirely INSIDE TRAIN: session/person-balanced Brier
+  constant .5 **.250000**, train mean **.247114**, own current-period history
+  **.230750**, ridge logistic (17 features, lambda .01) **.227505**.
+  These are exploratory training estimates, not financial LLM/Jev results.
+  State/model/CV artifacts: `outputs/market_quote_training_20260922/`.
+  State build session 78770 and CV session 46570 completed successfully. Final
+  audit session 39024 completed successfully. No restart is needed.
+- Jev status rechecked: direct and Gateway credentials absent, no real probe
+  summary. The probe status process exited successfully without model calls.
 
-**Next actions**
+**Backlog after the user resumes**
 
-1. Audit ONLY the new replication archive's frozen 51 training sessions. Implement
-   a source-checked filtered loader; resolve cumulative export duplicates via UUID;
-   reconstruct trade/dividend ledgers and period boundaries; quantify cancellation
-   and same-second ambiguities. Original code inspected at
-   `/tmp/fyp_replication_20260922/`, but authoritative bytes are the archived ZIP.
-   Do not execute the external package or inspect held-out outcomes. Decide which
-   micro targets and human macro references are identifiable before new model calls.
-2. Preserve CPC18 as completed external evidence. Stop lottery prompt expansion;
-   numerical risk choices currently favor statistical policies. Do not assume an
-   arbitrary mapping from gamble probabilities to stock buy/sell actions.
-3. Define/freeze plain versus calibrated LLM financial probability comparison on
-   the existing scopic development opportunities. Reuse statistical baselines;
-   retain test sessions. Include confirmed announced treatment framing and document
-   remaining within-period funding/settlement ambiguity. A sell-any predictor is
-   still not a coherent joint portfolio agent. First use the new training audit to
-   determine whether an institution-matched target can avoid a cross-dataset bridge.
+1. Extend the quote prototype's known private history across earlier periods and
+   repetitions. Current own-history features cover only the current period. Keep
+   account resets separate from memory, verify past-only invariance and preserve
+   the current version-1 training CV in a separate artifact directory before changes.
+2. Implement/freeze the financial comparison described in
+   `docs/market_quote_probability_next.md`: proposed 25 targets/session on 16
+   development sessions, four methods, two menu orders = 3,200 forecasts plus
+   smoke. This is a design draft, not a frozen or started experiment. Retain
+   statistical/history and neutral/shuffled-label controls; score balanced Brier.
+3. Preserve all completed lottery evidence and current financial partitions.
+   Scopic is a supplementary/fallback bridge with frozen statistical controls;
+   no need to restart it merely because a richer market archive is now available.
+   Do not map gamble probabilities directly to stock buy/sell actions. Before the
+   main market comparison, build a separately tested institution/quantity/price/
+   arrival/cancel controller and replace recorded human history with generated
+   private history. Exact order-book replay remains unavailable.
 4. Extend the implemented Jev adapter into a fair probability/action evaluation.
    Run the contract probe after access is configured. Real execution awaits an authorized key or
    a supported existing route. Continue independent work in the meantime.
