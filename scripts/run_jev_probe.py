@@ -21,7 +21,7 @@ from experiments.calibration_v2 import display_item, load_plan  # noqa: E402
 from experiments.jev_client import JevClient  # noqa: E402
 
 
-async def probe(key):
+async def probe(key, trust_env=False):
     commit, dirty = git_state(ROOT)
     if dirty:
         raise RuntimeError("commit the Jev probe and protocol before live execution")
@@ -39,7 +39,7 @@ async def probe(key):
             )
         )
     )
-    client = JevClient(key, out, ROOT / ".cache/jev/contract_probe")
+    client = JevClient(key, out, ROOT / ".cache/jev/contract_probe", trust_env=trust_env)
     records = []
     try:
         for item_id in plan["target_ids"][:2]:
@@ -73,6 +73,7 @@ async def probe(key):
                 "git_commit": commit,
                 "code_hash": code_hash,
                 "records": records,
+                "environment_proxy_enabled": trust_env,
                 "interpretation": "contract smoke only; no fidelity claim",
             },
         )
@@ -83,6 +84,7 @@ async def probe(key):
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--stage", required=True, choices=["status", "smoke"])
+    parser.add_argument("--trust-env", action="store_true", help="use configured environment proxy")
     args = parser.parse_args()
     load_dotenv(ROOT / ".env")
     key = os.getenv("TYPESAFE_API_KEY") or os.getenv("TYPESAFE_AI_API_KEY")
@@ -99,4 +101,4 @@ if __name__ == "__main__":
             )
         )
     else:
-        asyncio.run(probe(key))
+        asyncio.run(probe(key, args.trust_env))

@@ -83,6 +83,7 @@ class JevClient:
         endpoint="https://api.typesafe.ai/v1/systemone",
         transport=None,
         cache_only=False,
+        trust_env=False,
     ):
         parsed = urlparse(endpoint)
         if (
@@ -110,7 +111,7 @@ class JevClient:
             headers={"Authorization": "Bearer " + self.key} if self.key else {},
             transport=transport,
             timeout=60,
-            trust_env=False,
+            trust_env=trust_env,
         )
 
     async def close(self):
