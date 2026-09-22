@@ -1,0 +1,20 @@
+{
+  "experiment": {
+    "name": "probability_calibration_20260922",
+    "seed": 20260923,
+    "output_dir": "outputs/human_benchmark/probability_calibration"
+  },
+  "parent_config": "config/choices13k_calibration_v2.json",
+  "llm_overrides": {
+    "temperature": 0.0,
+    "max_tokens": 80,
+    "max_concurrency": 16,
+    "max_rps": 4.0
+  },
+  "evaluation": {
+    "bootstrap_samples": 5000,
+    "invalid_rate_gate": 0.01,
+    "minimum_common_coverage": 0.99,
+    "shrinkage_alphas": [0.0, 0.25, 0.5, 0.75, 1.0]
+  }
+}
