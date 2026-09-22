@@ -2,8 +2,10 @@
 
 This is a source and schema audit, not a fitted benchmark or a results report.
 External risk-choice rates and financial action/price outcome columns were not
-used to select the calibration-v2 method. Human trial/market splits are still to
-be frozen before behavioral model development on the financial data.
+used to select the calibration-v2 method. Financial session partitions were later
+frozen before behavioral inspection; see `financial_data_protocol.md` and
+`financial_training_audit_20260922.md`. Only train/development finance behavior
+has since been used; financial test behavior and CPC18 choice labels stay closed.
 
 **CPC18**
 
@@ -20,10 +22,16 @@ non-ambiguous. Five match Choices13k source gambles: GameIDs 3, 4, 24, 29 and 20
 This leaves 177 non-ambiguous candidate problems after the conservative exclusion
 against all Choices13k source rows, not only previously selected subsets.
 
-The eligible IDs and both source hashes are recorded in `feature_overlap_screen.json`.
+An additional within-source fingerprint audit identifies equivalent pairs 12/13
+and 19/20. Keeping the smaller GameID in each pair leaves **175 unique candidates**.
+The eligible IDs and source hashes are recorded in `feature_overlap_screen.json`.
 This is a near-family cross-source test, not proof against pretraining contamination.
-The workbook covers the calibration 210; the later full raw archive may cover
-additional competition problems and must not be assumed identical. Ambiguous
+The full raw archive has 694,500 rows and 270 games. A metadata-only check confirms
+all 210 workbook gamble definitions match their raw counterparts. The 175 selected
+games have 84,860 no-feedback trial records from 686 participants, 80–125 people
+per game, and exactly five no-feedback trials per person/game. The trial records
+are repeated decisions, not distinct people. No response column was read.
+These counts and source hashes are in `raw_metadata_screen.json`. Ambiguous
 worksheet padding must be reconciled with human presentation before including it.
 
 **Human single-asset markets**
@@ -79,8 +87,9 @@ retrieval returned HTTP 403; no raw file was obtained. The 166-market replicatio
 paper's OSF materials and linked nodes provided papers, preregistrations and plot
 images in the inspected listings; raw transaction availability remains unverified.
 
-Prioritize the two downloaded financial datasets for information-set and schema
-audits, then freeze session/group splits before inspecting training behavior.
-Use training groups to reproduce source statistics and development groups to
-select adapters. Preserve held-out human groups for micro and macro evaluation.
-Do not calibrate market liquidity directly against the held-out macro target.
+Financial train/development audits now identify a pre-ranking liquidation task,
+future-valued wealth fields and a market quote archive with eventual execution
+annotations. Frozen statistical baselines have been evaluated on scopic development
+sessions; see `scopic_baseline_results_20260922.md`. Preserve the financial test
+sessions for subsequent micro and macro evaluation. Do not calibrate market
+liquidity directly against the held-out macro target.

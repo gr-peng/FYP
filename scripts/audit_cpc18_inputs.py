@@ -67,12 +67,20 @@ def audit():
             {
                 "cpc_game_id": int(row["GameID"]),
                 "ambiguity": item.ambiguity,
+                "visible_fingerprint": visible_fingerprint(item),
                 "choices13k_matching_rows": lookup.get(visible_fingerprint(item), []),
             }
         )
     eligible = [
         x["cpc_game_id"] for x in rows if not x["ambiguity"] and not x["choices13k_matching_rows"]
     ]
+    unique = {}
+    duplicate_groups = {}
+    for row in sorted(rows, key=lambda x: x["cpc_game_id"]):
+        if row["cpc_game_id"] in eligible:
+            key = row["visible_fingerprint"]
+            unique.setdefault(key, row["cpc_game_id"])
+            duplicate_groups.setdefault(key, []).append(row["cpc_game_id"])
     result = {
         "external_labels_loaded": False,
         "comparison": "all Choices13k source rows, visible canonical fingerprint",
@@ -81,6 +89,9 @@ def audit():
         "feature_items": len(rows),
         "nonambiguous_items": sum(not x["ambiguity"] for x in rows),
         "risk_only_eligible_ids": eligible,
+        "unique_risk_only_eligible_ids": sorted(unique.values()),
+        "within_source_duplicate_groups": [x for x in duplicate_groups.values() if len(x) > 1],
+        "within_source_deduplication_rule": "retain smallest GameID; no labels read",
         "rows": rows,
         "note": "Risk-only eligibility. Ambiguous supports need a presentation audit. "
         "The workbook covers the calibration 210, not every problem in the later raw archive.",
@@ -91,10 +102,70 @@ def audit():
             {
                 "feature_items": len(rows),
                 "risk_only_eligible": len(eligible),
+                "unique_risk_only_eligible": len(unique),
                 "external_labels_loaded": False,
             }
         )
     )
+
+    raw = folder / "all_raw.csv"
+    raw_manifest = json.loads((folder / "raw_manifest.json").read_text())
+    expected = next(x["sha256"] for x in raw_manifest["files"] if x["path"].endswith("all_raw.csv"))
+    if digest(raw.read_bytes()) != expected:
+        raise ValueError("CPC18 raw archive mismatch")
+    parameters = [
+        "Ha",
+        "pHa",
+        "La",
+        "LotShapeA",
+        "LotNumA",
+        "Hb",
+        "pHb",
+        "Lb",
+        "LotShapeB",
+        "LotNumB",
+        "Amb",
+        "Corr",
+    ]
+    columns = ["SubjID", "Location", "Set", "Condition", "GameID", "Trial", "Feedback", "block"]
+    metadata = pd.read_csv(raw, usecols=columns + parameters)
+    definitions = metadata[["GameID"] + parameters].drop_duplicates()
+    if definitions.GameID.duplicated().any():
+        raise ValueError("raw game definition varies")
+    paired = definitions.merge(
+        external[["GameID"] + parameters], on="GameID", suffixes=("_r", "_w")
+    )
+    if len(paired) != len(external) or any(
+        not paired[f"{p}_r"].fillna("").equals(paired[f"{p}_w"].fillna(""))
+        and not (paired[f"{p}_r"].fillna("") == paired[f"{p}_w"].fillna("")).all()
+        for p in parameters
+    ):
+        raise ValueError("workbook/raw gamble definition mismatch")
+    if metadata.duplicated(["SubjID", "GameID", "Trial"]).any():
+        raise ValueError("duplicate trial identity")
+    if not ((metadata.Trial <= 5) == (metadata.Feedback == 0)).all():
+        raise ValueError("no-feedback trial mapping changed")
+    usable = metadata[metadata.GameID.isin(unique.values()) & (metadata.Feedback == 0)]
+    if not usable.groupby(["SubjID", "GameID"]).size().eq(5).all():
+        raise ValueError("incomplete no-feedback subject-game block")
+    subject_counts = usable.groupby("GameID").SubjID.nunique()
+    inventory = {
+        "human_choices_loaded": False,
+        "metadata_columns": columns + parameters,
+        "raw_sha256": expected,
+        "raw_rows": len(metadata),
+        "raw_games": int(metadata.GameID.nunique()),
+        "workbook_raw_gamble_agreements": len(paired),
+        "unique_external_items": len(unique),
+        "eligible_no_feedback_rows": len(usable),
+        "eligible_subjects": int(usable.SubjID.nunique()),
+        "subjects_per_item_min_max": [int(subject_counts.min()), int(subject_counts.max())],
+        "eligible_set_ids": sorted(usable.Set.unique().tolist()),
+        "interpretation": "Five repeated no-feedback trials per participant-game. Subject IDs "
+        "are unique in the full archive; repeated trials are not independent participants.",
+    }
+    write_json(folder / "raw_metadata_screen.json", inventory)
+    print(json.dumps(inventory))
 
 
 if __name__ == "__main__":
