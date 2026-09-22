@@ -1,0 +1,120 @@
+{
+  "behavior_used_for_splits": false,
+  "datasets": {
+    "cda": {
+      "assignments": {
+        "development": [
+          "Session 6-BuyANDSell",
+          "Session 3-BuyANDSell",
+          "Session 9-BuyORSell",
+          "Session 1-BuyORSell",
+          "Session 3-BuyORSell"
+        ],
+        "test": [
+          "Session 4-BuyANDSell",
+          "Session 1-BuyANDSell",
+          "Session 6-BuyORSell",
+          "Session 8-BuyORSell",
+          "Session 7-BuyORSell"
+        ],
+        "train": [
+          "Session 9-BuyANDSell",
+          "Session 8-BuyANDSell",
+          "Session 2-BuyANDSell",
+          "Session 7-BuyANDSell",
+          "Session 5-BuyANDSell",
+          "Session 2-BuyORSell",
+          "Session 10-BuyORSell",
+          "Session 4-BuyORSell",
+          "Session 5-BuyORSell",
+          "Session 11-BuyORSell",
+          "Session 12-BuyORSell"
+        ]
+      },
+      "conditions": {
+        "Session 1-BuyANDSell": "BuyANDSell",
+        "Session 1-BuyORSell": "BuyORSell",
+        "Session 10-BuyORSell": "BuyORSell",
+        "Session 11-BuyORSell": "BuyORSell",
+        "Session 12-BuyORSell": "BuyORSell",
+        "Session 2-BuyANDSell": "BuyANDSell",
+        "Session 2-BuyORSell": "BuyORSell",
+        "Session 3-BuyANDSell": "BuyANDSell",
+        "Session 3-BuyORSell": "BuyORSell",
+        "Session 4-BuyANDSell": "BuyANDSell",
+        "Session 4-BuyORSell": "BuyORSell",
+        "Session 5-BuyANDSell": "BuyANDSell",
+        "Session 5-BuyORSell": "BuyORSell",
+        "Session 6-BuyANDSell": "BuyANDSell",
+        "Session 6-BuyORSell": "BuyORSell",
+        "Session 7-BuyANDSell": "BuyANDSell",
+        "Session 7-BuyORSell": "BuyORSell",
+        "Session 8-BuyANDSell": "BuyANDSell",
+        "Session 8-BuyORSell": "BuyORSell",
+        "Session 9-BuyANDSell": "BuyANDSell",
+        "Session 9-BuyORSell": "BuyORSell"
+      },
+      "metadata_columns_read": [
+        "SessionID",
+        "Condition (BuyANDSell / BuyORSell)",
+        "Round"
+      ],
+      "source_path": "data/raw/finance_cda_2017_20260922/market_data.xlsx",
+      "source_sha256": "75a0b95bd01776cfb6aeb28f6fe8a8b976c2c37d3acdf534a517a52d6c4f2cac",
+      "unit": "SessionID"
+    },
+    "scopic": {
+      "admissible_assignments": 36,
+      "assignments": {
+        "development": [
+          "45zaunj0",
+          "utt3zm8h"
+        ],
+        "test": [
+          "f28g51j5",
+          "up6zkt6f"
+        ],
+        "train": [
+          "ljb1z2uw",
+          "vks91vuc"
+        ]
+      },
+      "metadata_columns_read": [
+        "participant.code",
+        "session.code",
+        "group.id_in_subsession",
+        "subsession.round_number",
+        "participant._current_app_name"
+      ],
+      "rule": "2 sessions per split, both treatments per split; lowest seeded SHA256",
+      "source_path": "data/raw/finance_scopic_20260922/data_de_scopic.csv",
+      "source_sha256": "327f7c512733fffe0efb8ee83944cefb4320ab538a930b920b5cdd25595ac333",
+      "treatments": {
+        "45zaunj0": [
+          "spt1"
+        ],
+        "f28g51j5": [
+          "spt1"
+        ],
+        "ljb1z2uw": [
+          "spt1",
+          "spt2"
+        ],
+        "up6zkt6f": [
+          "spt2"
+        ],
+        "utt3zm8h": [
+          "spt1",
+          "spt2"
+        ],
+        "vks91vuc": [
+          "spt1"
+        ]
+      },
+      "unit": "session.code"
+    }
+  },
+  "schema_version": 1,
+  "scope": "Data partition freeze only; not a frozen model/evaluation protocol",
+  "seed": 20260922
+}
