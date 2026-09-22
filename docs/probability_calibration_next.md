@@ -1,6 +1,8 @@
 # Next probability experiment: design proposal after Calibration V2
 
-This is a concrete next experiment design, not yet a frozen/running study.
+Historical design proposal. The experiment is now complete; see
+`probability_calibration_results_20260922.md`. The next external design is in
+`cpc18_external_next.md`.
 Calibration V2 failed its correct-label mechanism gate; its results are in
 `calibration_v2_results_20260922.md`. Avoid another large action-sampling matrix
 until the probability-prediction formulation has been tested.

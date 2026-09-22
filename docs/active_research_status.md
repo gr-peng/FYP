@@ -12,7 +12,7 @@ is active and is not satisfied by a new runner or a single calibration experimen
 - New semantic tests cover hidden-probability invariance, target/pool label
   isolation, visible structural duplicates, shuffled-label marginal preservation,
   neutral prompts, and response identity/counterbalance checks.
-- Full suite after financial adapters and probability elicitation: **89 passed**
+- Full suite after probability experiment, JS correction and statistical controls: **95 passed**
   in the project `.venv`; new-file Ruff checks passed.
 - The separate mock provider completed its 20-response smoke, 10,000-response
   development matrix, and evaluation. This is engineering evidence only.
@@ -41,8 +41,30 @@ is active and is not satisfied by a new runner or a single calibration experimen
   that direct/Gateway credentials are still absent; do not call this real validation.
 - Implemented `experiments/probability_elicitation.py` so generative LLMs can be
   compared with Jev probability outputs directly. Strict validation, explicit
-  normalization, one schema repair and complete per-call usage; no real probability
-  calls yet. Do not use the shared trading-specific `decide()` fallback for this task.
+  normalization, one schema repair and complete per-call usage. Do not use the
+  shared trading-specific `decide()` fallback for this task.
+- Probability experiment frozen at **660f9c0**, real smoke 16/16 and main 1,600/1,600
+  valid, no repairs/cache hits. Run/evaluation exited 0; sessions 97360/8888 closed.
+  P_true MAE .163021 versus P0 .179454 and constant .181091 (200 reused dev items).
+  True−P0 CI [-.031692,-.001773], but true−neutral and true−shuffled cross zero:
+  correct-label mechanism still unsupported. Selected candidate **P_true, alpha=1**.
+  Main successful usage: 837,866 input / 46,392 output tokens.
+- JS erratum: the frozen probability evaluator reports a sum as `mean_js` by calling
+  a scalar helper with arrays. Original source/output preserved. Run
+  `scripts/correct_probability_js.py`; authoritative JS is in `evaluation_corrected/`.
+  New studies must use `experiments.probability_analysis.mean_bernoulli_js`. Primary
+  MAE/selection unchanged; independently recalculated from raw responses.
+- Added stronger risk-only statistical controls, fitted on 487 pool items and
+  evaluated on 161 reused development items. Zero shared IDs/visible structures.
+  MAE: symmetric fractional logistic **.086638**, aligned 16-neighbor **.100011**,
+  P_true **.158909**, constant **.174865**. Fixed ridge .01/k16, no hyperparameter
+  search. These are post-probability-study exploratory controls, not preregistered.
+- Simple post hoc statistical/LLM mixture selects **zero LLM weight** on development;
+  weights 0/.25/.5/.75/1 give MAE .086638/.095707/.113204/.134790/.158909.
+  Do not present this as a successful hybrid or added LLM value. Reproducible with
+  `scripts/evaluate_risk_statistical_baselines.py`; model/results under
+  `outputs/risk_statistical_baselines_20260922/`.
+  See `docs/probability_calibration_results_20260922.md`.
 - Downloaded and checksum-verified CPC18 raw records and dictionary. Feature-only
   audit yields 177 risk candidates after excluding five overlaps with the entire
   Choices13k source, then **175 unique candidates** after keeping the smaller IDs
@@ -72,26 +94,36 @@ is active and is not satisfied by a new runner or a single calibration experimen
   Exact public order book/cash/opportunity replay is unresolved. Do not treat
   each filled quote row as an immediate trade or Market Price as a pre-quote field.
   See `docs/financial_training_audit_20260922.md` and `docs/scopic_baseline_results_20260922.md`.
+- Original author/registered instructions obtained and archived: three practice
+  periods/reset confirmed; announced ranking rules belong in even pre-ranking
+  context. Four train and four dev decisions use sales proceeds to fund purchases
+  exceeding start-of-period cash. Do not impose a stricter gross-purchase cap or
+  remove these records silently. Original source OSF node returns 410; registration
+  preserves instructions but no task code found. See `financial_instructions_audit_20260922.md`.
 - The financial herding replication package has a verified public file listing;
   a local direct page fetch returned HTTP 403. Raw individual data not obtained.
 
 **Next actions**
 
-1. Implement and freeze the probability-prediction experiment outlined in
-   `docs/probability_calibration_next.md` (not yet running/frozen). Reuse development
-   IDs and retrieval maps, compare no/true/neutral/shuffled examples in both orders,
-   retain statistical controls and measure order sensitivity. Suggested matrix:
-   1,600 forecasts plus separate smoke. Live transport is authorized; do not
-   request redundant permission. The previous action experiment needs no restart.
-2. Evaluate that matrix and development-only probability shrinkage; freeze the
-   next external policy. Do not promote the failed label mechanism as established.
-3. Freeze an external CPC18 design using the 175 unique risk problems before
-   reading labels. Include strong constant/retrieval baselines and controls informed
-   by the completed development contrasts; do not present reused development as test.
+1. Implement and freeze the independent CPC18 runner described in
+   `docs/cpc18_external_next.md` (draft; no external calls/label reads yet). Use
+   175 unique risk problems, four probability methods × two orders = 1,400 main
+   forecasts plus smoke. Preserve selected P_true/alpha1 and include BOTH strong
+   statistical controls fitted on the 487 pool cases. Keep their fitted checkpoint
+   fixed; do not tune on CPC18. Live existing-route calls are already authorized.
+2. Freeze metrics, complete response/source hashes and label-opening protocol;
+   then score raw no-feedback trials 1–5 only. Human sampling uncertainty must
+   respect repeated participant records; draft suggests within-stratum participant
+   cluster resampling in addition to conditional problem bootstrap. Use corrected JS.
+3. Reassess external results before choosing any calibration/policy intervention.
+   Preserve negative mixture and mechanism findings. No current real job is running;
+   completed Choices13k runs need no restart. Do not modify their frozen modules
+   merely to add a new study; use separate experiment code and hashes.
 4. Define/freeze plain versus calibrated LLM financial probability comparison on
    the existing scopic development opportunities. Reuse statistical baselines;
-   retain test sessions. Audit original instructions to confirm raw-round mapping
-   and any announced treatment framing before claiming full visible-state matching.
+   retain test sessions. Include confirmed announced treatment framing and document
+   remaining within-period funding/settlement ambiguity. A sell-any predictor is
+   still not a coherent joint portfolio agent.
 5. Extend the implemented Jev adapter into a fair probability/action evaluation.
    Run the contract probe after access is configured. Real execution awaits an authorized key or
    a supported existing route. Continue independent work in the meantime.
