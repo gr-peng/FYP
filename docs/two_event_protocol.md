@@ -68,3 +68,5 @@ v2在第一条探针即因仍返回reasoning_content而失败，完整日志保�
 [LiteLLM参数说明](https://docs.litellm.ai/docs/providers/deepseek)与
 [显式透传说明](https://docs.litellm.ai/blog/mimo_v2_6)提示网关参数映射与原生端点不同。
 v3保持研究内容不变，增加reasoning_effort:none及受限extra_body/allowed_openai_params透传，仍先通过8条探针并在全部正式响应中持续检查，不因测试失败悄悄换模型。
+
+v3第一条探针收到6次快速HTTP500后失败，没有有效模型输出。学校[模型说明](https://itdid.hkust-gz.edu.cn/en/detail-1070)将该路由标为校内部署，不能假定它等价于DeepSeek官方云端。v4改用本地推理框架文档中的`chat_template_kwargs:{thinking:false,enable_thinking:false}`，去掉v2/v3的原生参数和LiteLLM透传组合；[vLLM的DeepSeek V4模板源码](https://docs.vllm.ai/en/latest/api/vllm/tokenizers/deepseek_v4/)明确支持这些布尔开关。这里是根据公开文档提出的接口假设，仍以真实探针和每次响应验证，不声称已确认学校后台实现。

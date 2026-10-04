@@ -464,6 +464,7 @@ async def run_suite(config, provider, root=ROOT, cache_only=False):
             "reasoning_effort",
             "allowed_openai_params",
             "extra_body",
+            "chat_template_kwargs",
         }:
             raise ValueError("unsupported pilot provider override")
         provider_spec.update(overrides)

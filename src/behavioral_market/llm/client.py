@@ -155,6 +155,15 @@ class OpenAICompatibleClient:
             payload["thinking"] = thinking
         if "reasoning_effort" in self.config:
             payload["reasoning_effort"] = self.config["reasoning_effort"]
+        if "chat_template_kwargs" in self.config:
+            template = self.config["chat_template_kwargs"]
+            if (
+                not isinstance(template, dict)
+                or set(template) - {"thinking", "enable_thinking"}
+                or any(type(value) is not bool for value in template.values())
+            ):
+                raise ValueError("chat template only accepts boolean thinking controls")
+            payload["chat_template_kwargs"] = template
         if "allowed_openai_params" in self.config:
             allowed = self.config["allowed_openai_params"]
             if allowed != ["thinking"]:

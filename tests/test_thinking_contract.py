@@ -37,6 +37,7 @@ def test_native_mode_is_in_request_and_reasoning_response_is_not_cached(tmp_path
             extra_body={"thinking": {"type": "disabled"}, "enable_thinking": False},
             allowed_openai_params=["thinking"],
             reasoning_effort="none",
+            chat_template_kwargs={"thinking": False, "enable_thinking": False},
         )
         await client.http.aclose()
 
@@ -46,6 +47,7 @@ def test_native_mode_is_in_request_and_reasoning_response_is_not_cached(tmp_path
             assert payload["enable_thinking"] is False
             assert payload["extra_body"]["thinking"] == {"type": "disabled"}
             assert payload["reasoning_effort"] == "none"
+            assert payload["chat_template_kwargs"] == {"thinking": False, "enable_thinking": False}
             return httpx.Response(
                 200,
                 json={
