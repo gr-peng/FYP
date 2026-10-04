@@ -457,7 +457,14 @@ async def run_suite(config, provider, root=ROOT, cache_only=False):
             json.loads((root / config["provider_config"]).read_text()), provider
         )
         overrides = config.get("provider_overrides", {})
-        if set(overrides) - {"thinking", "require_no_reasoning", "max_tokens"}:
+        if set(overrides) - {
+            "thinking",
+            "require_no_reasoning",
+            "max_tokens",
+            "reasoning_effort",
+            "allowed_openai_params",
+            "extra_body",
+        }:
             raise ValueError("unsupported pilot provider override")
         provider_spec.update(overrides)
         # Freeze full provider configuration in run identity, without credentials.

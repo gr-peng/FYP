@@ -153,6 +153,18 @@ class OpenAICompatibleClient:
             if thinking not in ({"type": "enabled"}, {"type": "disabled"}):
                 raise ValueError("thinking must explicitly enable or disable the mode")
             payload["thinking"] = thinking
+        if "reasoning_effort" in self.config:
+            payload["reasoning_effort"] = self.config["reasoning_effort"]
+        if "allowed_openai_params" in self.config:
+            allowed = self.config["allowed_openai_params"]
+            if allowed != ["thinking"]:
+                raise ValueError("only thinking passthrough is supported")
+            payload["allowed_openai_params"] = allowed
+        if "extra_body" in self.config:
+            extra = self.config["extra_body"]
+            if not isinstance(extra, dict) or set(extra) - {"thinking", "enable_thinking"}:
+                raise ValueError("extra_body may only contain thinking-mode controls")
+            payload["extra_body"] = extra
         key = hashlib.sha256(
             json.dumps([payload, identity, self.cache_namespace], sort_keys=True).encode()
         ).hexdigest()

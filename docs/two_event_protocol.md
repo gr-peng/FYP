@@ -62,3 +62,9 @@
 v1冻结于`446d952`。真实调用期间发现：仅传`enable_thinking:false`不足以关闭当前路由部分响应的思考模式，2条响应以length结束，发生JSON修复。停止该批次并完整保留记录，不能把它混入主结果。首个MU普通/无做市/有新闻格完成24次决策、零成交；下一格被正常中断。44条响应日志包括29次新HTTP200、12次缓存、3次在途中取消；含缓存共21条带reasoning_content。已知新成功调用用量22,871输入/4,662输出token；3次取消调用的最终计费用量未知。
 
 依据[DeepSeek官方模式文档](https://api-docs.deepseek.com/guides/thinking_mode/)，新增显式`thinking:{type:disabled}`，保留旧参数以兼容路由；新配置`two_event_market_pilot_v2.json`启用返回契约检查，若仍收到非空reasoning_content则立即报错。旧实验配置与缓存不改写。先跑8条模型名/模式/JSON探针，无截断、无需修复才重跑432决策矩阵。v2只改接口设置，场景、新闻、偏好、流动性及窗口保持原定。不能把返回字段检查理解为对模型内部计算方式的完全证明。
+
+v2在第一条探针即因仍返回reasoning_content而失败，完整日志保留，市场矩阵未启动。
+[学校接口说明](https://docs.hpc.hkust-gz.edu.cn/docs/aigc/api-usage/)确认V2使用LiteLLM代理；
+[LiteLLM参数说明](https://docs.litellm.ai/docs/providers/deepseek)与
+[显式透传说明](https://docs.litellm.ai/blog/mimo_v2_6)提示网关参数映射与原生端点不同。
+v3保持研究内容不变，增加reasoning_effort:none及受限extra_body/allowed_openai_params透传，仍先通过8条探针并在全部正式响应中持续检查，不因测试失败悄悄换模型。

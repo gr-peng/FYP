@@ -33,12 +33,19 @@ def client_at(tmp_path):
 def test_native_mode_is_in_request_and_reasoning_response_is_not_cached(tmp_path):
     async def scenario():
         client = client_at(tmp_path)
+        client.config.update(
+            extra_body={"thinking": {"type": "disabled"}, "enable_thinking": False},
+            allowed_openai_params=["thinking"],
+            reasoning_effort="none",
+        )
         await client.http.aclose()
 
         def respond(request):
             payload = json.loads(request.content)
             assert payload["thinking"] == {"type": "disabled"}
             assert payload["enable_thinking"] is False
+            assert payload["extra_body"]["thinking"] == {"type": "disabled"}
+            assert payload["reasoning_effort"] == "none"
             return httpx.Response(
                 200,
                 json={
@@ -67,3 +74,14 @@ def test_reasoning_validation_is_opt_in_for_legacy_clients(tmp_path):
     client.config.pop("require_no_reasoning")
     client.validate_response_contract(response)
     asyncio.run(client.close())
+
+
+def test_passthrough_cannot_override_model_or_destination(tmp_path):
+    async def scenario():
+        client = client_at(tmp_path)
+        client.config["extra_body"] = {"model": "other-model"}
+        with pytest.raises(ValueError, match="only contain thinking-mode"):
+            await client.completion([], {})
+        await client.close()
+
+    asyncio.run(scenario())
