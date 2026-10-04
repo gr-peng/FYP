@@ -146,6 +146,13 @@ class OpenAICompatibleClient:
             "enable_thinking": self.config["enable_thinking"],
             "response_format": {"type": "json_object"},
         }
+        # Opt-in native DeepSeek parameter. Some relays ignore enable_thinking.
+        # Leave frozen legacy payloads unchanged unless explicitly configured.
+        if "thinking" in self.config:
+            thinking = self.config["thinking"]
+            if thinking not in ({"type": "enabled"}, {"type": "disabled"}):
+                raise ValueError("thinking must explicitly enable or disable the mode")
+            payload["thinking"] = thinking
         key = hashlib.sha256(
             json.dumps([payload, identity, self.cache_namespace], sort_keys=True).encode()
         ).hexdigest()
@@ -153,8 +160,7 @@ class OpenAICompatibleClient:
         self.log("llm_requests.jsonl", {**identity, "request_hash": key, "payload": payload})
         if cache_file.exists():
             body = json.loads(cache_file.read_text())
-            if body.get("model") != self.config["model"]:
-                raise FatalAPIError("cached response model does not match configured model")
+            self.validate_response_contract(body)
             self.log(
                 "llm_responses.jsonl",
                 {**identity, "request_hash": key, "cached": True, "status": "ok", "response": body},
@@ -228,8 +234,7 @@ class OpenAICompatibleClient:
             }
             self.log("llm_responses.jsonl", {**meta, "response": body})
             if body is not None:
-                if body.get("model") != self.config["model"]:
-                    raise FatalAPIError("response model does not match configured model")
+                self.validate_response_contract(body)
                 write_json(cache_file, body)
                 return body, {
                     "cache_hit": False,
@@ -249,6 +254,14 @@ class OpenAICompatibleClient:
                 if status != 429 or not self.pacer:
                     await asyncio.sleep(min(2**attempt, 16))
         return None, {"status": "transport_exhausted", "request_hash": key}
+
+    def validate_response_contract(self, body):
+        if body.get("model") != self.config["model"]:
+            raise FatalAPIError("response model does not match configured model")
+        if self.config.get("require_no_reasoning"):
+            for choice in body.get("choices", []):
+                if choice.get("message", {}).get("reasoning_content"):
+                    raise FatalAPIError("provider returned reasoning despite non-thinking contract")
 
     async def decide(self, system, user, schema, identity):
         messages = [{"role": "system", "content": system}, {"role": "user", "content": user}]
