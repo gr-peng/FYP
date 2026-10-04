@@ -6,7 +6,8 @@ The user confirmed the June–July 2026 Meta cloud/compute episode and authorize
 continued system iteration plus a plain-Chinese experiment report for this event
 and the 2024 Trump election crypto rally. The authoritative current protocol is
 `docs/two_event_protocol.md`; earlier results below remain historical evidence.
-No new financial development/test labels have been opened.
+The frozen financial development preparation has now opened only the designated
+16 development sessions; the final16 test sessions remain closed.
 
 Public daily/minute data and retrospective reality checks are complete under
 `two_event_20261004_v1`. A finite-inventory LP and 24/7 calendar are implemented.
@@ -31,12 +32,26 @@ The quote/account repairs restored two-sided activity but not realistic event
 returns. See the V5 addition to the stage report. It is a bundled engineering
 change, not a separate causal estimate of each repair.
 
-Next: freeze the executable financial development comparison (400 targets,
-four prompts,two menu orders). Training memory states and fitted controls were
-reconstructed exactly; train CV Brier is .215714 versus old .227505. Development
-and test remain unopened as of this checkpoint. Synthetic private allocations
-are not human calibration. Longer event windows and a fixed liquidity sensitivity
-screen are being prepared; the overall goal remains incomplete.
+Financial development is frozen at `217b60b` (400 targets,four prompts,two menu
+orders). Exactly400 target orders were selected by hash from18,827 eligible
+events across16 sessions. The8 train-only probability probes passed;3200 main
+forecasts are in progress. Source/public-anonymity and outbound message fields
+were checked after an automatic review rejection; the same campus model endpoint
+was then approved, without changing destination or hiding the data scope. Evidence
+is in `outputs/financial_probability_development_20261004/egress_scope_audit.json`.
+Training states and model parameters were exactly reconstructed; train CV Brier
+is .215714 versus old .227505. Independent scores are not yet available.
+
+The bounded V6 market extension is frozen at `ca4467c`:2088 long-window decisions
+plus1296 short-window liquidity sensitivity decisions,three seeds,private-target
+agents. Rule negative controls and fixed-reference/capacity checks completed.
+The explicit all-buy BTC stress yields +13.19% with standard synthetic liquidity,
+but +3.59% with fourfold depth/budget; these are mechanics diagnostics,not LLM
+predictions or mathematical bounds. Matching long-window real returns are
+MU -28.14% (June29 baseline) andBTC +47.00% (Nov4 baseline),different from
+the empirical report's June30/Nov5 baselines. Live V6 waits for the financial
+matrix to finish,avoiding simultaneous load on the same route. Overall goal
+remains active until bounded experiments,audits and final plain report complete.
 
 ## Previous continuation state (2026-09-23)
 
