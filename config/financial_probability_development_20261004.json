@@ -1,0 +1,31 @@
+{
+  "study_id": "financial_probability_development_20261004",
+  "seed": 20261004,
+  "quota": 25,
+  "expected_targets": 400,
+  "provider": "aigc_relay",
+  "provider_config": "config/memory_market_2026.json",
+  "provider_overrides": {
+    "max_tokens": 128,
+    "chat_template_kwargs": {
+      "thinking": false,
+      "enable_thinking": false
+    },
+    "require_no_reasoning": true
+  },
+  "methods": [
+    "no_examples",
+    "real_labels",
+    "neutral_labels",
+    "shuffled_labels"
+  ],
+  "menu_orders": [
+    "buy_first",
+    "sell_first"
+  ],
+  "retrieval": "Four nearest visible-state standardized feature vectors from distinct training participants; train mean and scale fixed",
+  "selection": "25 hash-selected eligible active-order events per development session",
+  "scope": "Development only; test remains closed. Recorded human history, active-order side, partial observation.",
+  "request_concurrency": 32,
+  "requests_per_second": 4
+}

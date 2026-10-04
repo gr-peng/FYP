@@ -1,0 +1,39 @@
+{
+  "scope": "development only; test remains closed",
+  "partition_sha256": "1413d8be31df359ffa201fa9c777cc8ef45854a372e605cde3bfd3a80cee0f77",
+  "input_hashes": {
+    "experiments/financial_probability.py": "7cce47ea3fa6228ef3db5210cf0dca38a29bc21cf4e07b201e8861c0ecf2256a",
+    "experiments/replication_development_data.py": "8f86a51ad3de07153cf4e0996dfa7a263a5e1ac0dc8e7f6fb360f318f39d3552",
+    "experiments/replication_quote_memory.py": "d5cc56d4490e12ab02afa6d464ddd5e975e66afc9bc8781ac3d89e9b2669bd93",
+    "experiments/replication_quote_states.py": "6baa99ea2a236ec3f4abb072ae8bee4808d9a46685a261f955bc7bb31ec26f15",
+    "experiments/market_quote_memory_baselines.py": "3a826e33f5fc396366620994fd15c6eec2670856ad2d70ea0c2455b3e9d5f17d",
+    "experiments/market_quote_baselines.py": "a31646fbcd083053e8683089cd3e09d2f55c3f15414e5f87e2bcc6430210dd06",
+    "experiments/replication_training_data.py": "f6b8a99afd650b3c032e2ede2e2eabd3054989f2ace7ea2f56ff94ceb4dac47f",
+    "experiments/replication_training_audit.py": "73862fadf297a9c8e862ae255cc77cf2007ce8775196939e75a0aa63fe7abc32",
+    "experiments/probability_elicitation.py": "7404d902d63d3bab4b1a5bfd35d81053989a6d0bb9060e4c8315a8f9119597b9",
+    "src/behavioral_market/llm/client.py": "2f10435317361fe08f09a414c6881774573813a6802c3649ddbcbb2fe4c453c5",
+    "src/behavioral_market/simulation/event_runner.py": "100373ff8153c860aeae05934e22931431154d88217f55229210fd7e0bfec042",
+    "src/behavioral_market/data/archive.py": "5be97fffd84042b717a771673eb5de2e7f7e99203e9909ec76887f2c1fc4f44e",
+    "experiments/replication_metadata.py": "c4705ac84a1f4cd767e21568bdf8a7476b4b70913473d735d393f227739af8ec",
+    "scripts/run_financial_probability.py": "aa9b64c4d631b120ceea85ec8ff7d83ad30223c54479d54d71a25e00207bdc05",
+    "scripts/build_market_quote_memory.py": "12d951f73a02d45ace238494e16a27cd800c29fab002800b652ce5b739b9456c",
+    "scripts/analyze_financial_probability.py": "a7d2feb6f749b757704a1c83ecfd4c70f4c44fb75c8226f3a3de3a6e476de647",
+    "config/financial_probability_development_20261004.json": "85884d95f26d09936ab040fab74552839b599e62133be2b9fd20ce970bc53673",
+    "config/memory_market_2026.json": "caa77f95eff3e5b5c14e458607e1debf47fd0bc2720d2461e8f071d32825e1f1",
+    "outputs/market_quote_memory_training_20261004/manifest.json": "90a7c726d82806a8840575ec1a2e6e13cbbd1e2a9a03ce2c633ef30784b57fd1",
+    "outputs/market_quote_memory_training_20261004/states.jsonl": "5e5c0a228d59f0e5f9a28a3a11d727d764ce5795bc6ba9bc6a39142d148be2db",
+    "outputs/market_quote_memory_training_20261004/baseline_model.json": "265e7a3ae02dc2932c44f596e85501a9713bdf7e88536dcb8b48782da7584b24"
+  },
+  "primary_metric": "session-then-person-balanced Brier on all 400 common targets",
+  "coverage": "All 3200 responses valid after at most one schema repair; otherwise no primary scores",
+  "contrasts": [
+    "real_labels minus no_examples",
+    "real_labels minus neutral_labels",
+    "real_labels minus shuffled_labels",
+    "real_labels minus memory_ridge_logistic",
+    "real_labels minus demonstration_mean"
+  ],
+  "uncertainty": "10000 paired resamples of 16 whole sessions, percentile 95%; descriptive multiple contrasts",
+  "selection": "25 eligible orders per development session by seeded hash; never by current side or error",
+  "interpretation": "Active-order side given partial observation and recorded history; not HOLD or autonomous market validation"
+}

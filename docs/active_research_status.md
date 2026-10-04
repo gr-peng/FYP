@@ -23,13 +23,20 @@ V1 was stopped for inconsistent thinking mode, V2/V3 probes failed, and V4's
 chat-template controls passed8/8 probes and every formal response. No model was
 silently substituted. Successful V4 main usage is293,234 input/21,181 output tokens.
 
-Next: V5 repairs quote grids, displays underlying-unit crypto prices, computes
-portfolio weights/gaps explicitly, and runs disjoint pairs concurrently while
-keeping each news/no-news pair sequential. This bundled engineering diagnostic
-is not a clean estimate of each repair's individual effect. A train-only memory
-extension has also been built and checked: Brier .215714 vs old .227505 in the same
-five-fold training-session CV; development/test remain unopened. Synthetic private
-allocation targets are not human calibration. The overall goal remains incomplete.
+V5 is complete at `2ef9091`: 432 audited decisions,96 matched pre-news pairs,
+336 new successes/96 cache hits,one recovered transport error. MU has50 BUY,
+45 SELL,97 HOLD and62 trades; BTC has74 BUY,56 SELL,110 HOLD and82 trades.
+Private-target finite-LP news increments are MU +.4165 pp andBTC -.0304 pp.
+The quote/account repairs restored two-sided activity but not realistic event
+returns. See the V5 addition to the stage report. It is a bundled engineering
+change, not a separate causal estimate of each repair.
+
+Next: freeze the executable financial development comparison (400 targets,
+four prompts,two menu orders). Training memory states and fitted controls were
+reconstructed exactly; train CV Brier is .215714 versus old .227505. Development
+and test remain unopened as of this checkpoint. Synthetic private allocations
+are not human calibration. Longer event windows and a fixed liquidity sensitivity
+screen are being prepared; the overall goal remains incomplete.
 
 ## Previous continuation state (2026-09-23)
 
