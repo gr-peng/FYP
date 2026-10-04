@@ -18,7 +18,7 @@ from behavioral_market.llm.client import OpenAICompatibleClient, RequestPacer  #
 from behavioral_market.llm.schemas import OrderDecision  # noqa: E402
 from behavioral_market.simulation.event_runner import git_state, llm_config  # noqa: E402
 from experiments.two_event_data import verify_manifest  # noqa: E402
-from experiments.two_event_market import SYSTEM, code_hash, context, setup  # noqa: E402
+from experiments.two_event_market import code_hash, context, setup, system_prompt  # noqa: E402
 
 
 async def probe(config, provider):
@@ -78,7 +78,7 @@ async def probe(config, provider):
                     }
                     body, response_meta = await client.completion(
                         [
-                            {"role": "system", "content": SYSTEM},
+                            {"role": "system", "content": system_prompt(config)},
                             {"role": "user", "content": json.dumps(payload, sort_keys=True)},
                         ],
                         identity,
@@ -110,7 +110,7 @@ async def probe(config, provider):
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument(
-        "--config", type=Path, default=ROOT / "config/two_event_market_pilot_v2.json"
+        "--config", type=Path, default=ROOT / "config/two_event_market_pilot_v5.json"
     )
     parser.add_argument("--provider", default="aigc_relay", choices=["aigc_relay", "siliconflow"])
     args = parser.parse_args()

@@ -14,6 +14,7 @@ from pathlib import Path
 import pandas as pd
 from dotenv import load_dotenv
 
+from behavioral_market.agents.portfolio_facts import portfolio_facts
 from behavioral_market.agents.state import population
 from behavioral_market.data.archive import digest, write_json
 from behavioral_market.data.calendar import sessions
@@ -39,6 +40,33 @@ Return ONLY a JSON object with action (buy/sell/hold), quantity (integer), limit
 (positive number or null for hold), rationale (short string), sentiment
 (strongly_bearish/bearish/neutral/bullish/strongly_bullish). For hold set quantity=0 and
 limit_price=null. Do not add fields."""
+
+LOT_RULES = """Prices and cash are quoted PER LOT in quote_currency. quantity is an integer
+number of lots; lot_size states the underlying asset amount. All displayed prices use this
+same lot unit."""
+ASSET_RULES = """All displayed market prices and limit_price are in quote_currency per ONE
+underlying asset unit (one share or one BTC). quantity is an integer number of lots, and
+lot_size is the underlying units per lot. Order notional is quantity * lot_size * limit_price.
+Respect price_tick. Computed account facts give current weights and allocation gaps."""
+assert LOT_RULES in SYSTEM
+
+
+def system_prompt(config):
+    basis = config.get("price_basis", "lot")
+    if basis not in {"lot", "underlying"}:
+        raise ValueError("unsupported observation price basis")
+    return SYSTEM.replace(LOT_RULES, ASSET_RULES) if basis == "underlying" else SYSTEM
+
+
+def prompt_version(config):
+    if config.get("price_basis", "lot") == "lot" and not config.get("computed_portfolio_facts"):
+        return PROMPT_VERSION
+    return (
+        PROMPT_VERSION
+        + "-"
+        + config.get("price_basis", "lot")
+        + f"-facts{int(bool(config.get('computed_portfolio_facts')))}"
+    )
 
 
 def code_hash():
@@ -79,7 +107,18 @@ def lot_history(bars, spec):
     if result.empty or spec["lot_size"] <= 0:
         raise ValueError("positive lot size and pre-start data required")
     for column in ("open", "high", "low", "close"):
-        result[column] = result[column].astype(float) * spec["lot_size"]
+        if "asset_price_tick" in spec:
+            tick = Decimal(str(spec["asset_price_tick"]))
+            if not tick.is_finite() or tick <= 0:
+                raise ValueError("invalid asset price grid")
+            lot = Decimal(str(spec["lot_size"]))
+            result[column] = result[column].map(
+                lambda value, tick=tick, lot=lot: float(
+                    (Decimal(str(value)) / tick).to_integral_value() * tick * lot
+                )
+            )
+        else:
+            result[column] = result[column].astype(float) * spec["lot_size"]
     result["volume"] = result.volume.astype(float) / spec["lot_size"]
     return result.sort_values("session_date")
 
@@ -107,7 +146,7 @@ def setup(config, spec, bars, seed, liquidity):
     if n < 2:
         raise ValueError("at least two participants required")
     # Stratification guarantees different preferences without claiming human estimation.
-    targets = [0.2 + 0.6 * i / (n - 1) for i in range(n)]
+    targets = [round(0.2 + 0.6 * i / (n - 1), 6) for i in range(n)]
     random.Random(seed + 177).shuffle(targets)
     background = None
     if liquidity == "finite":
@@ -123,6 +162,10 @@ def setup(config, spec, bars, seed, liquidity):
             "level_quantities": [max(1, max_quantity * n // spec_lp["levels"])] * spec_lp["levels"],
             "inventory_skew_bps": spec_lp["inventory_skew_bps"],
         }
+        if "asset_price_tick" in spec:
+            background["tick_size"] = str(
+                Decimal(str(spec["asset_price_tick"])) * Decimal(str(spec["lot_size"]))
+            )
     elif liquidity != "none":
         raise ValueError("unknown liquidity condition")
     environment = EndogenousEventEnvironment(
@@ -149,29 +192,53 @@ def context(config, spec, agent, target, environment, cutoff, condition, treatme
         state["subjective_target_asset_weight"] = target
     elif treatment != "vanilla":
         raise ValueError("unknown treatment")
-    return {
+    if config.get("computed_portfolio_facts"):
+        state["computed_account_facts"] = portfolio_facts(
+            agent.portfolio,
+            price,
+            spec["lot_size"],
+            target if treatment == "private_targets" else None,
+        )
+    multiplier = spec["lot_size"] if config.get("price_basis", "lot") == "underlying" else 1.0
+    book = environment.book_context()
+    for key in ("best_bid", "best_ask", "spread", "last_trade"):
+        if book[key] is not None:
+            book[key] = round(book[key] / multiplier, 6)
+    if multiplier != 1:
+        state["portfolio"]["average_cost_per_asset_unit"] = (
+            state["portfolio"].pop("average_cost_per_lot") / multiplier
+        )
+    payload = {
         "decision_at": cutoff,
         "asset": spec["symbol"],
         "quote_currency": spec["quote_currency"],
         "lot_size": spec["lot_size"],
+        "order_notional_multiplier": multiplier,
         "agent_state": state,
         "observation": {
-            "last_close": float(closes.iloc[-1]),
-            "last_trade": price,
-            "completed_close_history": closes.tail(6).tolist(),
+            "last_close": round(float(closes.iloc[-1]) / multiplier, 6),
+            "last_trade": round(price / multiplier, 6),
+            "completed_close_history": (closes.tail(6) / multiplier).round(6).tolist(),
             "completed_history_through": str(environment.history.session_date.iloc[-1]),
-            "book": environment.book_context(),
+            "book": book,
             "previous_round_agent_actions": previous,
             "news": visible_events(spec, cutoff, condition),
         },
         "constraints": {
-            "min_price": round(opening * config["price_band"][0], 6),
-            "max_price": round(opening * config["price_band"][1], 6),
+            "min_price": round(opening * config["price_band"][0] / multiplier, 6),
+            "max_price": round(opening * config["price_band"][1] / multiplier, 6),
             "max_quantity": math.floor(
                 float(agent.portfolio.total_equity) * config["max_order_equity_fraction"] / price
             ),
         },
     }
+    if "asset_price_tick" in spec:
+        payload["constraints"]["price_tick"] = float(
+            Decimal(str(spec["asset_price_tick"]))
+            * Decimal(str(spec["lot_size"]))
+            / Decimal(str(multiplier))
+        )
+    return payload
 
 
 def rule_decision(payload):
@@ -182,7 +249,8 @@ def rule_decision(payload):
         payload["constraints"],
     )
     price, book = obs["last_trade"], obs["book"]
-    weight = state["portfolio"]["lots"] * price / state["portfolio"]["equity"]
+    multiplier = Decimal(str(payload.get("order_notional_multiplier", 1)))
+    weight = state["portfolio"]["lots"] * price * float(multiplier) / state["portfolio"]["equity"]
     history = obs["completed_close_history"]
     momentum = history[-1] / history[0] - 1
     target = state.get("subjective_target_asset_weight", 0.5)
@@ -193,8 +261,11 @@ def rule_decision(payload):
     quote = book["best_ask" if side == "buy" else "best_bid"]
     limit = quote if quote is not None else price * (1.006 if side == "buy" else 0.994)
     limit = round(min(constraints["max_price"], max(constraints["min_price"], limit)), 6)
+    if "price_tick" in constraints:
+        tick = Decimal(str(constraints["price_tick"]))
+        limit = float((Decimal(str(limit)) / tick).to_integral_value() * tick)
     cap = (
-        int(Decimal(str(state["portfolio"]["cash"])) // Decimal(str(limit)))
+        int(Decimal(str(state["portfolio"]["cash"])) // (Decimal(str(limit)) * multiplier))
         if side == "buy"
         else state["portfolio"]["lots"]
     )
@@ -215,18 +286,34 @@ def validate_order(decision, payload):
     if decision.action == "hold":
         return None
     constraints = payload["constraints"]
+    if "price_tick" in constraints and (
+        Decimal(str(decision.limit_price)) % Decimal(str(constraints["price_tick"])) != 0
+    ):
+        return "price_tick"
     if not constraints["min_price"] <= decision.limit_price <= constraints["max_price"]:
         return "price_band"
     if decision.quantity > constraints["max_quantity"]:
         return "maximum_quantity"
     portfolio = payload["agent_state"]["portfolio"]
     if decision.action == "buy" and (
-        Decimal(str(decision.limit_price)) * decision.quantity > Decimal(str(portfolio["cash"]))
+        Decimal(str(decision.limit_price))
+        * decision.quantity
+        * Decimal(str(payload.get("order_notional_multiplier", 1)))
+        > Decimal(str(portfolio["cash"]))
     ):
         return "insufficient_cash"
     if decision.action == "sell" and decision.quantity > portfolio["lots"]:
         return "insufficient_inventory"
     return None
+
+
+def exchange_decision(decision, payload):
+    if decision.action == "hold":
+        return decision
+    multiplier = Decimal(str(payload.get("order_notional_multiplier", 1)))
+    return decision.model_copy(
+        update={"limit_price": float(Decimal(str(decision.limit_price)) * multiplier)}
+    )
 
 
 def append_json(path, value):
@@ -276,7 +363,7 @@ async def run_case(config, spec, bars, case, output, manifest_hash, client=None,
         "git_commit": commit,
         "dirty_worktree": dirty,
         "started_at": datetime.now(UTC).isoformat(),
-        "prompt_version": PROMPT_VERSION,
+        "prompt_version": prompt_version(config),
         "interpretation": config["interpretation"],
     }
     write_json(metadata_path, metadata)
@@ -320,7 +407,7 @@ async def run_case(config, spec, bars, case, output, manifest_hash, client=None,
                     key: value for key, value in identity.items() if key != "event_condition"
                 }
                 return await client.decide(
-                    SYSTEM,
+                    system_prompt(config),
                     json.dumps(payload, sort_keys=True),
                     OrderDecision,
                     {**call_identity, "decision_at": cutoff, "agent": agent.persona.agent_id},
@@ -339,19 +426,20 @@ async def run_case(config, spec, bars, case, output, manifest_hash, client=None,
             for i in arrival:
                 agent, (decision, meta), payload = agents[i], outcomes[i], payloads[i]
                 rejection = validate_order(decision, payload)
+                internal_decision = exchange_decision(decision, payload)
                 # The exchange uses exact Decimal accounting; displayed float cash is
                 # only an observation and must never bypass the final portfolio check.
                 if (
                     rejection is None
                     and decision.action == "buy"
                     and (
-                        Decimal(str(decision.limit_price)) * decision.quantity
+                        Decimal(str(internal_decision.limit_price)) * decision.quantity
                         > agent.portfolio.cash
                     )
                 ):
                     rejection = "insufficient_cash"
                 if rejection is None:
-                    env.submit(agent, decision)
+                    env.submit(agent, internal_decision)
                     submitted[i] = env._orders[-1].get("order")
                 previous["rejected" if rejection else decision.action] += 1
                 row = {
@@ -359,6 +447,7 @@ async def run_case(config, spec, bars, case, output, manifest_hash, client=None,
                     "agent_id": agent.persona.agent_id,
                     "payload": payload,
                     "decision": decision.model_dump(),
+                    "exchange_limit_price_per_lot": internal_decision.limit_price,
                     "rejection": rejection,
                     "response_metadata": meta,
                 }
@@ -472,74 +561,99 @@ async def run_suite(config, provider, root=ROOT, cache_only=False):
         config["resolved_provider_config"] = provider_spec
         load_dotenv(root / ".env")
     shared_semaphore, pacer = asyncio.Semaphore(12), RequestPacer(4)
-    rows = []
-    registry_verified = False
-    # Sequential cases make paired pre-news response reuse deterministic.
-    for spec in config["scenarios"]:
-        bars = pd.read_parquet(directory / f"{spec['scenario_id']}_daily.parquet")
-        for case in itertools.product(
-            config["seeds"],
-            config["treatments"],
-            config["liquidity_conditions"],
-            config["event_conditions"],
-        ):
-            seed, treatment, liquidity, condition = case
-            destination = (
-                output / spec["symbol"] / f"seed{seed}" / treatment / liquidity / condition
+    count = config.get("pair_concurrency", 1)
+    if type(count) is not int or count < 1 or count > 8:
+        raise ValueError("pair_concurrency must be between one and eight")
+    pair_semaphore = asyncio.Semaphore(count)
+    bars_by_scenario = {
+        spec["scenario_id"]: pd.read_parquet(directory / f"{spec['scenario_id']}_daily.parquet")
+        for spec in config["scenarios"]
+    }
+    if live and not cache_only:
+        verifier = OpenAICompatibleClient(
+            provider_spec,
+            os.getenv(provider_spec["api_key_env"], ""),
+            output / "registry",
+            root / ".cache" / config["experiment_id"] / provider,
+        )
+        try:
+            await verifier.verify_model()
+        finally:
+            await verifier.close()
+
+    async def run_pair(spec, seed, treatment, liquidity):
+        results = []
+        async with pair_semaphore:
+            # Only disjoint pairs overlap. Each pair completes news before no-news,
+            # so identical pre-news responses are written before their paired reuse.
+            for condition in config["event_conditions"]:
+                results.append(await run_one(spec, seed, treatment, liquidity, condition))
+        return results
+
+    async def run_one(spec, seed, treatment, liquidity, condition):
+        destination = output / spec["symbol"] / f"seed{seed}" / treatment / liquidity / condition
+        client = None
+        if live:
+            client = OpenAICompatibleClient(
+                provider_spec,
+                os.getenv(provider_spec["api_key_env"], ""),
+                destination / "transport",
+                root / ".cache" / config["experiment_id"] / provider,
+                semaphore=shared_semaphore,
+                pacer=pacer,
+                cache_only=cache_only,
+                cache_namespace=prompt_version(config),
             )
-            client = None
+        elif provider == "mock":
+            client = MockLLMClient()
+        try:
+            result = await run_case(
+                config,
+                spec,
+                bars_by_scenario[spec["scenario_id"]],
+                (seed, treatment, condition, liquidity),
+                destination,
+                digest(manifest_path.read_bytes()),
+                client,
+                provider,
+            )
+            print(
+                json.dumps(
+                    {
+                        k: result[k]
+                        for k in (
+                            "scenario",
+                            "seed",
+                            "treatment",
+                            "event_condition",
+                            "liquidity",
+                            "return",
+                            "trades",
+                            "rejected_orders",
+                        )
+                    }
+                ),
+                flush=True,
+            )
+            return result
+        finally:
             if live:
-                client = OpenAICompatibleClient(
-                    provider_spec,
-                    os.getenv(provider_spec["api_key_env"], ""),
-                    destination / "transport",
-                    root / ".cache" / config["experiment_id"] / provider,
-                    semaphore=shared_semaphore,
-                    pacer=pacer,
-                    cache_only=cache_only,
-                    cache_namespace=PROMPT_VERSION,
-                )
-            elif provider == "mock":
-                client = MockLLMClient()
-            try:
-                if live and not cache_only and not registry_verified:
-                    # Registry evidence belongs to the suite, separate from attempt logs.
-                    case_output = client.output
-                    client.output = output / "registry"
-                    await client.verify_model()
-                    client.output = case_output
-                    registry_verified = True
-                result = await run_case(
-                    config,
-                    spec,
-                    bars,
-                    (seed, treatment, condition, liquidity),
-                    destination,
-                    digest(manifest_path.read_bytes()),
-                    client,
-                    provider,
-                )
-                rows.append(result)
-                print(
-                    json.dumps(
-                        {
-                            k: result[k]
-                            for k in (
-                                "scenario",
-                                "seed",
-                                "treatment",
-                                "event_condition",
-                                "liquidity",
-                                "return",
-                                "trades",
-                                "rejected_orders",
-                            )
-                        }
-                    ),
-                    flush=True,
-                )
-            finally:
-                if live:
-                    await client.close()
+                await client.close()
+
+    tasks = [
+        asyncio.create_task(run_pair(spec, seed, treatment, liquidity))
+        for spec in config["scenarios"]
+        for seed, treatment, liquidity in itertools.product(
+            config["seeds"], config["treatments"], config["liquidity_conditions"]
+        )
+    ]
+    try:
+        paired_rows = await asyncio.gather(*tasks)
+    except BaseException:
+        for task in tasks:
+            task.cancel()
+        await asyncio.gather(*tasks, return_exceptions=True)
+        raise
+    rows = [row for pair in paired_rows for row in pair]
     write_json(output / "summary.json", rows)
     return rows

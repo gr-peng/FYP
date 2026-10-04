@@ -4,7 +4,7 @@ This participant never reads future prices, events, treatment labels or model ou
 Cash and inventory persist. Requoting does not replenish either resource.
 """
 
-from decimal import Decimal
+from decimal import ROUND_CEILING, ROUND_FLOOR, Decimal
 
 from behavioral_market.market import Portfolio
 
@@ -18,6 +18,9 @@ class FiniteLiquidityProvider:
         self.level_spacing_bps = Decimal(str(spec["level_spacing_bps"]))
         self.level_quantities = tuple(spec["level_quantities"])
         self.inventory_skew_bps = Decimal(str(spec["inventory_skew_bps"]))
+        self.tick_size = Decimal(str(spec["tick_size"])) if "tick_size" in spec else None
+        if self.tick_size is not None and (not self.tick_size.is_finite() or self.tick_size <= 0):
+            raise ValueError("liquidity tick size must be finite and positive")
         if not (
             0 < self.half_spread_bps < 1000
             and 0 < self.level_spacing_bps < 1000
@@ -52,7 +55,12 @@ class FiniteLiquidityProvider:
             if offset >= 1:
                 raise ValueError("background quote ladder reaches nonpositive prices")
             for side, price in (("buy", center * (1 - offset)), ("sell", center * (1 + offset))):
-                price = price.quantize(Decimal("0.000001"))
+                if self.tick_size is None:
+                    price = price.quantize(Decimal("0.000001"))
+                else:
+                    rounding = ROUND_FLOOR if side == "buy" else ROUND_CEILING
+                    price = (price / self.tick_size).to_integral_value(rounding=rounding)
+                    price *= self.tick_size
                 if price <= 0:
                     raise ValueError("background price below simulation precision")
                 capacity = (

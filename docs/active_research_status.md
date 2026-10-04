@@ -10,10 +10,26 @@ No new financial development/test labels have been opened.
 
 Public daily/minute data and retrospective reality checks are complete under
 `two_event_20261004_v1`. A finite-inventory LP and 24/7 calendar are implemented.
-The next milestone is the frozen 6-agent one-seed `two_event_market_pilot_v1`
-mechanism diagnostic, followed by financial validation and larger controlled
-experiments. Synthetic private allocation targets are not human calibration.
-The overall research goal and final report remain incomplete.
+The first controlled diagnostic is now complete: V4, frozen at `4e05cf5`,
+16 cases /432 real decisions, 336 new calls and96 paired pre-news cache hits.
+MU has14 BUY/178 HOLD/no SELL andzero trades; early commentary saying all192
+decisions were HOLD was incorrect and has been explicitly corrected. Eleven buys
+missed synthetic asks by only $0.000589, exposing a price-grid defect. BTC finite-LP
+returns are +.4193% (vanilla news) and +.8009% (private-target news); the latter
+no-news control is already +.4834%, so its news increment is only +.3175 pp.
+See `docs/two_event_pilot_results_20261004.md` and the generated raw-output audit.
+
+V1 was stopped for inconsistent thinking mode, V2/V3 probes failed, and V4's
+chat-template controls passed8/8 probes and every formal response. No model was
+silently substituted. Successful V4 main usage is293,234 input/21,181 output tokens.
+
+Next: V5 repairs quote grids, displays underlying-unit crypto prices, computes
+portfolio weights/gaps explicitly, and runs disjoint pairs concurrently while
+keeping each news/no-news pair sequential. This bundled engineering diagnostic
+is not a clean estimate of each repair's individual effect. A train-only memory
+extension has also been built and checked: Brier .215714 vs old .227505 in the same
+five-fold training-session CV; development/test remain unopened. Synthetic private
+allocation targets are not human calibration. The overall goal remains incomplete.
 
 ## Previous continuation state (2026-09-23)
 

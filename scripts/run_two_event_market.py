@@ -17,7 +17,9 @@ def main():
     parser.add_argument(
         "--provider", required=True, choices=["rule", "mock", "aigc_relay", "siliconflow"]
     )
-    parser.add_argument("--config", type=Path, default=ROOT / "config/two_event_market_pilot.json")
+    parser.add_argument(
+        "--config", type=Path, default=ROOT / "config/two_event_market_pilot_v5.json"
+    )
     parser.add_argument("--cache-only", action="store_true")
     args = parser.parse_args()
     config = json.loads(args.config.read_text())
