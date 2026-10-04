@@ -1,0 +1,89 @@
+{
+  "experiment_id": "two_event_month_extension_v6",
+  "data_config": "config/two_event_study.json",
+  "provider_config": "config/memory_market_2026.json",
+  "seeds": [
+    7,
+    42,
+    2026
+  ],
+  "n_agents": 6,
+  "initial_cash": 50000,
+  "initial_stock_value": 50000,
+  "max_order_equity_fraction": 0.05,
+  "price_band": [
+    0.8,
+    1.2
+  ],
+  "memory_rounds": 6,
+  "treatments": [
+    "private_targets"
+  ],
+  "event_conditions": [
+    "news",
+    "no_news"
+  ],
+  "liquidity_conditions": [
+    "finite"
+  ],
+  "liquidity": {
+    "wealth_multiple": 1.0,
+    "half_spread_bps": 20,
+    "level_spacing_bps": 20,
+    "levels": 3,
+    "inventory_skew_bps": 100
+  },
+  "scenarios": [
+    {
+      "scenario_id": "meta_compute_2026",
+      "symbol": "MU",
+      "calendar": "XNYS",
+      "start": "2026-06-30",
+      "end": "2026-07-31",
+      "lot_size": 1.0,
+      "quote_currency": "USD",
+      "events": [
+        {
+          "at": "2026-07-01T14:39:00Z",
+          "text": "Bloomberg reports that Meta is considering a cloud service offering external customers computing capacity and AI models. The proposal could monetize capacity beyond its own requirements. Details remain under development.",
+          "source_url": "https://news.bloomberglaw.com/artificial-intelligence/meta-is-building-a-cloud-business-to-sell-excess-ai-compute-1"
+        }
+      ],
+      "asset_price_tick": 0.01
+    },
+    {
+      "scenario_id": "trump_election_2024",
+      "symbol": "BTCUSDT",
+      "calendar": "24/7",
+      "start": "2024-11-05",
+      "end": "2024-12-06",
+      "lot_size": 0.001,
+      "quote_currency": "USDT",
+      "events": [
+        {
+          "at": "2024-11-06T07:24:00Z",
+          "text": "The Associated Press has called Pennsylvania for Donald Trump. Counting and calls for other states continue; this bulletin does not announce the final national result.",
+          "source_url": "https://apnews.com/article/d07049f884d25ceae0d1376157d07c35"
+        },
+        {
+          "at": "2024-11-06T10:34:00Z",
+          "text": "The Associated Press has called Wisconsin for Donald Trump, taking him past the electoral vote threshold and declaring him the winner of the 2024 US presidential election.",
+          "source_url": "https://apnews.com/article/d07049f884d25ceae0d1376157d07c35"
+        }
+      ],
+      "asset_price_tick": 0.01
+    }
+  ],
+  "interpretation": "Mechanism diagnostic only; six synthetic agents and one seed are not a human-calibrated or realistic market. LP parameters and private targets are synthetic. Rules ignore news. No post-start real price or prespecified signed value shock enters the endogenous market. V5 repairs synthetic quote precision and account presentation together; comparison with V4 is a bundled engineering diagnostic, not an isolated causal effect of each fix. The 0.01 asset-price grid is declared synthetic, not verified as the venue tick for the event date. Fixed bounded extension: three seeds, full registered windows, finite baseline liquidity; negative results retained. This is a synthetic six-agent mechanism experiment, not a validated market forecast. Dates and names remain visible; prior historical knowledge is possible.",
+  "provider_overrides": {
+    "chat_template_kwargs": {
+      "thinking": false,
+      "enable_thinking": false
+    },
+    "require_no_reasoning": true
+  },
+  "price_basis": "underlying",
+  "computed_portfolio_facts": true,
+  "pair_concurrency": 8,
+  "request_concurrency": 32
+}

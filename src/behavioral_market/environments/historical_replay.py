@@ -54,4 +54,4 @@ class HistoricalReplayEnvironment:
         for agent in agents:
             agent.portfolio.mark_to_market(row.close)
         self.history = self.bars.loc[self.bars.session_date <= session].copy()
-        return float(row.close), int(row.volume), orders, fills
+        return float(row.close), float(row.volume), orders, fills

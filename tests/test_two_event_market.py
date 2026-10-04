@@ -251,3 +251,45 @@ def test_parallel_disjoint_pairs_preserve_paths_and_pre_news_pair_order(tmp_path
             yes = json.loads((path.parent.parent / "news/run_metadata.json").read_text())
             assert no["started_at"] >= yes["completed_at"]
     assert results[0] == results[1]
+
+
+def test_liquidity_profiles_change_finite_resources_and_displayed_depth():
+    config, spec, bars = fixtures()
+    config["liquidity_profiles"] = {
+        "thin": {"wealth_multiple": 0.25, "depth_multiple": 0.25},
+        "deep": {"wealth_multiple": 4, "depth_multiple": 4},
+    }
+    accounts = []
+    depths = []
+    for profile in ("thin", "finite", "deep"):
+        _, _, env = setup(config, spec, bars, 42, profile)
+        accounts.append(env.background.portfolio.cash)
+        env.start_session(spec["start"])
+        env.requote_background()
+        depths.append(env.book_context()["ask_depth"])
+    assert accounts[0] * 4 == accounts[1] and accounts[1] * 4 == accounts[2]
+    assert depths[0] < depths[1] < depths[2]
+    config["liquidity_profiles"]["thin"]["depth_multiple"] = -1
+    with pytest.raises(ValueError, match="finite and positive"):
+        setup(config, spec, bars, 42, "thin")
+
+
+def test_fixed_reference_uses_only_prior_bars_and_keeps_fractional_volume():
+    from experiments.two_event_fixed_reference import run_reference
+
+    config, spec, bars = fixtures()
+    config.update(price_basis="underlying", computed_portfolio_facts=True)
+    spec["asset_price_tick"] = 0.01
+    first = run_reference(config, spec, bars, 42, "news")
+    assert first["daily"][0]["external_volume_lots"] == pytest.approx(12345.6)
+    changed = bars.copy()
+    changed.loc[changed.session_date >= spec["start"], ["open", "high", "low", "close"]] *= 2
+    second = run_reference(config, spec, changed, 42, "news")
+    assert first["decisions"][0]["payload"] == second["decisions"][0]["payload"]
+    assert first["decisions"][0]["decision"] == second["decisions"][0]["decision"]
+    assert second["reference_price_return"] == 1
+    assert first["reference_price_return"] == 0
+    assert all(
+        r["payload"]["observation"]["completed_history_through"] < r["decision_at"][:10]
+        for r in second["decisions"]
+    )

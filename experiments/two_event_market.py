@@ -149,8 +149,13 @@ def setup(config, spec, bars, seed, liquidity):
     targets = [round(0.2 + 0.6 * i / (n - 1), 6) for i in range(n)]
     random.Random(seed + 177).shuffle(targets)
     background = None
-    if liquidity == "finite":
-        spec_lp = config["liquidity"]
+    if liquidity == "finite" or liquidity in config.get("liquidity_profiles", {}):
+        spec_lp = {**config["liquidity"], **config.get("liquidity_profiles", {}).get(liquidity, {})}
+        if any(
+            not math.isfinite(spec_lp.get(name, 1)) or spec_lp.get(name, 1) <= 0
+            for name in ("wealth_multiple", "depth_multiple")
+        ):
+            raise ValueError("liquidity resources and depth must be finite and positive")
         max_quantity = math.floor(
             float(agents[0].portfolio.total_equity) * config["max_order_equity_fraction"] / price
         )
@@ -159,7 +164,15 @@ def setup(config, spec, bars, seed, liquidity):
             "initial_shares": int(shares * n * spec_lp["wealth_multiple"]),
             "half_spread_bps": spec_lp["half_spread_bps"],
             "level_spacing_bps": spec_lp["level_spacing_bps"],
-            "level_quantities": [max(1, max_quantity * n // spec_lp["levels"])] * spec_lp["levels"],
+            "level_quantities": [
+                max(
+                    1,
+                    math.floor(
+                        max_quantity * n / spec_lp["levels"] * spec_lp.get("depth_multiple", 1)
+                    ),
+                )
+            ]
+            * spec_lp["levels"],
             "inventory_skew_bps": spec_lp["inventory_skew_bps"],
         }
         if "asset_price_tick" in spec:
@@ -560,7 +573,10 @@ async def run_suite(config, provider, root=ROOT, cache_only=False):
         # Freeze full provider configuration in run identity, without credentials.
         config["resolved_provider_config"] = provider_spec
         load_dotenv(root / ".env")
-    shared_semaphore, pacer = asyncio.Semaphore(12), RequestPacer(4)
+    capacity = config.get("request_concurrency", 12)
+    if type(capacity) is not int or not 1 <= capacity <= 32:
+        raise ValueError("request_concurrency must be between one and 32")
+    shared_semaphore, pacer = asyncio.Semaphore(capacity), RequestPacer(4)
     count = config.get("pair_concurrency", 1)
     if type(count) is not int or count < 1 or count > 8:
         raise ValueError("pair_concurrency must be between one and eight")
