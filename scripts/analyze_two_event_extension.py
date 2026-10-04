@@ -13,6 +13,7 @@ import numpy as np
 import pandas as pd
 
 matplotlib.use("Agg")
+import matplotlib.dates as mdates
 import matplotlib.pyplot as plt
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -285,6 +286,10 @@ def analyze(root, config_path):
             ax.axhline(100, color="#bbbbbb", lw=0.6)
             ax.set_title(f"{spec['symbol']} / {liquidity}")
             ax.set_ylabel("Price index (pre-start = 100)")
+            span_days = (pd.Timestamp(spec["end"]) - pd.Timestamp(spec["start"])).days
+            ax.xaxis.set_major_locator(mdates.DayLocator(interval=max(1, (span_days + 3) // 4)))
+            ax.xaxis.set_major_formatter(mdates.DateFormatter("%m-%d"))
+            ax.set_xlabel(str(spec["start"])[:4])
             ax.grid(alpha=0.2)
             ax.tick_params(axis="x", rotation=35)
             ax.legend(fontsize=8)

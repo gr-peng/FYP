@@ -1,57 +1,55 @@
 # Active research objective and continuation state
 
-## Current objective: two event scenarios (2026-10-04)
+## Completed bounded two-event study (2026-10-04)
 
-The user confirmed the June–July 2026 Meta cloud/compute episode and authorized
-continued system iteration plus a plain-Chinese experiment report for this event
-and the 2024 Trump election crypto rally. The authoritative current protocol is
-`docs/two_event_protocol.md`; earlier results below remain historical evidence.
-The frozen financial development preparation has now opened only the designated
-16 development sessions; the final16 test sessions remain closed.
+The user confirmed the June–July 2026 Meta cloud/compute episode. The authorized
+bounded iteration, live experiments, audits and plain-Chinese report for this
+and the 2024 Trump election are complete. No experiment remains running.
+The final report is [两次新闻冲击的模拟：实验报告](two_event_final_report_20261004.md).
+This completes the study deliverable, not validation of the broad scientific hypothesis.
 
-Public daily/minute data and retrospective reality checks are complete under
-`two_event_20261004_v1`. A finite-inventory LP and 24/7 calendar are implemented.
-The first controlled diagnostic is now complete: V4, frozen at `4e05cf5`,
-16 cases /432 real decisions, 336 new calls and96 paired pre-news cache hits.
-MU has14 BUY/178 HOLD/no SELL andzero trades; early commentary saying all192
-decisions were HOLD was incorrect and has been explicitly corrected. Eleven buys
-missed synthetic asks by only $0.000589, exposing a price-grid defect. BTC finite-LP
-returns are +.4193% (vanilla news) and +.8009% (private-target news); the latter
-no-news control is already +.4834%, so its news increment is only +.3175 pp.
-See `docs/two_event_pilot_results_20261004.md` and the generated raw-output audit.
+- Public data cover13 equities/ETFs and4 crypto assets; endogenous experiments
+  use MU and BTC only. Actual return windows and announcement times are explicit.
+- V4 (`4e05cf5`),432 decisions: MU14 BUY/178 HOLD/no SELL,zero trades;
+  eleven buy prices narrowly missed fractional synthetic asks. Earlier commentary
+  incorrectly called all decisions HOLD; corrected in the preserved stage report.
+- V5 (`2ef9091`),432 decisions: repaired price grid, BTC unit conversion and
+  computed account facts; MU62 andBTC82 trades. These engineering improvements
+  did not establish realistic event-price formation. One transport error recovered.
+- Financial probability comparison frozen at `217b60b`:51 training sessions,
+  16 independent development sessions,400 hash-selected active orders,3200 valid
+  model forecasts with no repairs. Brier: true examples .22621,plain .22516,
+  shuffled .22615,memory statistical model .21262. No demonstrated true-label
+  benefit; statistical control is better. Final16 test sessions remain closed.
+- V6 configs frozen at `ca4467c`,live runs recorded clean `0cf2d18`:12 long-window
+  cases/2088 decisions and48 liquidity cases/1296 decisions,6 agents,3 seeds.
+  Every raw response,pre-news pair,unit conversion and conservation check passed.
+  Long-window63 proposed orders rejected by trading constraints; sensitivity0.
+  One sensitivity HTTP502 recovered; no hidden HOLD fallback.
+- Long-window mean news/control returns: MU +.676%/+1.181% versus real -28.137%;
+  BTC +.748%/+1.435% versus real +47.002%. Baselines June29/Nov4 differ from the
+  descriptive event report's June30/Nov5 baselines. These are failures to reproduce
+  the observed market,not successful price predictions.
+- Short-window news increments (pp),none/thin/standard/deep: MU0/.155/.413/0;
+  BTC0/.612/.145/.139. Synthetic liquidity affects results;3-seed intervals are
+  simulation-repeat descriptions,not population or event-causal inference.
+- Rule negative controls,OHLC fixed-reference checks and explicit all-buy/all-sell
+  mechanics stress completed separately. These are not LLM or real-fill results.
+- Final automated suite:139 passed; changed Python lint and final diff checks pass.
+  Market main usage totals5,024,736 input/228,207 output tokens; finance main usage
+  11,969,898 input/77,392 output. Probes and unknown failed usage excluded.
+- Initial finance smoke automatic review rejection was resolved by evidence of
+  public anonymous experimental points,identifier-free prompts,and the approved
+  same school On-Campus Local model route. Same smoke and main matrix approved;
+  no pending approval. `egress_scope_audit.json` preserves the evidence.
 
-V1 was stopped for inconsistent thinking mode, V2/V3 probes failed, and V4's
-chat-template controls passed8/8 probes and every formal response. No model was
-silently substituted. Successful V4 main usage is293,234 input/21,181 output tokens.
-
-V5 is complete at `2ef9091`: 432 audited decisions,96 matched pre-news pairs,
-336 new successes/96 cache hits,one recovered transport error. MU has50 BUY,
-45 SELL,97 HOLD and62 trades; BTC has74 BUY,56 SELL,110 HOLD and82 trades.
-Private-target finite-LP news increments are MU +.4165 pp andBTC -.0304 pp.
-The quote/account repairs restored two-sided activity but not realistic event
-returns. See the V5 addition to the stage report. It is a bundled engineering
-change, not a separate causal estimate of each repair.
-
-Financial development is frozen at `217b60b` (400 targets,four prompts,two menu
-orders). Exactly400 target orders were selected by hash from18,827 eligible
-events across16 sessions. The8 train-only probability probes passed;3200 main
-forecasts are in progress. Source/public-anonymity and outbound message fields
-were checked after an automatic review rejection; the same campus model endpoint
-was then approved, without changing destination or hiding the data scope. Evidence
-is in `outputs/financial_probability_development_20261004/egress_scope_audit.json`.
-Training states and model parameters were exactly reconstructed; train CV Brier
-is .215714 versus old .227505. Independent scores are not yet available.
-
-The bounded V6 market extension is frozen at `ca4467c`:2088 long-window decisions
-plus1296 short-window liquidity sensitivity decisions,three seeds,private-target
-agents. Rule negative controls and fixed-reference/capacity checks completed.
-The explicit all-buy BTC stress yields +13.19% with standard synthetic liquidity,
-but +3.59% with fourfold depth/budget; these are mechanics diagnostics,not LLM
-predictions or mathematical bounds. Matching long-window real returns are
-MU -28.14% (June29 baseline) andBTC +47.00% (Nov4 baseline),different from
-the empirical report's June30/Nov5 baselines. Live V6 waits for the financial
-matrix to finish,avoiding simultaneous load on the same route. Overall goal
-remains active until bounded experiments,audits and final plain report complete.
+Outputs live under `outputs/two_event_20261004_v1/` and
+`outputs/financial_probability_development_20261004/`; exact tables,limitations
+and source links are in the final report. Earlier versions and unsuccessful runs
+remain preserved. The model is DeepSeek-V4-Flash throughout the completed batch.
+Synthetic allocation targets are not validated human calibration; no final-test
+selection,real LOB replay,causal historical-event identification,or unseen-event
+prediction is claimed. A future stage would need separate,explicitly scoped work.
 
 ## Previous continuation state (2026-09-23)
 
