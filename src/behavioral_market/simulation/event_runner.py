@@ -217,9 +217,11 @@ async def run_experiment(
             primary, spec["experiment_start"], spec["primary_symbol"], agents
         )
     )
-    schedule = sessions(spec["experiment_start"], spec["experiment_end"])
+    calendar = spec.get("calendar", "XNYS")
+    schedule = sessions(spec["experiment_start"], spec["experiment_end"], calendar)
     previous_cutoff = sessions(
-        environment.history.session_date.iloc[-1], environment.history.session_date.iloc[-1]
+        environment.history.session_date.iloc[-1], environment.history.session_date.iloc[-1],
+        calendar,
     ).market_open.iloc[-1]
     if condition == "no_event":
         events = []

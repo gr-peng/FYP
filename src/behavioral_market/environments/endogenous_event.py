@@ -4,19 +4,25 @@ import pandas as pd
 
 from behavioral_market.market import Exchange
 
+from .liquidity import FiniteLiquidityProvider
+
 
 class EndogenousEventEnvironment:
     """Own only pre-start real bars; all subsequent bars come from the CDA."""
 
-    def __init__(self, bars, start, symbol, agents):
+    def __init__(self, bars, start, symbol, agents, background_spec=None):
         self.history = (
             bars.loc[bars.session_date < start].copy(deep=True).sort_values("session_date")
         )
         self.exchange = Exchange(symbol, self.history.close.iloc[-1])
         for agent in agents:
             self.exchange.register(agent.persona.agent_id, agent.portfolio)
-        self.initial_cash = sum(a.portfolio.cash for a in agents)
-        self.initial_shares = sum(a.portfolio.position for a in agents)
+        self.background = (
+            FiniteLiquidityProvider(self.exchange, background_spec) if background_spec else None
+        )
+        self.initial_cash = sum(p.cash for p in self.exchange.portfolios.values())
+        self.initial_shares = sum(p.position for p in self.exchange.portfolios.values())
+        self.background_orders = []
         self._session = None
         self._opening = None
         self._orders = []
@@ -45,6 +51,19 @@ class EndogenousEventEnvironment:
         self._session = session
         self._opening = float(self.exchange.market_price)
         self._orders, self._trades = [], []
+
+    def requote_background(self):
+        if self._session is None:
+            raise RuntimeError("background requires an open session")
+        if self.background is None:
+            return
+        # A common opening anchor for this session; inventory alone shifts the quotes.
+        rows, trades = self.background.requote(self._opening)
+        self.background_orders.extend({"session_date": self._session, **row} for row in rows)
+        self._trades.extend(
+            {**asdict(fill), "price": float(fill.price), "session_date": self._session}
+            for fill in trades
+        )
 
     def submit(self, agent, decision):
         if self._session is None:
@@ -83,8 +102,8 @@ class EndogenousEventEnvironment:
                     filled_quantity=order.quantity - order.remaining_quantity,
                 )
         if (
-            sum(a.portfolio.cash for a in agents) != self.initial_cash
-            or sum(a.portfolio.position for a in agents) != self.initial_shares
+            sum(p.cash for p in self.exchange.portfolios.values()) != self.initial_cash
+            or sum(p.position for p in self.exchange.portfolios.values()) != self.initial_shares
         ):
             raise RuntimeError("CDA conservation violated")
         prices = [opening, *[trade["price"] for trade in self._trades]]

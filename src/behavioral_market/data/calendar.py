@@ -6,7 +6,15 @@ import pandas_market_calendars as mcal
 ET = "America/New_York"
 
 
-def sessions(start: str | date, end: str | date) -> pd.DataFrame:
+def sessions(start: str | date, end: str | date, calendar: str = "XNYS") -> pd.DataFrame:
+    if calendar == "24/7":
+        opens = pd.date_range(start, end, freq="D", tz="UTC")
+        return pd.DataFrame(
+            {"market_open": opens, "market_close": opens + pd.Timedelta(days=1)},
+            index=pd.Index(opens.strftime("%Y-%m-%d"), name="session_date"),
+        )
+    if calendar != "XNYS":
+        raise ValueError("calendar must be XNYS or 24/7")
     schedule = mcal.get_calendar("XNYS").schedule(start_date=start, end_date=end)
     schedule.index = pd.Index([x.date().isoformat() for x in schedule.index], name="session_date")
     return schedule

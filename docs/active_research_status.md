@@ -1,5 +1,22 @@
 # Active research objective and continuation state
 
+## Current objective: two event scenarios (2026-10-04)
+
+The user confirmed the June–July 2026 Meta cloud/compute episode and authorized
+continued system iteration plus a plain-Chinese experiment report for this event
+and the 2024 Trump election crypto rally. The authoritative current protocol is
+`docs/two_event_protocol.md`; earlier results below remain historical evidence.
+No new financial development/test labels have been opened.
+
+Public daily/minute data and retrospective reality checks are complete under
+`two_event_20261004_v1`. A finite-inventory LP and 24/7 calendar are implemented.
+The next milestone is the frozen 6-agent one-seed `two_event_market_pilot_v1`
+mechanism diagnostic, followed by financial validation and larger controlled
+experiments. Synthetic private allocation targets are not human calibration.
+The overall research goal and final report remain incomplete.
+
+## Previous continuation state (2026-09-23)
+
 Updated 2026-09-23. The user authorized continued experimentation, independent
 gap analysis against the micro-to-macro research question, iterative improvements,
 and a real comparison of the recently released Jev with LLM agents. This objective

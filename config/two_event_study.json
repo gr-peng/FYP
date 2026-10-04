@@ -1,0 +1,45 @@
+{
+  "study_id": "two_event_20261004_v1",
+  "interpretation": "Retrospective event studies of two known episodes; neither episode is an untouched causal test.",
+  "scenarios": [
+    {
+      "scenario_id": "meta_compute_2026",
+      "title_zh": "Meta 出售算力消息与半导体市场",
+      "provider": "yahoo",
+      "calendar": "XNYS",
+      "history_start": "2026-04-01",
+      "history_end": "2026-07-31",
+      "estimation_end": "2026-05-29",
+      "anticipation_start": "2026-06-01",
+      "event_at": "2026-07-01T14:39:00Z",
+      "benchmark": "QQQ",
+      "symbols": ["NVDA", "MU", "SNDK", "AMD", "AVGO", "KLAC", "AMAT", "LRCX", "SOXX", "SMH", "META", "QQQ", "SPY"],
+      "primary_outcomes": ["SOXX", "NVDA", "MU"],
+      "audited_splits": [
+        {"symbol": "KLAC", "effective_session": "2026-06-12", "ratio": 10.0,
+         "price_handling": "Yahoo OHLC already split-adjusted; do not divide twice",
+         "source_url": "https://www.sec.gov/Archives/edgar/data/319201/000119312526269375/d144278d8k.htm"}
+      ],
+      "source_urls": ["https://news.bloomberglaw.com/artificial-intelligence/meta-is-building-a-cloud-business-to-sell-excess-ai-compute-1"],
+      "event_note": "User confirmed the June-July 2026 episode. The verified main release is a July 1 Bloomberg report, not a verified June Zuckerberg post. A month-long decline and event causation are hypotheses to check, not inputs.",
+      "intraday": null
+    },
+    {
+      "scenario_id": "trump_election_2024",
+      "title_zh": "2024 美国大选与加密货币市场",
+      "provider": "binance_spot_archive",
+      "calendar": "24/7",
+      "history_start": "2024-08-01",
+      "history_end": "2024-12-06",
+      "estimation_end": "2024-10-31",
+      "anticipation_start": "2024-11-05",
+      "event_at": "2024-11-06T10:34:00Z",
+      "benchmark": null,
+      "symbols": ["BTCUSDT", "ETHUSDT", "SOLUSDT", "DOGEUSDT"],
+      "primary_outcomes": ["BTCUSDT", "ETHUSDT", "SOLUSDT"],
+      "source_urls": ["https://apnews.com/article/d07049f884d25ceae0d1376157d07c35", "https://github.com/binance/binance-public-data"],
+      "event_note": "AP called Wisconsin and the presidency at 05:34 EST / 10:34 UTC on Nov 6. Election information and trading reactions arrived earlier; this is a confirmation landmark, not the first information arrival. USDT prices are not assumed to be identical to USD prices.",
+      "intraday": {"start": "2024-11-05", "end": "2024-11-07", "interval": "1m"}
+    }
+  ]
+}
