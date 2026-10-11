@@ -57,17 +57,54 @@ archived sources. The active crypto work does not reopen Meta experiments.
   integrated realistic exchange simulation. Historical risk tiers, applicable
   account mode, order-margin reservation, liquidation and ADL remain incomplete.
 
-The corrected engineering suite passed 245 tests; independent re-review passed
-83 related tests. These are engineering results, not market-fidelity results.
+The current full suite passed 290 tests at `cc5853d`; independent reviewers
+verified the data pipeline, profile clocks and NB2 probability/gradient/time
+alignment. These are engineering results, not market-fidelity results.
 Descriptive profiles at `a9a2a1d` are complete: each of four train/development
   days has 86,397 known full book seconds. Train spread medians are about
   0.014–0.015 bps and mean trade rates range from 7 to 26 per second; these are
   observed market characteristics, not simulation scores. Added profile tests
   passed 21/21 and independent timing-oracle checks matched 2,623 pairs.
-No new market-fidelity result or overall completion is claimed. The next evidence
-required is chronological train/development comparison of a simple activity
-model with a state-conditioned alternative, followed by autonomous order-flow
-generation and execution validation.
+The fixed NB2 activity probe completed at `cc5853d`, with an independent raw-input,
+sample and SciPy score reconstruction. See [活动对照结果](crypto_activity_probe_results_20261011.md).
+On November 4, adding book state changes mean log score by +0.001146, +0.000924,
+and -0.000143 at extra delays 0/1/5 seconds; MAE worsens in all three. Predicted
+zero-trade fractions are about 23% versus observed 10.08%; the training set also
+has a zero-probability mismatch (about 24.2% predicted versus 15.54% observed).
+No stable useful LOB prediction increment, autonomous-market fidelity, or
+execution validation is established. The result and independent receipt are in
+`outputs/crypto_activity_probe_20261011/` and must remain unchanged.
+
+Supplementary data were preregistered at `310e57f` before market-body download:
+October 14–20 train, October 21–27 development. All 28 files totaling
+3,809,289,727 bytes are downloaded with configuration SHA256
+`ed325ecb674361c72ad55af5b9b2c35728c2f6bce222ede3584e2b26c2aff52d`.
+Both supplementary audits completed 14/14 with no reported structural/trade
+anomalies and verified CRCs. Their original-agent sessions `53406` and `9649`
+both exited 0 and are closed. Train published 14 feature files; development
+published none and has no parquet directory. No jobs remain running from this
+batch. Do not re-run these audits merely because the old handles are closed.
+Authoritative manifests are under `outputs/crypto_microstructure_aux_20261011/`.
+Auxiliary training-only profile is complete at `profile_train_v1.json`, from root
+session `8755` exit 0; seven days each have 86,397 book seconds. Training mean
+trade rates span about 4.99–30.50 per second and zero-trade fractions 6.97–32.49%.
+Auxiliary development market profiles/features and the November final test
+remain unopened. Total original plus supplementary raw data are 42 files across
+21 dates, totaling 6,441,794,276 bytes.
+
+Continue with the limited design in
+[下一版计数模型建议](crypto_activity_next_model_20261011.md): preserve v1, compare
+NB2 and logistic/zero-truncated-NB hurdle families with baseline/book information,
+plus one fixed independent-noise negative control; keep the three fixed delays.
+This is a design idea, not yet implemented or validated. Implement/review a new
+protocol and separate train-only fit from evaluation. Freeze the complete fitted
+model artifact and all source/input identities BEFORE exporting/reading auxiliary
+development features. Evaluation must never optimize or recalculate training
+normalization. Avoid bypassing the v1 hard-coded November selection via monkeypatch;
+any new date selection must be explicit, tested and confined to the auxiliary plan.
+More lags/weekday features are outside this proposed version. The November final
+test remains sealed. Autonomous order-flow generation, execution validity and
+LLM increment are still required; this goal remains active.
 Model/scoring freeze must precede event-test model evaluation. Tests and process
 statuses must be reported from their actual new outputs, not inferred from the
 October 4 suite or from the presence of newly written code.
