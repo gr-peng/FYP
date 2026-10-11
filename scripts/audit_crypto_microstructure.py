@@ -8,6 +8,7 @@ import subprocess
 import sys
 from concurrent.futures import ProcessPoolExecutor, as_completed
 from pathlib import Path
+from uuid import uuid4
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
@@ -21,10 +22,30 @@ def file_hash(path):
         return hashlib.file_digest(source, "sha256").hexdigest()
 
 
-def audit_task(config, config_hash, split, day, kind, export_features):
+def audit_task(
+    config, config_hash, split, day, kind, export_features, source_hashes=None, run_id=None
+):
+    if export_features and split == "event_test":
+        raise ValueError("Final event features require a future frozen evaluation gate")
+    if day not in config["splits"][split]:
+        raise ValueError("Day does not belong to requested frozen split")
     url = config["urls"][kind].format(date=day)
     path = ROOT / "data/raw" / config["study_id"] / kind / url.rsplit("/", 1)[-1]
-    meta = json.loads(path.with_name(path.name + ".metadata.json").read_text())
+    output = ROOT / "outputs" / config["study_id"] / "integrity"
+    report = output / f"{day}_{kind}.json"
+    state = {
+        "status": "running",
+        "audit_run_id": run_id or uuid4().hex,
+        "features_published": False,
+        "split": split,
+        "config_sha256": config_hash,
+        "kind": kind,
+        "day": day,
+        "processing_source_sha256": source_hashes,
+    }
+    # Revoke the old receipt before any fallible raw-data/provenance check.
+    # A killed or failed re-audit must never authorize a leftover parquet.
+    write_json(report, state)
     expected = {
         "url": url,
         "split": split,
@@ -35,33 +56,34 @@ def audit_task(config, config_hash, split, day, kind, export_features):
         "symbol": config["symbol"],
         "config_sha256": config_hash,
     }
-    if any(meta[k] != v for k, v in expected.items()):
-        raise ValueError("Archive provenance or frozen split differs")
-    if meta["sha256"] != file_hash(path) or meta["bytes"] != path.stat().st_size:
-        raise ValueError("Archive bytes differ from download manifest")
-    output = ROOT / "outputs" / config["study_id"] / "integrity"
-    output.mkdir(parents=True, exist_ok=True)
-    features = None
-    if export_features:
-        if split == "event_test":
-            raise ValueError("Final event features require a future frozen evaluation gate")
-        features = ROOT / "data/processed" / config["study_id"] / split / f"{day}_{kind}_1s.parquet"
-    if kind == "orderbook":
-        result = audit_book_file(path, day, features, output / f"{day}_{kind}.progress.json")
-    else:
-        from experiments.bybit_trades import audit_trades_file
+    try:
+        meta = json.loads(path.with_name(path.name + ".metadata.json").read_text())
+        if any(meta.get(k) != v for k, v in expected.items()):
+            raise ValueError("Archive provenance or frozen split differs")
+        if meta["sha256"] != file_hash(path) or meta["bytes"] != path.stat().st_size:
+            raise ValueError("Archive bytes differ from download manifest")
+        features = None
+        if export_features:
+            features = (
+                ROOT / "data/processed" / config["study_id"] / split / f"{day}_{kind}_1s.parquet"
+            )
+        if kind == "orderbook":
+            result = audit_book_file(path, day, features, output / f"{day}_{kind}.progress.json")
+        else:
+            from experiments.bybit_trades import audit_trades_file
 
-        result = audit_trades_file(path, day, features)
-    result.update(
-        {
-            "input_sha256": meta["sha256"],
-            "split": split,
-            "config_sha256": config_hash,
-            "kind": kind,
-            "day": day,
-        }
-    )
-    write_json(output / f"{day}_{kind}.json", result)
+            result = audit_trades_file(path, day, features)
+        published = bool(result.get("features_published"))
+        result.update(state)
+        result.update(status="complete", input_sha256=meta["sha256"], features_published=published)
+        if published:
+            result["features_path"] = str(features.relative_to(ROOT))
+            result["features_sha256"] = file_hash(features)
+        write_json(report, result)
+    except Exception as exc:
+        state.update(status="failed", error={"type": type(exc).__name__, "detail": str(exc)[:300]})
+        write_json(report, state)
+        raise
     print(
         json.dumps(
             {"day": day, "kind": kind, "output": str(output), "rows": result.get("feature_rows")}
@@ -100,6 +122,7 @@ def main():
     out = ROOT / "outputs" / config["study_id"] / f"audit_{args.split}_{args.kind}.json"
     state = {
         "status": "running",
+        "audit_run_id": uuid4().hex,
         "config_sha256": config_hash,
         "results": [],
         "source_sha256": {
@@ -119,7 +142,15 @@ def main():
     try:
         with ProcessPoolExecutor(max_workers=args.workers) as pool:
             futures = [
-                pool.submit(audit_task, config, config_hash, *task, args.export_features)
+                pool.submit(
+                    audit_task,
+                    config,
+                    config_hash,
+                    *task,
+                    args.export_features,
+                    state["source_sha256"],
+                    state["audit_run_id"],
+                )
                 for task in tasks
             ]
             for future in as_completed(futures):

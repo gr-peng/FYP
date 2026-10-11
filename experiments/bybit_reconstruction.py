@@ -25,15 +25,18 @@ def audit_book_file(path, expected_day, features_path=None, progress_path=None):
     crc_verified = False
     first_cts, last_cts = None, None
     same_version_snapshots = 0
+    segment_available_ms = 0
 
-    def flush():
+    def flush(confirmation_ms=0):
         if features_path is not None and book.valid and bucket is not None:
             row = book.features()
             row.update(
                 {
                     "bucket_ms": bucket,
                     "segment": segment,
-                    "available_at_ms": max(bucket + 1000, row["ts_ms"]),
+                    "available_at_ms": max(bucket + 1000, segment_available_ms, confirmation_ms),
+                    "prefix_publication_ms": segment_available_ms,
+                    "bucket_confirmation_ms": confirmation_ms,
                     "state_age_at_bucket_end_ms": bucket + 1000 - row["cts_ms"],
                     **bucket_counts,
                 }
@@ -65,15 +68,21 @@ def audit_book_file(path, expected_day, features_path=None, progress_path=None):
                             raise BookIntegrityError("Oversized archive message")
                         message = json.loads(raw)
                         cts = message["cts"]
-                        if type(cts) is not int or not start_ms <= cts < end_ms:
+                        if type(cts) is not int or not start_ms - 60000 <= cts < end_ms + 60000:
                             raise BookIntegrityError(
-                                "Matching-engine timestamp outside expected day"
+                                "Timestamp outside named day and boundary allowance"
                             )
+                        # Daily archives may include the following day's first seconds.
+                        # Keep them for integrity checks; features stay within the named day.
+                        if start_ms <= cts < end_ms:
+                            counts["messages_inside_filename_day"] += 1
+                        else:
+                            counts["messages_outside_filename_day"] += 1
                         first_cts = cts if first_cts is None else min(first_cts, cts)
                         last_cts = cts if last_cts is None else max(last_cts, cts)
                         next_bucket = cts // 1000 * 1000
                         if next_bucket != bucket:
-                            flush()
+                            flush(message.get("ts", 0))
                             bucket, bucket_counts = (
                                 next_bucket,
                                 Counter(
@@ -108,8 +117,10 @@ def audit_book_file(path, expected_day, features_path=None, progress_path=None):
                                 )
                             segment += 1
                             segment_start = result.engine_ms
+                            segment_available_ms = result.system_ms
                             bucket_counts.clear()
                         elif result.kind == "delta":
+                            segment_available_ms = max(segment_available_ms, result.system_ms)
                             bucket_counts["delta_messages"] += 1
                             bucket_counts["positive_visible_depth_change_units"] += (
                                 result.positive_depth_change_units
@@ -141,6 +152,8 @@ def audit_book_file(path, expected_day, features_path=None, progress_path=None):
     except (BadZipFile, EOFError, OSError, BookIntegrityError) as exc:
         errors[type(exc).__name__] += 1
         examples.append({"archive_error": str(exc)[:200]})
+    if not counts["snapshot"] or not segments or not counts["messages_inside_filename_day"]:
+        errors["NoValidSnapshotSegment"] += 1
     result = {
         "file": str(path),
         "expected_day": expected_day,
@@ -150,14 +163,22 @@ def audit_book_file(path, expected_day, features_path=None, progress_path=None):
         "zip_crc_verified": crc_verified,
         "first_cts_ms": first_cts,
         "last_cts_ms": last_cts,
-        "initial_uncovered_ms": None if first_cts is None else first_cts - start_ms,
-        "ending_uncovered_ms": None if last_cts is None else end_ms - last_cts,
+        "raw_initial_uncovered_ms": None if first_cts is None else max(0, first_cts - start_ms),
+        "raw_ending_uncovered_ms": None if last_cts is None else max(0, end_ms - last_cts),
+        "raw_after_day_ms": None if last_cts is None else max(0, last_cts - end_ms),
+        "valid_initial_uncovered_ms": None
+        if not segments
+        else max(0, segments[0]["first_cts_ms"] - start_ms),
+        "valid_ending_uncovered_ms": (
+            None if not segments else max(0, end_ms - segments[-1]["last_cts_ms"])
+        ),
         "segments": segments,
         "same_version_snapshot_comparisons": same_version_snapshots,
         "independent_exchange_checksum": "not supplied by this archive",
         "no_hidden_exchange_gaps_proven": False,
         "structural_pass": crc_verified and not errors,
         "feature_rows": 0,
+        "features_published": False,
         "interpretation": "Only known-state segments; u-step check is conservative. "
         "Visible L2 changes are not identified order additions/cancellations. "
         "No counterfactual fills or endogenous-price validity established.",
@@ -179,12 +200,15 @@ def audit_book_file(path, expected_day, features_path=None, progress_path=None):
         frame = frame[
             (frame.bucket_ms >= frame.segment.map(starts))
             & (frame.bucket_ms + 1000 <= frame.segment.map(ends))
+            & (frame.bucket_ms >= start_ms)
+            & (frame.available_at_ms < end_ms)
         ]
         temporary = features_path.with_name(features_path.name + ".tmp")
         frame.to_parquet(temporary, index=False)
         temporary.replace(features_path)
         result["feature_rows"] = len(frame)
         result["features"] = str(features_path)
+        result["features_published"] = True
     if progress_path is not None:
         write_json(progress_path, {"status": "complete", **result})
     return result

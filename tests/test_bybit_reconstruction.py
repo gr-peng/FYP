@@ -45,7 +45,7 @@ def test_snapshot_is_not_order_flow_and_features_are_available_after_bucket(tmp_
     assert result["feature_rows"] == 2
     assert frame.iloc[0].positive_visible_depth_change_units == 100  # Not initial 3000.
     assert frame.iloc[0].cts_ms == START + 500
-    assert frame.iloc[0].available_at_ms == START + 1000
+    assert frame.iloc[0].available_at_ms == START + 1505
     assert frame.iloc[0].state_age_at_bucket_end_ms == 500
 
 
@@ -89,3 +89,49 @@ def test_crc_failure_never_publishes_features(tmp_path):
     result = audit_book_file(path, "2024-11-01", output)
     assert not result["zip_crc_verified"] and not result["structural_pass"]
     assert not output.exists()
+
+
+def test_empty_or_snapshotless_archive_never_passes_structure(tmp_path):
+    for rows in ([], [event(0, 10)]):
+        result = audit_book_file(archive(tmp_path, rows), "2024-11-01")
+        assert result["zip_crc_verified"] and not result["structural_pass"]
+        assert not result["features_published"]
+
+
+def test_late_publication_remains_in_prefix_availability(tmp_path):
+    late = event(500, 11)
+    late["ts"] = START + 5000
+    rows = [event(0, 10, "snapshot"), late, event(800, 12), event(1500, 13), event(2500, 14)]
+    output = tmp_path / "features.parquet"
+    result = audit_book_file(archive(tmp_path, rows), "2024-11-01", output)
+    assert result["structural_pass"]
+    frame = pd.read_parquet(output)
+    assert frame.available_at_ms.tolist() == [START + 5000, START + 5000]
+
+
+def test_failed_reprocessing_disallows_old_features_in_manifest(tmp_path):
+    rows = [event(0, 10, "snapshot"), event(1500, 11)]
+    path, output = archive(tmp_path, rows), tmp_path / "features.parquet"
+    good = audit_book_file(path, "2024-11-01", output)
+    assert good["features_published"]
+    content = output.read_bytes()
+    path.write_bytes(path.read_bytes()[:-50])
+    bad = audit_book_file(path, "2024-11-01", output)
+    assert not bad["features_published"] and "features" not in bad
+    assert output.read_bytes() == content  # Preserved evidence; manifest forbids its reuse.
+
+
+def test_daily_file_overlap_is_audited_but_does_not_leak_into_day_features(tmp_path):
+    end = 86400000
+    rows = [event(end - 3000, 10, "snapshot")]
+    rows.extend(
+        event(end + offset, 11 + i) for i, offset in enumerate([-2500, -1500, -500, 500, 1500])
+    )
+    output = tmp_path / "features.parquet"
+    result = audit_book_file(archive(tmp_path, rows), "2024-11-01", output)
+    assert result["structural_pass"]
+    assert result["counts"]["messages_outside_filename_day"] == 2
+    assert result["raw_after_day_ms"] == 1500
+    frame = pd.read_parquet(output)
+    assert len(frame) == 2
+    assert (frame.available_at_ms < START + end).all()
