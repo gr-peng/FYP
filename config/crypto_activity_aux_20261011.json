@@ -1,0 +1,133 @@
+{
+  "protocol_version": 1,
+  "study_id": "crypto_activity_aux_20261011",
+  "source_config": "config/crypto_microstructure_aux_20261011.json",
+  "source_config_sha256": "ed325ecb674361c72ad55af5b9b2c35728c2f6bce222ede3584e2b26c2aff52d",
+  "splits": {
+    "train": [
+      "2024-10-14",
+      "2024-10-15",
+      "2024-10-16",
+      "2024-10-17",
+      "2024-10-18",
+      "2024-10-19",
+      "2024-10-20"
+    ],
+    "development": [
+      "2024-10-21",
+      "2024-10-22",
+      "2024-10-23",
+      "2024-10-24",
+      "2024-10-25",
+      "2024-10-26",
+      "2024-10-27"
+    ]
+  },
+  "additional_delay_ms": [
+    0,
+    1000,
+    5000
+  ],
+  "target_seconds": 1,
+  "minimum_visible_levels_per_side": 5,
+  "model_features": {
+    "N0": [
+      "utc_sin",
+      "utc_cos",
+      "log1p_last_trade_count",
+      "log1p_last_trade_quantity_btc"
+    ],
+    "N1": [
+      "utc_sin",
+      "utc_cos",
+      "log1p_last_trade_count",
+      "log1p_last_trade_quantity_btc",
+      "log1p_spread_bps",
+      "imbalance_l1",
+      "log1p_bid_depth_5_btc",
+      "log1p_ask_depth_5_btc"
+    ],
+    "H0": [
+      "utc_sin",
+      "utc_cos",
+      "log1p_last_trade_count",
+      "log1p_last_trade_quantity_btc"
+    ],
+    "H1": [
+      "utc_sin",
+      "utc_cos",
+      "log1p_last_trade_count",
+      "log1p_last_trade_quantity_btc",
+      "log1p_spread_bps",
+      "imbalance_l1",
+      "log1p_bid_depth_5_btc",
+      "log1p_ask_depth_5_btc"
+    ],
+    "Hnoise": [
+      "utc_sin",
+      "utc_cos",
+      "log1p_last_trade_count",
+      "log1p_last_trade_quantity_btc",
+      "noise_0",
+      "noise_1",
+      "noise_2",
+      "noise_3"
+    ]
+  },
+  "model": {
+    "l2_penalty": 0.01,
+    "alpha_bounds": [
+      0.0001,
+      1000.0
+    ],
+    "optimizer": {
+      "method": "L-BFGS-B",
+      "maxiter": 500,
+      "ftol": 1e-10,
+      "gtol": 1e-07,
+      "accepted_projected_gradient_inf_norm": 0.001
+    }
+  },
+  "noise": {
+    "seed": 20261011,
+    "features": [
+      "noise_0",
+      "noise_1",
+      "noise_2",
+      "noise_3"
+    ],
+    "hash": "sha256",
+    "serialization": "ASCII crypto-activity-aux-noise-v1|{seed}|{signal_bucket_ms}|{feature_index}; base-10 integers; no newline",
+    "uniforms": "u1=((big_endian_uint64(digest[0:8]) >> 12)+0.5)/2**52; u2=((big_endian_uint64(digest[8:16]) >> 12)+0.5)/2**52",
+    "transform": "sqrt(-2*log(u1))*cos(2*pi*u2)",
+    "feature_index": [
+      0,
+      1,
+      2,
+      3
+    ]
+  },
+  "calibration_block_hours": 3,
+  "count_bins": [
+    "0",
+    "1",
+    "2",
+    "3-5",
+    "6-10",
+    "11-20",
+    "21-50",
+    "51+"
+  ],
+  "median": "inf{k integer >=0: F(k)>=0.5}",
+  "hurdle_objective": "full_N_mean_negative_log_probability_plus_half_l2_all_slopes",
+  "comparisons": [
+    "H0-N0",
+    "N1-N0",
+    "H1-H0",
+    "Hnoise-H0"
+  ],
+  "selection_policy": "Report every fixed model/delay/day; no winner selection or realism pass label",
+  "aux_development_market_data_unopened_at_design": true,
+  "method_development_used_previously_seen_november_results": true,
+  "interpretation": "Retrospective method development with parameters fit on October 14-20 and evaluated on October 21-27. A conditional count diagnostic, not autonomous market generation, execution validation, prospective research, or a significance test. One fixed noise seed is not an empirical null distribution. Original November 5-7 event test and final human financial sessions remain sealed."
+}

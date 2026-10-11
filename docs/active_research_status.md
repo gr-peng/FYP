@@ -92,19 +92,39 @@ Auxiliary development market profiles/features and the November final test
 remain unopened. Total original plus supplementary raw data are 42 files across
 21 dates, totaling 6,441,794,276 bytes.
 
-Continue with the limited design in
-[下一版计数模型建议](crypto_activity_next_model_20261011.md): preserve v1, compare
-NB2 and logistic/zero-truncated-NB hurdle families with baseline/book information,
-plus one fixed independent-noise negative control; keep the three fixed delays.
-This is a design idea, not yet implemented or validated. Implement/review a new
-protocol and separate train-only fit from evaluation. Freeze the complete fitted
-model artifact and all source/input identities BEFORE exporting/reading auxiliary
-development features. Evaluation must never optimize or recalculate training
-normalization. Avoid bypassing the v1 hard-coded November selection via monkeypatch;
-any new date selection must be explicit, tested and confined to the auxiliary plan.
-More lags/weekday features are outside this proposed version. The November final
-test remains sealed. Autonomous order-flow generation, execution validity and
-LLM increment are still required; this goal remains active.
+The limited auxiliary experiment is now implemented, with no real fit or auxiliary
+development market access yet at this code freeze. See
+[两阶段协议](crypto_activity_aux_protocol_20261011.md) and
+[独立审查](crypto_activity_aux_independent_review_20261011.md).
+New `experiments/crypto_activity_aux.py` implements N0/N1 NB2, H0/H1 logistic plus
+zero-truncated NB2, and Hnoise with one fixed SHA256/Box–Muller noise construction,
+all at 0/1000/5000 ms delay. v1 source/config/results are unchanged. New pipeline
+and `scripts/run_crypto_activity_aux.py` separate train-only fit, reviewed first
+development export, and optimization-free evaluation. The 33 core and 22 pipeline
+synthetic tests passed; the current workspace full suite passed 371 tests in
+26.79 seconds, including 26 tests of the separately developing execution component.
+That full-suite count does not mean the uncommitted execution implementation is
+independently approved or the market model is realistic.
+
+Next: fit all 15 models from auxiliary train only, save the immutable model package,
+and independently verify its fitted parameters/scores and exact artifact hash.
+Only then create a review receipt and run the guarded development export; no
+auxiliary development parquet exists at this code freeze. Evaluation must never
+optimize, recalculate normalization or change the fixed candidate list. All raw,
+feature, audit, model, review, source and access identities are bound, with explicit
+UTC ordering. Source freezing covers every listed experiment dependency and both
+configs; unrelated parallel work may remain uncommitted. Numerical fixes made
+before opening development must produce a new frozen source/artifact identity.
+More lags/weekday features are outside this version. Original November final test
+remains sealed. Autonomous order-flow generation, execution validity and LLM
+increment are still required; this goal remains active.
+
+In parallel, an original-November TRAIN-ONLY execution diagnostic is being
+implemented from the existing execution design. It is not yet independently
+approved or run on real market data. It conditions on actual print side/size,
+streams five delayed raw book cursors, and compares visible sweep/L1/midpoint;
+public prints do not identify complete parent orders or passive queues. Do not
+infer completion from its new files or engineering tests.
 Model/scoring freeze must precede event-test model evaluation. Tests and process
 statuses must be reported from their actual new outputs, not inferred from the
 October 4 suite or from the presence of newly written code.
