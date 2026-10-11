@@ -1,10 +1,82 @@
 # Active research objective and continuation state
 
+## Active crypto-market realism research (2026-10-11)
+
+The current user objective is active: focus on crypto markets, keep improving
+simulation realism, find missing data autonomously, and use independent agents
+to assess completion and propose ideas. The October 4 bounded study below is a
+preserved historical result; its completion does not complete this new objective.
+The current protocol is [加密市场真实性协议](crypto_realism_protocol_20261011.md),
+with [独立审查记录](crypto_independent_review_20261011.md) and
+[第一轮真实数据结果](crypto_first_data_results_20261011.md).
+
+The user's latest clarification confirms the same June–July 2026 Meta episode
+already identified in the prior study; exact report timing remains based on its
+archived sources. The active crypto work does not reopen Meta experiments.
+
+- Downloaded all 14 official Bybit BTCUSDT linear-USDT perpetual archives for
+  November 1–7, 2024: seven 500-level L2 snapshot/delta ZIPs and seven trade GZIPs,
+  totaling 2,632,504,549 bytes. Official frontend/API provenance, HTTP size and local
+  hashes are preserved. This is Bybit perpetual data, not Binance spot or onchain
+  data; the corrected full audit at `f7f0d2e` subsequently passed all seven book
+  structural checks and all seven trade-file validity/CRC checks. This does not
+  prove hidden exchange-side gaps absent or identify individual orders.
+- Same-week mark-price and index-price 1-minute data and funding history are
+  archived from the official V5 endpoints. Coverage metadata report 10,080 minutes
+  for each price series and 21 funding timestamps. Sources and limitations are in
+  `outputs/crypto_research_20261011/contract_sources/`. Minute bars cannot establish
+  tick-level liquidation chronology; realized funding is unavailable before its
+  settlement timestamp.
+- Frozen configuration is unchanged: November 1–3 train, November 4 development,
+  November 5–7 sealed event evaluation. Initial prefix inspection was for source
+  and schema verification only. An already-seen whole-week funding-rate range in
+  source-audit metadata must not influence parameter selection; the event-period
+  book/trade profiles and model evaluation remain closed. The 16 final human
+  financial sessions also remain closed.
+- The initial `ec620a4` training audit is preserved under
+  `outputs/crypto_microstructure_20261011/initial_ec620a4_audit/`. Daily LOB archives
+  extend roughly two seconds into the next day; the first parser incorrectly
+  marked 18/19/19 end-of-file messages as date errors on the three training days.
+  Format corrections were committed as `f7f0d2e`; the new full audit completed successfully for train/development and
+  integrity-only event files.
+  Do not describe the preserved initial features as a successful corrected run.
+- The +/-60-second date allowance is for archive integrity/format inspection only.
+  Exported buckets must belong to their named day and become available strictly
+  before the next UTC midnight. LOB availability uses the maximum of the bucket
+  end, cumulative publication `ts` of its segment prefix, and the message `ts`
+  confirming bucket completion; `cts` alone is not an availability timestamp.
+- Consumers must require a current per-file `complete` audit, a run identity,
+  `features_published=true`, matching actual input/config/output hashes and row
+  count. A failed preflight can otherwise leave a stale successful manifest;
+  this fail-closed path is fixed in `f7f0d2e`, including raw-byte revalidation by
+  consumers, and independently reviewed. The new full archive audit completed successfully.
+  File existence and a batch's terminal status cannot authorize feature reuse.
+- A separate linear-perpetual accounting module now represents collateral,
+  signed positions, entry cost, PnL, fees and funding. It is not a verified
+  historical risk/margin/liquidation engine and does not yet establish an
+  integrated realistic exchange simulation. Historical risk tiers, applicable
+  account mode, order-margin reservation, liquidation and ADL remain incomplete.
+
+The corrected engineering suite passed 245 tests; independent re-review passed
+83 related tests. These are engineering results, not market-fidelity results.
+Descriptive profiles at `a9a2a1d` are complete: each of four train/development
+  days has 86,397 known full book seconds. Train spread medians are about
+  0.014–0.015 bps and mean trade rates range from 7 to 26 per second; these are
+  observed market characteristics, not simulation scores. Added profile tests
+  passed 21/21 and independent timing-oracle checks matched 2,623 pairs.
+No new market-fidelity result or overall completion is claimed. The next evidence
+required is chronological train/development comparison of a simple activity
+model with a state-conditioned alternative, followed by autonomous order-flow
+generation and execution validation.
+Model/scoring freeze must precede event-test model evaluation. Tests and process
+statuses must be reported from their actual new outputs, not inferred from the
+October 4 suite or from the presence of newly written code.
+
 ## Completed bounded two-event study (2026-10-04)
 
 The user confirmed the June–July 2026 Meta cloud/compute episode. The authorized
 bounded iteration, live experiments, audits and plain-Chinese report for this
-and the 2024 Trump election are complete. No experiment remains running.
+and the 2024 Trump election are complete. No experiment from that batch remains running.
 The final report is [两次新闻冲击的模拟：实验报告](two_event_final_report_20261004.md).
 This completes the study deliverable, not validation of the broad scientific hypothesis.
 
@@ -49,7 +121,7 @@ and source links are in the final report. Earlier versions and unsuccessful runs
 remain preserved. The model is DeepSeek-V4-Flash throughout the completed batch.
 Synthetic allocation targets are not validated human calibration; no final-test
 selection,real LOB replay,causal historical-event identification,or unseen-event
-prediction is claimed. A future stage would need separate,explicitly scoped work.
+prediction is claimed. The separately authorized October 11 crypto stage is active above.
 
 ## Previous continuation state (2026-09-23)
 
