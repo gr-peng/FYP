@@ -1,0 +1,51 @@
+{
+  "study_id": "crypto_microstructure_aux_20261011",
+  "parent_study_id": "crypto_microstructure_20261011",
+  "venue": "bybit",
+  "market": "linear_usdt_perpetual",
+  "symbol": "BTCUSDT",
+  "book_depth": 500,
+  "price_storage_scale": 100,
+  "quantity_storage_scale": 1000,
+  "storage_units_are_not_verified_historical_trading_rules": true,
+  "splits": {
+    "train": [
+      "2024-10-14",
+      "2024-10-15",
+      "2024-10-16",
+      "2024-10-17",
+      "2024-10-18",
+      "2024-10-19",
+      "2024-10-20"
+    ],
+    "development": [
+      "2024-10-21",
+      "2024-10-22",
+      "2024-10-23",
+      "2024-10-24",
+      "2024-10-25",
+      "2024-10-26",
+      "2024-10-27"
+    ],
+    "event_test": []
+  },
+  "urls": {
+    "orderbook": "https://quote-saver.bycsi.com/orderbook/linear/BTCUSDT/{date}_BTCUSDT_ob500.data.zip",
+    "trades": "https://public.bybit.com/trading/BTCUSDT/BTCUSDT{date}.csv.gz"
+  },
+  "sources": [
+    "https://www.bybit.com/en/derivative-activity/history-data",
+    "https://api2.bybit.com/quote/public/support/download/list-files",
+    "https://bybit-exchange.github.io/docs/v5/websocket/public/orderbook",
+    "https://bybit-exchange.github.io/docs/v5/websocket/public/trade"
+  ],
+  "calendar_selection_policy": "Two complete consecutive UTC Monday-Sunday weeks, selected before inspecting these dates' market profiles; do not replace dates based on market outcomes or file sizes.",
+  "development_policy": "Fit auxiliary parameters only on 2024-10-14 through 2024-10-20 before evaluation on 2024-10-21 through 2024-10-27. A model fitted using November data is not a strictly forward validation on this October development week.",
+  "preregistration_policy": "Commit this configuration and its protocol before downloading or inspecting the selected market profiles. Archive-list metadata and HEAD size checks alone are permitted before commit.",
+  "event_test_policy": "No auxiliary event-test dates. The parent study's 2024-11-05 through 2024-11-07 event test remains sealed; its configuration and splits are unchanged.",
+  "limits": {
+    "download_workers": 2,
+    "maximum_file_bytes": 2000000000,
+    "maximum_total_bytes": 8000000000
+  }
+}
