@@ -1,0 +1,35 @@
+{
+  "protocol_version": 1,
+  "study_id": "crypto_activity_probe_20261011",
+  "source_config": "config/crypto_microstructure_20261011.json",
+  "source_config_sha256": "e056498b7296591841d64ea4700ed1bb4fdf821ead965c943e0ee3520a361184",
+  "splits": {
+    "train": ["2024-11-01", "2024-11-02", "2024-11-03"],
+    "development": ["2024-11-04"]
+  },
+  "development_previously_profiled": true,
+  "target_seconds": 1,
+  "additional_delay_ms": [0, 1000, 5000],
+  "minimum_visible_levels_per_side": 5,
+  "baseline_features": [
+    "utc_sin", "utc_cos", "log1p_last_trade_count", "log1p_last_trade_quantity_btc"
+  ],
+  "additional_book_features": [
+    "log1p_spread_bps", "imbalance_l1", "log1p_bid_depth_5_btc", "log1p_ask_depth_5_btc"
+  ],
+  "model": {
+    "family": "NB2",
+    "l2_penalty": 0.01,
+    "objective": "mean_negative_log_probability_plus_half_l2_slopes",
+    "alpha_bounds": [0.0001, 1000.0],
+    "optimizer": {
+      "method": "L-BFGS-B",
+      "maxiter": 500,
+      "ftol": 1e-10,
+      "gtol": 1e-7,
+      "accepted_projected_gradient_inf_norm": 0.001
+    }
+  },
+  "calibration_block_hours": 3,
+  "interpretation": "Conditional next-second trade-activity diagnostic, not a market simulator or a causal/tradable prediction claim. Development has been descriptively examined and is for development only. No event-test access, hyperparameter search, latency selection or significance claim. Ideal server-publication clocks; trade publication and client receipt times are unobserved."
+}
