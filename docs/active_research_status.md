@@ -32,11 +32,19 @@ published all 14 auxiliary DEVELOPMENT features. First access, prior integrity
 receipts, completion and all per-file export identities are preserved. This
 week is now open only for the fixed auxiliary diagnostic. Root evaluation session
 `37540` is running with frozen parameters, logging to
-`/tmp/fyp_crypto_aux_development_evaluate_20261013_v1.log`; target is
-`outputs/crypto_activity_aux_20261011/development_result_v1.json`. Do not call it
-completed or consume partial output. Independent reviewer waits for the complete
-artifact before reconstructing all seven days. Original November event test and
-final human financial sessions remain closed.
+`/tmp/fyp_crypto_aux_development_evaluate_20261013_v1.log`; it subsequently exited
+0 and atomically published `development_result_v1.json` at 04:30:26 UTC.
+Result SHA256 is `e989504c8ecd63f81159f09e426e53b3bb407806e3ab1755111f5d8802d836f1`.
+Independent development session `95224` also exited 0: all 15 models, seven days
+and 56 UTC blocks passed 260,364 scalar checks; max summary difference 9.24e-14.
+Receipt `independent_development_review_v1.json` SHA256 is
+`b2bf0bec2cf81f3b7d98b717dc122fa86b10de4eae8ee05bc9baba8e98bbee03`.
+See `docs/crypto_activity_aux_results_20261013.md` and the independent development
+memo. H0-N0 gains are +0.121798/+0.124016/+0.127207 (0/1/5s), positive every day
+and block; H1-H0 gains are +0.001985/+0.001177/+0.000890 but negative on two days
+and 24 of 56 blocks in each delay. Preserve alpha/optimizer and calibration limits.
+This verifies the count diagnostic, not autonomous-market fidelity. Original
+November event test and final human financial sessions remain closed.
 
 Real execution smoke and exact summary both completed and independently passed.
 They cover 39,333 actual prints in the predeclared November 1 00–01 UTC window;
@@ -45,13 +53,23 @@ review/verification notes. Fixed full training execution (Nov1–3) is still run
 as root session `59820`, log `/tmp/fyp_crypto_execution_train_20261013_v1.log`, target
 `outputs/crypto_execution_diagnostic_20261011/train_20261013_v1/`. Its current
 manifest is not complete; do not summarize partial day files as a finished run.
-Root full suite passed 405 tests in 27.98 seconds; changed Python lint passed.
+November 1 output has published within the still-running master; Nov2/3 remain
+required. Last root full suite passed 458 tests in 27.21 seconds, before the latest
+effective-flow endpoint/type/RNG revisions; revised flow-specific tests pass 38.
 
 The next five-minute M0/M1 proposal is in
 `docs/crypto_autonomous_flow_prototype_plan_20261013.md`, not a fitted or validated
-market model. A new synthetic perpetual matching/risk adapter is being implemented
-in two new files by the summary agent, with synthetic tests only. Do not modify
-any frozen activity or execution source while their jobs are running. Simulation
+market model. The new experimental perpetual matching/risk adapter passed
+independent review after repairing low-precision Decimal bid sorting using exact
+copy_negate; 62 related tests, 2400 Fraction-ledger random operations and 1800
+price-priority oracle scenarios passed. See
+`docs/perpetual_exchange_independent_review_20261013.md`. It remains an experimental
+admission policy without reduce-only, historical margin, liquidation, ADL or
+funding scheduling. The OrderBook change is outside the frozen activity/execution
+source lists. Root's new pure effective-flow/template core is under independent
+review; new pure autonomous generator and metrics are being written by separate
+agents with synthetic inputs only. No real template extraction/generation has
+begun. Do not modify any frozen execution source while its job is running. Simulation
 realism, full-parent-order/queue identification, historical margin/liquidation and
 LLM increment are still unestablished; the user's research objective is incomplete.
 
@@ -133,6 +151,11 @@ At that earlier stage auxiliary development features were unopened; they were
 subsequently exported after the complete model freeze on October 13. The November
 final test remains unopened. Total original plus supplementary raw data are 42 files across
 21 dates, totaling 6,441,794,276 bytes.
+
+### Preserved October 11 code-freeze stage
+
+The following notes record the earlier stage; current completed training and
+development evaluation are described above. Do not rerun those completed jobs.
 
 The limited auxiliary experiment is now implemented, with no real fit or auxiliary
 development market access yet at this code freeze. See

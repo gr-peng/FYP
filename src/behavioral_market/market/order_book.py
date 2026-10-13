@@ -12,7 +12,9 @@ class OrderBook:
         side = self.bids if order.side == Side.BUY else self.asks
         side.append(order)
         if order.side == Side.BUY:
-            side.sort(key=lambda item: (-item.price, item.timestamp))
+            # Unary Decimal negation applies the current arithmetic precision;
+            # the exact sign copy keeps nearby prices distinct for price priority.
+            side.sort(key=lambda item: (item.price.copy_negate(), item.timestamp))
         else:
             side.sort(key=lambda item: (item.price, item.timestamp))
 
