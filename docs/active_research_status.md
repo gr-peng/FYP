@@ -14,24 +14,46 @@ The user's latest clarification confirms the same June–July 2026 Meta episode
 already identified in the prior study; exact report timing remains based on its
 archived sources. The active crypto work does not reopen Meta experiments.
 
-Current continuation resumed on 2026-10-13: the October 11 fit was interrupted
-at the usage limit; no process or complete model artifact remained, and the old
-log is preserved. The unchanged source freeze `1f4211f` and code review `e041bb3`
-remain valid. Root restarted train-only fitting as session `81223`, logging to
-`/tmp/fyp_crypto_activity_aux_fit_20261013_v1.log`, with one BLAS/OMP thread.
-`outputs/crypto_activity_aux_20261011/restart_20261013.json` records the restart;
-`models_v1.json` is still an immutable target, not a completed result. The new
-independent auxiliary reviewer will reconstruct all training samples/scores before
-issuing a fitted-artifact receipt. Auxiliary development remains unopened.
+Latest continuation, 2026-10-13: the October 11 interrupted fit remains preserved;
+its replacement root session `81223` exited 0. Complete auxiliary model artifact
+`outputs/crypto_activity_aux_20261011/models_v1.json` has SHA256
+`275dbc73ca33ca30d834cf8a4de7a17a298cdf5125a7e104e9ddd83c1b3c3ae6`.
+All 15 fixed fits and training scores passed independent reconstruction (260,604
+scalar checks; max training-score difference 1.14e-13). The fitted freeze receipt
+is `independent_freeze_review_v1.json`, SHA256
+`c957e6789c1d7916ffd9ca9f3d471305093963bd2bb535d742440c1ae560ac55`.
+H0 5s reaches alpha's 1000 numerical upper bound; H1/Hnoise 5s projected gradients
+are 0.0008942/0.0002564, inside the predeclared 0.001 tolerance but larger than the
+short-delay fits. Preserve these limitations and the independent script's failed
+NumPy-bool serialization log alongside its corrected successful run.
 
-Execution core now has independent engineering review with 29 passing tests,
-25,000 random-state predictions and 3,780 exact-rational residual comparisons.
-See `docs/crypto_execution_independent_review_20261013.md` and its hash-bound
-receipt. After committing the reviewed four files, run the fixed November 1
-00–01 UTC TRAIN-only smoke. A separate quantile/stratified summary module is being
-implemented; the reviewed execution files remain unchanged. No real execution
-run has completed, and no development/event-test access is authorized by these
-engineering checks.
+After verifying the freeze receipt, root export session `6500` exited 0 and
+published all 14 auxiliary DEVELOPMENT features. First access, prior integrity
+receipts, completion and all per-file export identities are preserved. This
+week is now open only for the fixed auxiliary diagnostic. Root evaluation session
+`37540` is running with frozen parameters, logging to
+`/tmp/fyp_crypto_aux_development_evaluate_20261013_v1.log`; target is
+`outputs/crypto_activity_aux_20261011/development_result_v1.json`. Do not call it
+completed or consume partial output. Independent reviewer waits for the complete
+artifact before reconstructing all seven days. Original November event test and
+final human financial sessions remain closed.
+
+Real execution smoke and exact summary both completed and independently passed.
+They cover 39,333 actual prints in the predeclared November 1 00–01 UTC window;
+see `docs/crypto_execution_first_results_20261013.md` and the three independent
+review/verification notes. Fixed full training execution (Nov1–3) is still running
+as root session `59820`, log `/tmp/fyp_crypto_execution_train_20261013_v1.log`, target
+`outputs/crypto_execution_diagnostic_20261011/train_20261013_v1/`. Its current
+manifest is not complete; do not summarize partial day files as a finished run.
+Root full suite passed 405 tests in 27.98 seconds; changed Python lint passed.
+
+The next five-minute M0/M1 proposal is in
+`docs/crypto_autonomous_flow_prototype_plan_20261013.md`, not a fitted or validated
+market model. A new synthetic perpetual matching/risk adapter is being implemented
+in two new files by the summary agent, with synthetic tests only. Do not modify
+any frozen activity or execution source while their jobs are running. Simulation
+realism, full-parent-order/queue identification, historical margin/liquidation and
+LLM increment are still unestablished; the user's research objective is incomplete.
 
 - Downloaded all 14 official Bybit BTCUSDT linear-USDT perpetual archives for
   November 1–7, 2024: seven 500-level L2 snapshot/delta ZIPs and seven trade GZIPs,
@@ -101,14 +123,15 @@ October 14–20 train, October 21–27 development. All 28 files totaling
 Both supplementary audits completed 14/14 with no reported structural/trade
 anomalies and verified CRCs. Their original-agent sessions `53406` and `9649`
 both exited 0 and are closed. Train published 14 feature files; development
-published none and has no parquet directory. No jobs remain running from this
-batch. Do not re-run these audits merely because the old handles are closed.
+published none at the October 11 integrity-only stage; the authorized October 13
+export is described above. No jobs remain running from that old audit batch. Do not re-run these audits merely because the old handles are closed.
 Authoritative manifests are under `outputs/crypto_microstructure_aux_20261011/`.
 Auxiliary training-only profile is complete at `profile_train_v1.json`, from root
 session `8755` exit 0; seven days each have 86,397 book seconds. Training mean
 trade rates span about 4.99–30.50 per second and zero-trade fractions 6.97–32.49%.
-Auxiliary development market profiles/features and the November final test
-remain unopened. Total original plus supplementary raw data are 42 files across
+At that earlier stage auxiliary development features were unopened; they were
+subsequently exported after the complete model freeze on October 13. The November
+final test remains unopened. Total original plus supplementary raw data are 42 files across
 21 dates, totaling 6,441,794,276 bytes.
 
 The limited auxiliary experiment is now implemented, with no real fit or auxiliary
