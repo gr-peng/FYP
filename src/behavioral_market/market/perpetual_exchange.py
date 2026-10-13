@@ -327,11 +327,11 @@ class ExperimentalPerpetualExchange:
 
     def _copy_live_book(self):
         book = OrderBook()
-        orders = {}
-        for original in self._book.resting_orders():
-            order = copy(original)
-            orders[order.order_id] = order
-            book.add(order)
+        # Both live sides already have exact price/FIFO order. Preserve it while
+        # copying; repeatedly calling add would re-sort every growing prefix.
+        book.bids = [copy(order) for order in self._book.bids]
+        book.asks = [copy(order) for order in self._book.asks]
+        orders = {order.order_id: order for order in book.resting_orders()}
         return book, orders
 
     def submit_order(

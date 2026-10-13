@@ -48,3 +48,11 @@ mark由调用者明确提供整数存储单位。自主盘口的买卖中点若�
 初版发现凭证为 `outputs/perpetual_exchange_review_20261013/review_v1/review_receipt_v1.json`，SHA256 `9377e532c25036fb7491ad1199bf7b49a2bd9e2850e20221a1007c31135ebe97`。修复后最终凭证为 `outputs/perpetual_exchange_review_20261013/review_v2/review_receipt_v2.json`，SHA256 `4393e50c8dd443c00ccb39e21660288e6392dee4d77a0d4fd0dccdec38ebc6ca`；目录保留实际执行的两份独立oracle脚本和前后源码身份。
 
 工程通过后，可把组件作为有限资金的自主订单流试验基础，让新订单真正改变自己的盘口，再比较固定时窗中的价差、深度、方向、活动和冲击响应。历史盘口回放及条件逐笔成本解释仍是另一组验证任务；已有数据和本次会计恒等不能代替自主生成的市场评价。
+
+## 保序复制优化的追加复核
+
+同日root将 `_copy_live_book()` 改为分别复制已经排好价优/FIFO顺序的bid/ask列表，再构造订单ID字典；省去对每个拷贝订单重复add/sort。该版本组件SHA256为 `6a31d49e5d284350787e44108f0893f3fecf9cc0a4b8605a5f6bef17ad72d43d`，测试、共享簿和账本hash不变。
+
+独立追加审阅重新运行62项相关测试、2400操作Fraction账本oracle、1800个低精度排序场景及48个公开adapter价优场景，均通过；包括所有晚期失败回滚。另直接核对120个live订单（双侧各60）：顺序相同、每个订单对象及两侧列表都独立、ID字典指向拷贝对象；修改拷贝的fill/price并清空拷贝列表不改变任何原订单。组件与依赖hash前后相同。root提供的合成性能计时没有由本审阅者独立复测，不是实际市场吞吐证据。
+
+追加凭证位于 `outputs/perpetual_exchange_review_20261013/review_v3/review_receipt_v3.json`，保留旧v1/v2记录。该优化没有改变本文件所述入场minimum、mark、费用、风险、Decimal舍入及非历史强平模型的边界，也没有读取真实或留出行情。
