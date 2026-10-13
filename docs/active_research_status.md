@@ -14,6 +14,25 @@ The user's latest clarification confirms the same June–July 2026 Meta episode
 already identified in the prior study; exact report timing remains based on its
 archived sources. The active crypto work does not reopen Meta experiments.
 
+Current continuation resumed on 2026-10-13: the October 11 fit was interrupted
+at the usage limit; no process or complete model artifact remained, and the old
+log is preserved. The unchanged source freeze `1f4211f` and code review `e041bb3`
+remain valid. Root restarted train-only fitting as session `81223`, logging to
+`/tmp/fyp_crypto_activity_aux_fit_20261013_v1.log`, with one BLAS/OMP thread.
+`outputs/crypto_activity_aux_20261011/restart_20261013.json` records the restart;
+`models_v1.json` is still an immutable target, not a completed result. The new
+independent auxiliary reviewer will reconstruct all training samples/scores before
+issuing a fitted-artifact receipt. Auxiliary development remains unopened.
+
+Execution core now has independent engineering review with 29 passing tests,
+25,000 random-state predictions and 3,780 exact-rational residual comparisons.
+See `docs/crypto_execution_independent_review_20261013.md` and its hash-bound
+receipt. After committing the reviewed four files, run the fixed November 1
+00–01 UTC TRAIN-only smoke. A separate quantile/stratified summary module is being
+implemented; the reviewed execution files remain unchanged. No real execution
+run has completed, and no development/event-test access is authorized by these
+engineering checks.
+
 - Downloaded all 14 official Bybit BTCUSDT linear-USDT perpetual archives for
   November 1–7, 2024: seven 500-level L2 snapshot/delta ZIPs and seven trade GZIPs,
   totaling 2,632,504,549 bytes. Official frontend/API provenance, HTTP size and local
@@ -57,7 +76,7 @@ archived sources. The active crypto work does not reopen Meta experiments.
   integrated realistic exchange simulation. Historical risk tiers, applicable
   account mode, order-margin reservation, liquidation and ADL remain incomplete.
 
-The current full suite passed 290 tests at `cc5853d`; independent reviewers
+The earlier full suite passed 290 tests at `cc5853d`; independent reviewers
 verified the data pipeline, profile clocks and NB2 probability/gradient/time
 alignment. These are engineering results, not market-fidelity results.
 Descriptive profiles at `a9a2a1d` are complete: each of four train/development
