@@ -1,0 +1,19 @@
+{
+  "study_id": "crypto_effective_flow_extraction_20261013",
+  "source_config": "config/crypto_microstructure_20261011.json",
+  "source_config_sha256": "e056498b7296591841d64ea4700ed1bb4fdf821ead965c943e0ee3520a361184",
+  "allowed_splits": ["train"],
+  "days": ["2024-11-01", "2024-11-02", "2024-11-03"],
+  "grid_us": 100000,
+  "delays_ms": [0, 1000, 5000],
+  "max_book_age_us": 1000000,
+  "past_print_pressure_us": 1000000,
+  "common_delay_cohort": true,
+  "require_same_signal_label_segment_and_invalid_count": true,
+  "snapshot_policy": "Every valid raw snapshot, including an exact duplicate, is a reset boundary",
+  "net_event_order": "bid descending then ask ascending; raw print order preserved",
+  "smoke": {"day": "2024-11-01", "start_second_utc": 600, "end_second_utc": 900},
+  "priming": "Consume from UTC day start; no prior-day or future state initialization",
+  "evidence": "Sparse changed/consumed levels plus hash-bound raw prefix references",
+  "interpretation": "Effective net residuals, not gross orders or identified parent intentions"
+}
