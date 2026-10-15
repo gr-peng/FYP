@@ -31,9 +31,8 @@ After verifying the freeze receipt, root export session `6500` exited 0 and
 published all 14 auxiliary DEVELOPMENT features. First access, prior integrity
 receipts, completion and all per-file export identities are preserved. This
 week is now open only for the fixed auxiliary diagnostic. Root evaluation session
-`37540` is running with frozen parameters, logging to
-`/tmp/fyp_crypto_aux_development_evaluate_20261013_v1.log`; it subsequently exited
-0 and atomically published `development_result_v1.json` at 04:30:26 UTC.
+`37540` used frozen parameters and exited 0, logging to
+`/tmp/fyp_crypto_aux_development_evaluate_20261013_v1.log`; it atomically published `development_result_v1.json` at 04:30:26 UTC.
 Result SHA256 is `e989504c8ecd63f81159f09e426e53b3bb407806e3ab1755111f5d8802d836f1`.
 Independent development session `95224` also exited 0: all 15 models, seven days
 and 56 UTC blocks passed 260,364 scalar checks; max summary difference 9.24e-14.
@@ -46,32 +45,53 @@ and 24 of 56 blocks in each delay. Preserve alpha/optimizer and calibration limi
 This verifies the count diagnostic, not autonomous-market fidelity. Original
 November event test and final human financial sessions remain closed.
 
-Real execution smoke and exact summary both completed and independently passed.
-They cover 39,333 actual prints in the predeclared November 1 00–01 UTC window;
-see `docs/crypto_execution_first_results_20261013.md` and the three independent
-review/verification notes. Fixed full training execution (Nov1–3) is still running
-as root session `59820`, log `/tmp/fyp_crypto_execution_train_20261013_v1.log`, target
-`outputs/crypto_execution_diagnostic_20261011/train_20261013_v1/`. Its current
-manifest is not complete; do not summarize partial day files as a finished run.
-November 1 output has published within the still-running master; Nov2/3 remain
-required. Last root full suite passed 458 tests in 27.21 seconds, before the latest
-effective-flow endpoint/type/RNG revisions; revised flow-specific tests pass 38.
+Updated 2026-10-15 after resuming the interrupted turn. Real execution smoke and
+exact summary completed and independently passed, covering 39,333 actual prints
+in the fixed November 1 00–01 UTC window. Full TRAIN execution root session
+`59820` and exact summary `75304` subsequently both exited 0 on October 13;
+DO NOT rerun them. Complete manifests are
+`outputs/crypto_execution_diagnostic_20261011/train_20261013_v1/manifest.json` and
+`outputs/crypto_execution_diagnostic_20261011/train_summary_20261013_v1/manifest.json`.
+There are 4,371,215 unique prints and 21,856,075 five-delay rows. See
+[full three-day report](crypto_execution_full_train_results_20261015.md).
+The independent full-batch audit is currently running; it separately checks all
+stored integer-derived residuals/aggregates and fixed 128 prints per day against
+raw dictionary-book reconstruction. Do not claim every raw book/print was independently
+replayed. Shared cross-L1 equal-day MAE improves by 0.158056bps at zero delay;
+all shared eligible improvement is only 0.005669bps. November 3 all-shared P99 is
+worse for sweep at 0/50/100/250ms. These are conditional price-proxy results.
 
-The next five-minute M0/M1 proposal is in
-`docs/crypto_autonomous_flow_prototype_plan_20261013.md`, not a fitted or validated
-market model. The new experimental perpetual matching/risk adapter passed
-independent review after repairing low-precision Decimal bid sorting using exact
-copy_negate; 62 related tests, 2400 Fraction-ledger random operations and 1800
-price-priority oracle scenarios passed. See
-`docs/perpetual_exchange_independent_review_20261013.md`. It remains an experimental
-admission policy without reduce-only, historical margin, liquidation, ADL or
-funding scheduling. The OrderBook change is outside the frozen activity/execution
-source lists. Root's new pure effective-flow/template core is under independent
-review; new pure autonomous generator and metrics are being written by separate
-agents with synthetic inputs only. No real template extraction/generation has
-begun. Do not modify any frozen execution source while its job is running. Simulation
-realism, full-parent-order/queue identification, historical margin/liquidation and
-LLM increment are still unestablished; the user's research objective is incomplete.
+The five-minute M0/M1 protocol remains a prototype, not a validated market model.
+Finite perpetual matching, effective-flow decomposition, pure generator and pure
+metrics have independently passed synthetic engineering review. Generator and
+metrics were frozen at `7fd6177`. The adapter's FIFO-preserving preview-copy
+optimization also passed its independent v3 replay; see its existing review memo.
+Real TRAIN effective-flow smoke (Nov1 00:10–00:15 UTC) completed on October 13 and
+passed independent full reconstruction on October 15: all 3,000 candidates,
+1,894 prints, 9,000 lag features and 160,679 sparse price records agree. See
+[real extraction review](crypto_effective_flow_real_smoke_review_20261015.md).
+Its output is an extraction validation, not a fitted model or a generation result.
+
+Full three-day flow extraction is running as root session `27190`, log
+`/tmp/fyp_crypto_effective_flow_train_20261015_v1.log`, target
+`outputs/crypto_effective_flow_extraction_20261013/train_20261015_v1/`.
+The running master is unpublished; partial files cannot fit a model. Reader code
+and extraction config remain byte-identical to frozen `5a21b96`. Do not modify
+these source files while the run is active. Fitter/loader and the TRAIN target
+bridge/builder are undergoing separate independent synthetic reviews; no real
+model fit, target collection, generation or score has run. Root full suite `3383` exited 0 with 638 passed in 69.82s, log
+`/tmp/fyp_full_suite_20261015_v1.log`. This precedes the subsequent target-builder
+preflight-receipt binding correction; its focused 18 tests and Ruff also pass,
+and independent builder review is ongoing.
+
+Next: finish these reviews; complete and independently validate the all-three-day
+extraction; freeze the fitter and provenance builder before any true fit or target
+parsing. Then validate immutable model and target packages before the fixed
+M0/M1 × S1/S2 × 0/1/5s × 20-seed first-window generation. Keep all failures and
+candidate denominators. Historical margin/liquidation, parent-order/queue
+identification, autonomous-market fidelity and LLM increment are unestablished.
+The original November 5–7 event evaluation and final human sessions remain closed;
+the user's broad research objective is incomplete.
 
 - Downloaded all 14 official Bybit BTCUSDT linear-USDT perpetual archives for
   November 1–7, 2024: seven 500-level L2 snapshot/delta ZIPs and seven trade GZIPs,
