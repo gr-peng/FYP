@@ -182,13 +182,11 @@ def test_api_repair_fallback_cache_and_no_key_leak(config, tmp_path):
                 200,
                 json={
                     "model": live["model"],
-                    "choices": [{"message": {"content": "bad"}}],
+                    "choices": [{"finish_reason": "stop", "message": {"content": "bad"}}],
                 },
             )
 
-        client = SiliconFlowClient(
-            live, "unit-test-secret", tmp_path / "logs", tmp_path / "cache"
-        )
+        client = SiliconFlowClient(live, "unit-test-secret", tmp_path / "logs", tmp_path / "cache")
         await client.http.aclose()
         client.http = httpx.AsyncClient(
             transport=httpx.MockTransport(respond), base_url="https://api.siliconflow.cn/v1/"
@@ -222,10 +220,11 @@ def test_shared_pacer_backoff_and_cache_only(config, tmp_path):
                 json={
                     "choices": [
                         {
+                            "finish_reason": "stop",
                             "message": {
                                 "content": '{"action":"hold","quantity":0,"limit_price":null,'
                                 '"rationale":"ok","sentiment":"neutral"}'
-                            }
+                            },
                         }
                     ],
                     "model": live["model"],

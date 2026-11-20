@@ -1,0 +1,111 @@
+{
+  "dimensions": [
+    "return_bps",
+    "volume_btc",
+    "published_print_count",
+    "mean_spread_bps",
+    "mean_visible_bid_depth_5bps_btc",
+    "mean_visible_ask_depth_5bps_btc",
+    "quantity_pressure"
+  ],
+  "scales": [
+    1.0,
+    1.0,
+    1.0,
+    1.0,
+    1.0,
+    1.0,
+    1.0
+  ],
+  "synthetic_observed": {
+    "start_ms": 1730419800000,
+    "blocks": [
+      {
+        "start_ms": 1730419800000,
+        "values": [
+          0.0,
+          0.0,
+          0.0,
+          2.0,
+          200.0,
+          200.0,
+          0.0
+        ],
+        "issues": [],
+        "valid_left_points": 600,
+        "bid_5bps_coverage_fraction": 0.0,
+        "ask_5bps_coverage_fraction": 0.0
+      },
+      {
+        "start_ms": 1730419860000,
+        "values": [
+          0.0,
+          0.0,
+          0.0,
+          2.0,
+          200.0,
+          200.0,
+          0.0
+        ],
+        "issues": [],
+        "valid_left_points": 600,
+        "bid_5bps_coverage_fraction": 0.0,
+        "ask_5bps_coverage_fraction": 0.0
+      },
+      {
+        "start_ms": 1730419920000,
+        "values": [
+          0.0,
+          0.0,
+          0.0,
+          2.0,
+          200.0,
+          200.0,
+          0.0
+        ],
+        "issues": [],
+        "valid_left_points": 600,
+        "bid_5bps_coverage_fraction": 0.0,
+        "ask_5bps_coverage_fraction": 0.0
+      },
+      {
+        "start_ms": 1730419980000,
+        "values": [
+          0.0,
+          0.0,
+          0.0,
+          2.0,
+          200.0,
+          200.0,
+          0.0
+        ],
+        "issues": [],
+        "valid_left_points": 600,
+        "bid_5bps_coverage_fraction": 0.0,
+        "ask_5bps_coverage_fraction": 0.0
+      },
+      {
+        "start_ms": 1730420040000,
+        "values": [
+          0.0,
+          0.0,
+          0.0,
+          2.0,
+          200.0,
+          200.0,
+          0.0
+        ],
+        "issues": [],
+        "valid_left_points": 600,
+        "bid_5bps_coverage_fraction": 0.0,
+        "ask_5bps_coverage_fraction": 0.0
+      }
+    ]
+  },
+  "expected_paths_per_scenario": 20,
+  "expected_path_blocks_per_scenario": 100,
+  "generator_calls_in_extraction": 0,
+  "metric_function": "approved experiments.crypto_autonomous_metrics.summarize_window",
+  "fixture_sha256": "21ff0f16a22d3e9ead1b0c5ad676772cc1654b936701a8ac74fdfee734243522",
+  "interpretation": "Raw synthetic path-block diagnostics; no real observed target, trained scales, market validity or winner claim."
+}

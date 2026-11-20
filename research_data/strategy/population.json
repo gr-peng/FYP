@@ -1,0 +1,365 @@
+{
+  "cells": [
+    {
+      "agent_id": "A000",
+      "original_style": "fundamental",
+      "condition": "positive",
+      "population_condition": "fundamental_majority",
+      "planned": 3,
+      "dispatched": 3,
+      "valid": 3,
+      "invalid": 0,
+      "unsubmitted": 0,
+      "pending_records": 0,
+      "target_counts": {
+        "fundamental": 2,
+        "technical": 1
+      },
+      "stay_count": 2,
+      "switch_count": 1,
+      "fundamental_fraction_descriptive": 0.6666666666666666,
+      "alternative_fraction_descriptive": 0.3333333333333333,
+      "all_three_valid": true,
+      "different_targets_on_same_input": true
+    },
+    {
+      "agent_id": "A000",
+      "original_style": "fundamental",
+      "condition": "positive",
+      "population_condition": "technical_majority",
+      "planned": 3,
+      "dispatched": 3,
+      "valid": 3,
+      "invalid": 0,
+      "unsubmitted": 0,
+      "pending_records": 0,
+      "target_counts": {
+        "fundamental": 0,
+        "technical": 3
+      },
+      "stay_count": 0,
+      "switch_count": 3,
+      "fundamental_fraction_descriptive": 0.0,
+      "alternative_fraction_descriptive": 1.0,
+      "all_three_valid": true,
+      "different_targets_on_same_input": false
+    },
+    {
+      "agent_id": "A000",
+      "original_style": "fundamental",
+      "condition": "positive",
+      "population_condition": "hidden",
+      "planned": 3,
+      "dispatched": 3,
+      "valid": 3,
+      "invalid": 0,
+      "unsubmitted": 0,
+      "pending_records": 0,
+      "target_counts": {
+        "fundamental": 0,
+        "technical": 3
+      },
+      "stay_count": 0,
+      "switch_count": 3,
+      "fundamental_fraction_descriptive": 0.0,
+      "alternative_fraction_descriptive": 1.0,
+      "all_three_valid": true,
+      "different_targets_on_same_input": false
+    },
+    {
+      "agent_id": "A001",
+      "original_style": "technical",
+      "condition": "negative",
+      "population_condition": "fundamental_majority",
+      "planned": 3,
+      "dispatched": 3,
+      "valid": 3,
+      "invalid": 0,
+      "unsubmitted": 0,
+      "pending_records": 0,
+      "target_counts": {
+        "fundamental": 1,
+        "technical": 2
+      },
+      "stay_count": 2,
+      "switch_count": 1,
+      "fundamental_fraction_descriptive": 0.3333333333333333,
+      "alternative_fraction_descriptive": 0.3333333333333333,
+      "all_three_valid": true,
+      "different_targets_on_same_input": true
+    },
+    {
+      "agent_id": "A001",
+      "original_style": "technical",
+      "condition": "negative",
+      "population_condition": "technical_majority",
+      "planned": 3,
+      "dispatched": 3,
+      "valid": 3,
+      "invalid": 0,
+      "unsubmitted": 0,
+      "pending_records": 0,
+      "target_counts": {
+        "fundamental": 0,
+        "technical": 3
+      },
+      "stay_count": 3,
+      "switch_count": 0,
+      "fundamental_fraction_descriptive": 0.0,
+      "alternative_fraction_descriptive": 0.0,
+      "all_three_valid": true,
+      "different_targets_on_same_input": false
+    },
+    {
+      "agent_id": "A001",
+      "original_style": "technical",
+      "condition": "negative",
+      "population_condition": "hidden",
+      "planned": 3,
+      "dispatched": 3,
+      "valid": 3,
+      "invalid": 0,
+      "unsubmitted": 0,
+      "pending_records": 0,
+      "target_counts": {
+        "fundamental": 0,
+        "technical": 3
+      },
+      "stay_count": 3,
+      "switch_count": 0,
+      "fundamental_fraction_descriptive": 0.0,
+      "alternative_fraction_descriptive": 0.0,
+      "all_three_valid": true,
+      "different_targets_on_same_input": false
+    },
+    {
+      "agent_id": "A000",
+      "original_style": "fundamental",
+      "condition": "negative",
+      "population_condition": "fundamental_majority",
+      "planned": 3,
+      "dispatched": 3,
+      "valid": 3,
+      "invalid": 0,
+      "unsubmitted": 0,
+      "pending_records": 0,
+      "target_counts": {
+        "fundamental": 3,
+        "technical": 0
+      },
+      "stay_count": 3,
+      "switch_count": 0,
+      "fundamental_fraction_descriptive": 1.0,
+      "alternative_fraction_descriptive": 0.0,
+      "all_three_valid": true,
+      "different_targets_on_same_input": false
+    },
+    {
+      "agent_id": "A000",
+      "original_style": "fundamental",
+      "condition": "negative",
+      "population_condition": "technical_majority",
+      "planned": 3,
+      "dispatched": 3,
+      "valid": 3,
+      "invalid": 0,
+      "unsubmitted": 0,
+      "pending_records": 0,
+      "target_counts": {
+        "fundamental": 3,
+        "technical": 0
+      },
+      "stay_count": 3,
+      "switch_count": 0,
+      "fundamental_fraction_descriptive": 1.0,
+      "alternative_fraction_descriptive": 0.0,
+      "all_three_valid": true,
+      "different_targets_on_same_input": false
+    },
+    {
+      "agent_id": "A000",
+      "original_style": "fundamental",
+      "condition": "negative",
+      "population_condition": "hidden",
+      "planned": 3,
+      "dispatched": 3,
+      "valid": 3,
+      "invalid": 0,
+      "unsubmitted": 0,
+      "pending_records": 0,
+      "target_counts": {
+        "fundamental": 3,
+        "technical": 0
+      },
+      "stay_count": 3,
+      "switch_count": 0,
+      "fundamental_fraction_descriptive": 1.0,
+      "alternative_fraction_descriptive": 0.0,
+      "all_three_valid": true,
+      "different_targets_on_same_input": false
+    },
+    {
+      "agent_id": "A001",
+      "original_style": "technical",
+      "condition": "positive",
+      "population_condition": "fundamental_majority",
+      "planned": 3,
+      "dispatched": 3,
+      "valid": 3,
+      "invalid": 0,
+      "unsubmitted": 0,
+      "pending_records": 0,
+      "target_counts": {
+        "fundamental": 2,
+        "technical": 1
+      },
+      "stay_count": 1,
+      "switch_count": 2,
+      "fundamental_fraction_descriptive": 0.6666666666666666,
+      "alternative_fraction_descriptive": 0.6666666666666666,
+      "all_three_valid": true,
+      "different_targets_on_same_input": true
+    },
+    {
+      "agent_id": "A001",
+      "original_style": "technical",
+      "condition": "positive",
+      "population_condition": "technical_majority",
+      "planned": 3,
+      "dispatched": 3,
+      "valid": 3,
+      "invalid": 0,
+      "unsubmitted": 0,
+      "pending_records": 0,
+      "target_counts": {
+        "fundamental": 3,
+        "technical": 0
+      },
+      "stay_count": 0,
+      "switch_count": 3,
+      "fundamental_fraction_descriptive": 1.0,
+      "alternative_fraction_descriptive": 1.0,
+      "all_three_valid": true,
+      "different_targets_on_same_input": false
+    },
+    {
+      "agent_id": "A001",
+      "original_style": "technical",
+      "condition": "positive",
+      "population_condition": "hidden",
+      "planned": 3,
+      "dispatched": 3,
+      "valid": 3,
+      "invalid": 0,
+      "unsubmitted": 0,
+      "pending_records": 0,
+      "target_counts": {
+        "fundamental": 3,
+        "technical": 0
+      },
+      "stay_count": 0,
+      "switch_count": 3,
+      "fundamental_fraction_descriptive": 1.0,
+      "alternative_fraction_descriptive": 1.0,
+      "all_three_valid": true,
+      "different_targets_on_same_input": false
+    }
+  ],
+  "primary_population_contrasts": [
+    {
+      "agent_id": "A000",
+      "condition": "positive",
+      "definition": "raw fundamental fraction: F-majority minus T-majority",
+      "complete": true,
+      "difference": 0.6666666666666666,
+      "left_valid": 3,
+      "right_valid": 3
+    },
+    {
+      "agent_id": "A000",
+      "condition": "negative",
+      "definition": "raw fundamental fraction: F-majority minus T-majority",
+      "complete": true,
+      "difference": 0.0,
+      "left_valid": 3,
+      "right_valid": 3
+    },
+    {
+      "agent_id": "A001",
+      "condition": "positive",
+      "definition": "raw fundamental fraction: F-majority minus T-majority",
+      "complete": true,
+      "difference": -0.33333333333333337,
+      "left_valid": 3,
+      "right_valid": 3
+    },
+    {
+      "agent_id": "A001",
+      "condition": "negative",
+      "definition": "raw fundamental fraction: F-majority minus T-majority",
+      "complete": true,
+      "difference": 0.3333333333333333,
+      "left_valid": 3,
+      "right_valid": 3
+    }
+  ],
+  "secondary_economic_contrasts": [
+    {
+      "agent_id": "A000",
+      "population_condition": "fundamental_majority",
+      "definition": "alternative fraction: economic positive minus negative",
+      "complete": true,
+      "difference": 0.3333333333333333,
+      "left_valid": 3,
+      "right_valid": 3
+    },
+    {
+      "agent_id": "A000",
+      "population_condition": "technical_majority",
+      "definition": "alternative fraction: economic positive minus negative",
+      "complete": true,
+      "difference": 1.0,
+      "left_valid": 3,
+      "right_valid": 3
+    },
+    {
+      "agent_id": "A000",
+      "population_condition": "hidden",
+      "definition": "alternative fraction: economic positive minus negative",
+      "complete": true,
+      "difference": 1.0,
+      "left_valid": 3,
+      "right_valid": 3
+    },
+    {
+      "agent_id": "A001",
+      "population_condition": "fundamental_majority",
+      "definition": "alternative fraction: economic positive minus negative",
+      "complete": true,
+      "difference": 0.3333333333333333,
+      "left_valid": 3,
+      "right_valid": 3
+    },
+    {
+      "agent_id": "A001",
+      "population_condition": "technical_majority",
+      "definition": "alternative fraction: economic positive minus negative",
+      "complete": true,
+      "difference": 1.0,
+      "left_valid": 3,
+      "right_valid": 3
+    },
+    {
+      "agent_id": "A001",
+      "population_condition": "hidden",
+      "definition": "alternative fraction: economic positive minus negative",
+      "complete": true,
+      "difference": 1.0,
+      "left_valid": 3,
+      "right_valid": 3
+    }
+  ],
+  "limits": "Two fixed fictional accounts, four economic bundles, three repeats each. No mandatory correct style, no inference from old-model or prior hidden answers. Assigned information effects are not endogenous feedback, human alignment or market realism. Repeated/distinct signatures do not establish independent generations. Accepted finite-account material bytes, not legacy proxy materials. A difference from the older36 cannot identify a return-method-only effect.",
+  "requested_model": "DeepSeek-V4.1-Flash",
+  "logged_dispatch_attempts": 36
+}

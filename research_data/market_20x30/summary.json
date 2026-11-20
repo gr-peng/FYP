@@ -1,0 +1,362 @@
+{
+  "seed": 20261106,
+  "accounts": 20,
+  "sessions": 30,
+  "arms": {
+    "fixed": {
+      "last_close": 104.59,
+      "single_side_traded_quantity": 129,
+      "trades": 54,
+      "cash_total": 20000.0,
+      "shares_total": 40,
+      "wealth_gain_from_marking": 183.59999999999854,
+      "daily_closes": [
+        {
+          "session_date": "2026-01-01",
+          "close": 100.3
+        },
+        {
+          "session_date": "2026-01-02",
+          "close": 100.6
+        },
+        {
+          "session_date": "2026-01-03",
+          "close": 100.9
+        },
+        {
+          "session_date": "2026-01-04",
+          "close": 101.2
+        },
+        {
+          "session_date": "2026-01-05",
+          "close": 101.2
+        },
+        {
+          "session_date": "2026-01-06",
+          "close": 101.5
+        },
+        {
+          "session_date": "2026-01-07",
+          "close": 101.8
+        },
+        {
+          "session_date": "2026-01-08",
+          "close": 102.11
+        },
+        {
+          "session_date": "2026-01-09",
+          "close": 102.11
+        },
+        {
+          "session_date": "2026-01-10",
+          "close": 102.11
+        },
+        {
+          "session_date": "2026-01-11",
+          "close": 102.11
+        },
+        {
+          "session_date": "2026-01-12",
+          "close": 102.11
+        },
+        {
+          "session_date": "2026-01-13",
+          "close": 102.42
+        },
+        {
+          "session_date": "2026-01-14",
+          "close": 102.11
+        },
+        {
+          "session_date": "2026-01-15",
+          "close": 101.8
+        },
+        {
+          "session_date": "2026-01-16",
+          "close": 102.11
+        },
+        {
+          "session_date": "2026-01-17",
+          "close": 102.42
+        },
+        {
+          "session_date": "2026-01-18",
+          "close": 102.73
+        },
+        {
+          "session_date": "2026-01-19",
+          "close": 103.04
+        },
+        {
+          "session_date": "2026-01-20",
+          "close": 103.04
+        },
+        {
+          "session_date": "2026-01-21",
+          "close": 103.04
+        },
+        {
+          "session_date": "2026-01-22",
+          "close": 103.04
+        },
+        {
+          "session_date": "2026-01-23",
+          "close": 103.35
+        },
+        {
+          "session_date": "2026-01-24",
+          "close": 103.66
+        },
+        {
+          "session_date": "2026-01-25",
+          "close": 103.66
+        },
+        {
+          "session_date": "2026-01-26",
+          "close": 103.66
+        },
+        {
+          "session_date": "2026-01-27",
+          "close": 103.66
+        },
+        {
+          "session_date": "2026-01-28",
+          "close": 103.97
+        },
+        {
+          "session_date": "2026-01-29",
+          "close": 104.28
+        },
+        {
+          "session_date": "2026-01-30",
+          "close": 104.59
+        }
+      ],
+      "reviews": [
+        {
+          "session_date": "2026-01-05",
+          "switches": 0,
+          "fundamental_targets": 10,
+          "accounts": 20
+        },
+        {
+          "session_date": "2026-01-10",
+          "switches": 0,
+          "fundamental_targets": 10,
+          "accounts": 20
+        },
+        {
+          "session_date": "2026-01-15",
+          "switches": 0,
+          "fundamental_targets": 10,
+          "accounts": 20
+        },
+        {
+          "session_date": "2026-01-20",
+          "switches": 0,
+          "fundamental_targets": 10,
+          "accounts": 20
+        },
+        {
+          "session_date": "2026-01-25",
+          "switches": 0,
+          "fundamental_targets": 10,
+          "accounts": 20
+        },
+        {
+          "session_date": "2026-01-30",
+          "switches": 0,
+          "fundamental_targets": 10,
+          "accounts": 20
+        }
+      ]
+    },
+    "hybrid": {
+      "last_close": 104.9,
+      "single_side_traded_quantity": 161,
+      "trades": 64,
+      "cash_total": 20000.0,
+      "shares_total": 40,
+      "wealth_gain_from_marking": 196.0,
+      "daily_closes": [
+        {
+          "session_date": "2026-01-01",
+          "close": 100.3
+        },
+        {
+          "session_date": "2026-01-02",
+          "close": 100.6
+        },
+        {
+          "session_date": "2026-01-03",
+          "close": 100.9
+        },
+        {
+          "session_date": "2026-01-04",
+          "close": 101.2
+        },
+        {
+          "session_date": "2026-01-05",
+          "close": 101.2
+        },
+        {
+          "session_date": "2026-01-06",
+          "close": 101.5
+        },
+        {
+          "session_date": "2026-01-07",
+          "close": 101.5
+        },
+        {
+          "session_date": "2026-01-08",
+          "close": 101.8
+        },
+        {
+          "session_date": "2026-01-09",
+          "close": 101.8
+        },
+        {
+          "session_date": "2026-01-10",
+          "close": 102.11
+        },
+        {
+          "session_date": "2026-01-11",
+          "close": 102.42
+        },
+        {
+          "session_date": "2026-01-12",
+          "close": 102.73
+        },
+        {
+          "session_date": "2026-01-13",
+          "close": 103.04
+        },
+        {
+          "session_date": "2026-01-14",
+          "close": 103.04
+        },
+        {
+          "session_date": "2026-01-15",
+          "close": 103.04
+        },
+        {
+          "session_date": "2026-01-16",
+          "close": 103.35
+        },
+        {
+          "session_date": "2026-01-17",
+          "close": 103.66
+        },
+        {
+          "session_date": "2026-01-18",
+          "close": 103.66
+        },
+        {
+          "session_date": "2026-01-19",
+          "close": 103.35
+        },
+        {
+          "session_date": "2026-01-20",
+          "close": 103.35
+        },
+        {
+          "session_date": "2026-01-21",
+          "close": 103.66
+        },
+        {
+          "session_date": "2026-01-22",
+          "close": 103.97
+        },
+        {
+          "session_date": "2026-01-23",
+          "close": 104.28
+        },
+        {
+          "session_date": "2026-01-24",
+          "close": 103.97
+        },
+        {
+          "session_date": "2026-01-25",
+          "close": 104.28
+        },
+        {
+          "session_date": "2026-01-26",
+          "close": 104.59
+        },
+        {
+          "session_date": "2026-01-27",
+          "close": 104.9
+        },
+        {
+          "session_date": "2026-01-28",
+          "close": 104.9
+        },
+        {
+          "session_date": "2026-01-29",
+          "close": 104.9
+        },
+        {
+          "session_date": "2026-01-30",
+          "close": 104.9
+        }
+      ],
+      "reviews": [
+        {
+          "session_date": "2026-01-05",
+          "switches": 13,
+          "fundamental_targets": 3,
+          "accounts": 20
+        },
+        {
+          "session_date": "2026-01-10",
+          "switches": 12,
+          "fundamental_targets": 9,
+          "accounts": 20
+        },
+        {
+          "session_date": "2026-01-15",
+          "switches": 12,
+          "fundamental_targets": 3,
+          "accounts": 20
+        },
+        {
+          "session_date": "2026-01-20",
+          "switches": 8,
+          "fundamental_targets": 5,
+          "accounts": 20
+        },
+        {
+          "session_date": "2026-01-25",
+          "switches": 11,
+          "fundamental_targets": 6,
+          "accounts": 20
+        },
+        {
+          "session_date": "2026-01-30",
+          "switches": 10,
+          "fundamental_targets": 4,
+          "accounts": 20
+        }
+      ]
+    }
+  },
+  "model_POSTs": 120,
+  "first5_trading_days_equal": true,
+  "first_actual_switch_session": "2026-01-05",
+  "all_trading_equal_through": "2026-01-05",
+  "terminal_review_has_no_later_market": true,
+  "independent_generation_count": null,
+  "limits": "One-seed mechanism pilot, rules submit orders, model chooses styles. No human calibration, majority-effect, superiority or market-realism conclusion. Cash1000/shares2 capacity asymmetry is shared by both arms.",
+  "last_close_difference_hybrid_minus_fixed": 0.3100000000000023,
+  "independently_accepted": true,
+  "independent_review": {
+    "bytes": 154150,
+    "sha256": "e71e2cf5a7f0c24bac3ab6728f6f4e5e45dde8e15e329eff2b1d59e3ac527dec"
+  },
+  "cumulative_POSTs": 349,
+  "remaining_POSTs": 151,
+  "model": "DeepSeek-V4.1-Flash",
+  "final_review_F_targets": 4,
+  "day30_trading_F_accounts": 6,
+  "scope": "One synthetic market and seed; model chooses styles, rules submit orders. Human style labels unverified; no real-market fidelity or superiority conclusion."
+}

@@ -1,0 +1,35 @@
+{
+  "financial": {
+    "decisions": 400,
+    "responses": 3200,
+    "sessions": 16,
+    "candidate": 0.22620899168312153,
+    "reference": 0.22516127072005684,
+    "difference": 0.0010477209630646855,
+    "point_direction": "higher",
+    "interval": [
+      -0.006613624090866825,
+      0.008090638135838761
+    ],
+    "directional_support": "not_established",
+    "equivalence_inferred": false
+  },
+  "financial_vs_statistical": {
+    "candidate": 0.22620899168312153,
+    "reference": 0.21262305974938833,
+    "difference": 0.013585931933733197,
+    "point_direction": "higher",
+    "interval": [
+      0.007882129975335791,
+      0.01925476225566711
+    ],
+    "directional_support": "higher_error",
+    "equivalence_inferred": false
+  },
+  "financial_methods": {
+    "no_examples": 0.22516127072005684,
+    "real_labels": 0.22620899168312153,
+    "shuffled_labels": 0.2261509226023542,
+    "memory_ridge_logistic": 0.21262305974938833
+  }
+}

@@ -17,21 +17,36 @@ def run_metrics(market, orders, switches, initial_price, initial_shares):
     prices = [initial_price, *market.close.astype(float)]
     result = path_metrics(prices)
     submitted = int(orders.quantity.sum())
+    # Retain the realized switch rate below, including operationally unchanged styles
+    # after failures. Separately report what the valid answers actually chose.
+    valid_styles = switches.iloc[:0]
+    if len(switches) and "validation_status" in switches:
+        valid = switches.validation_status.isin(["ok", "mock", "rule"])
+        if "fallback" in switches:
+            valid &= switches.fallback.eq(False)
+        if "choice_valid" in switches:
+            valid &= switches.choice_valid.eq(True)
+        valid_styles = switches.loc[valid]
+    invalid_styles = len(switches) - len(valid_styles)
     result.update(
         buy_rate=float((orders.action == "buy").mean()),
         sell_rate=float((orders.action == "sell").mean()),
         hold_rate=float((orders.action == "hold").mean()),
         switch_rate=float((switches.decision == "switch").mean()) if len(switches) else 0.0,
         switching_opportunities=len(switches),
+        valid_style_decisions=len(valid_styles),
+        invalid_style_decisions=invalid_styles,
+        invalid_style_rate=invalid_styles / len(switches) if len(switches) else 0.0,
+        valid_style_switch_rate=float((valid_styles.decision == "switch").mean())
+        if len(valid_styles)
+        else None,
         submitted_quantity=submitted,
         filled_order_quantity=int(orders.filled_quantity.sum()),
         order_execution_rate=float(orders.filled_quantity.sum() / submitted) if submitted else 0.0,
         constraint_violation_rate=float(
             (orders.validation_status == "constraint_violation").mean()
         ),
-        invalid_order_rate=float(
-            (~orders.validation_status.isin(["ok", "mock", "rule"])).mean()
-        ),
+        invalid_order_rate=float((~orders.validation_status.isin(["ok", "mock", "rule"])).mean()),
         price_band_violation_rate=float(
             (orders.validation_status == "price_band_violation").mean()
         ),

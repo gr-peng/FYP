@@ -1,0 +1,23 @@
+{
+  "status": "independently_accepted",
+  "model": "DeepSeek-V4.1-Flash",
+  "new_POSTs": 48,
+  "cumulative_POSTs": 397,
+  "remaining": 103,
+  "actual_review": {
+    "bytes": 4842,
+    "sha256": "9b982a8bf6c5a541c6585dfdd6fc87683a8502dd65872453fd3fae5483bc6d39"
+  },
+  "plot_review": {
+    "bytes": 1735,
+    "sha256": "adab4fcde2f48e1e7cb9e8cf0c1b40fca1e931375129657a866f9d4551c03a78"
+  },
+  "primary_percentage_points": {
+    "current": 29.0,
+    "completed": 17.5
+  },
+  "max_menu_difference_pp": 40,
+  "max_same_input_range_pp": 30,
+  "scope": "Invented cues only; no accuracy/humanalignment/marketvalidation.",
+  "next_direction": "Zero-call conditional order execution adapter, fixed before this result."
+}

@@ -1,0 +1,12 @@
+{"agent_id":"invented_alpha","arm":"account_public_task_15","mean_probability_buy":0.56,"probabilities_buy":[0.62,0.5],"tick":0}
+{"agent_id":"invented_beta","arm":"account_public_task_15","mean_probability_buy":0.6000000000000001,"probabilities_buy":[0.65,0.55],"tick":0}
+{"agent_id":"invented_alpha","arm":"plus_current_period_17","mean_probability_buy":0.5700000000000001,"probabilities_buy":[0.52,0.62],"tick":0}
+{"agent_id":"invented_beta","arm":"plus_current_period_17","mean_probability_buy":0.54,"probabilities_buy":[0.5,0.58],"tick":0}
+{"agent_id":"invented_alpha","arm":"plus_completed_history_23","mean_probability_buy":0.5,"probabilities_buy":[0.5,0.5],"tick":0}
+{"agent_id":"invented_beta","arm":"plus_completed_history_23","mean_probability_buy":0.5,"probabilities_buy":[0.5,0.5],"tick":0}
+{"agent_id":"invented_alpha","arm":"account_public_task_15","mean_probability_buy":0.6000000000000001,"probabilities_buy":[0.55,0.65],"tick":3}
+{"agent_id":"invented_beta","arm":"account_public_task_15","mean_probability_buy":0.485,"probabilities_buy":[0.55,0.42],"tick":3}
+{"agent_id":"invented_alpha","arm":"plus_current_period_17","mean_probability_buy":0.585,"probabilities_buy":[0.55,0.62],"tick":3}
+{"agent_id":"invented_beta","arm":"plus_current_period_17","mean_probability_buy":0.585,"probabilities_buy":[0.62,0.55],"tick":3}
+{"agent_id":"invented_alpha","arm":"plus_completed_history_23","mean_probability_buy":0.585,"probabilities_buy":[0.62,0.55],"tick":3}
+{"agent_id":"invented_beta","arm":"plus_completed_history_23","mean_probability_buy":0.685,"probabilities_buy":[0.65,0.72],"tick":3}

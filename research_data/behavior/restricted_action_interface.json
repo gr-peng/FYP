@@ -1,0 +1,225 @@
+{
+  "status": "interface_feasible_with_bounded_intervention",
+  "original_design_status": "preflight_insufficient_coverage",
+  "A1_status": "controller_dominated",
+  "temporal_superiority_status": "not_evaluated_sparse_coverage",
+  "behavioral_superiority_evaluated": false,
+  "human_or_market_realism_established": false,
+  "qualified_for_next_scientific_design": false,
+  "actual_order_gates_pass": true,
+  "unconstrained_proposal_intervention_gates_pass": true,
+  "cells": {
+    "legacy:memory_ridge_logistic": {
+      "means": {
+        "actual_no_order": 0.0030778638203896847,
+        "ioc_unfilled": 0.0,
+        "raw_proposal_infeasible": 0.0030778638203896847,
+        "boundary_exposed": 0.004968700932949947,
+        "no_feasible_action": 0.0,
+        "action_changed_from_raw": 0.0,
+        "zero_feasible_probability_support": 0.0
+      },
+      "maxima": {
+        "actual_no_order": 0.17094017094017094,
+        "ioc_unfilled": 0.0,
+        "raw_proposal_infeasible": 0.17094017094017094,
+        "boundary_exposed": 0.19658119658119658,
+        "no_feasible_action": 0.0,
+        "action_changed_from_raw": 0.0,
+        "zero_feasible_probability_support": 0.0
+      },
+      "gates": {
+        "actual_no_order": {
+          "balanced_mean": 0.0030778638203896847,
+          "maximum_trajectory": 0.17094017094017094,
+          "mean_pass": true,
+          "all_trajectories_pass": true,
+          "trajectories_over20pct": 0
+        },
+        "ioc_unfilled": {
+          "balanced_mean": 0.0,
+          "maximum_trajectory": 0.0,
+          "mean_pass": true,
+          "all_trajectories_pass": true,
+          "trajectories_over20pct": 0
+        },
+        "raw_proposal_infeasible": {
+          "balanced_mean": 0.0030778638203896847,
+          "maximum_trajectory": 0.17094017094017094,
+          "mean_pass": true,
+          "all_trajectories_pass": true,
+          "trajectories_over20pct": 0
+        }
+      },
+      "total_counts": {
+        "actual_no_order": 94,
+        "ioc_unfilled": 0,
+        "raw_proposal_infeasible": 94,
+        "boundary_exposed": 151,
+        "no_feasible_action": 0,
+        "action_changed_from_raw": 0,
+        "zero_feasible_probability_support": 0
+      },
+      "total_planned_opportunities": 21390
+    },
+    "legacy:lifetime_history_prior4": {
+      "means": {
+        "actual_no_order": 0.01712402175834427,
+        "ioc_unfilled": 0.0,
+        "raw_proposal_infeasible": 0.01712402175834427,
+        "boundary_exposed": 0.01969819280298184,
+        "no_feasible_action": 0.0,
+        "action_changed_from_raw": 0.0,
+        "zero_feasible_probability_support": 0.0
+      },
+      "maxima": {
+        "actual_no_order": 0.358974358974359,
+        "ioc_unfilled": 0.0,
+        "raw_proposal_infeasible": 0.358974358974359,
+        "boundary_exposed": 0.38461538461538464,
+        "no_feasible_action": 0.0,
+        "action_changed_from_raw": 0.0,
+        "zero_feasible_probability_support": 0.0
+      },
+      "gates": {
+        "actual_no_order": {
+          "balanced_mean": 0.01712402175834427,
+          "maximum_trajectory": 0.358974358974359,
+          "mean_pass": true,
+          "all_trajectories_pass": false,
+          "trajectories_over20pct": 13
+        },
+        "ioc_unfilled": {
+          "balanced_mean": 0.0,
+          "maximum_trajectory": 0.0,
+          "mean_pass": true,
+          "all_trajectories_pass": true,
+          "trajectories_over20pct": 0
+        },
+        "raw_proposal_infeasible": {
+          "balanced_mean": 0.01712402175834427,
+          "maximum_trajectory": 0.358974358974359,
+          "mean_pass": true,
+          "all_trajectories_pass": false,
+          "trajectories_over20pct": 13
+        }
+      },
+      "total_counts": {
+        "actual_no_order": 540,
+        "ioc_unfilled": 0,
+        "raw_proposal_infeasible": 540,
+        "boundary_exposed": 630,
+        "no_feasible_action": 0,
+        "action_changed_from_raw": 0,
+        "zero_feasible_probability_support": 0
+      },
+      "total_planned_opportunities": 21390
+    },
+    "own_feasible_projection:memory_ridge_logistic": {
+      "means": {
+        "actual_no_order": 0.0,
+        "ioc_unfilled": 0.0,
+        "raw_proposal_infeasible": 0.0018379725305720982,
+        "boundary_exposed": 0.002632149723439193,
+        "no_feasible_action": 0.0,
+        "action_changed_from_raw": 0.0018379725305720982,
+        "zero_feasible_probability_support": 0.0
+      },
+      "maxima": {
+        "actual_no_order": 0.0,
+        "ioc_unfilled": 0.0,
+        "raw_proposal_infeasible": 0.08547008547008547,
+        "boundary_exposed": 0.09401709401709402,
+        "no_feasible_action": 0.0,
+        "action_changed_from_raw": 0.08547008547008547,
+        "zero_feasible_probability_support": 0.0
+      },
+      "gates": {
+        "actual_no_order": {
+          "balanced_mean": 0.0,
+          "maximum_trajectory": 0.0,
+          "mean_pass": true,
+          "all_trajectories_pass": true,
+          "trajectories_over20pct": 0
+        },
+        "ioc_unfilled": {
+          "balanced_mean": 0.0,
+          "maximum_trajectory": 0.0,
+          "mean_pass": true,
+          "all_trajectories_pass": true,
+          "trajectories_over20pct": 0
+        },
+        "raw_proposal_infeasible": {
+          "balanced_mean": 0.0018379725305720982,
+          "maximum_trajectory": 0.08547008547008547,
+          "mean_pass": true,
+          "all_trajectories_pass": true,
+          "trajectories_over20pct": 0
+        }
+      },
+      "total_counts": {
+        "actual_no_order": 0,
+        "ioc_unfilled": 0,
+        "raw_proposal_infeasible": 55,
+        "boundary_exposed": 80,
+        "no_feasible_action": 0,
+        "action_changed_from_raw": 55,
+        "zero_feasible_probability_support": 0
+      },
+      "total_planned_opportunities": 21390
+    },
+    "own_feasible_projection:lifetime_history_prior4": {
+      "means": {
+        "actual_no_order": 0.0,
+        "ioc_unfilled": 0.0,
+        "raw_proposal_infeasible": 0.007273690617668827,
+        "boundary_exposed": 0.008600126311264477,
+        "no_feasible_action": 0.0,
+        "action_changed_from_raw": 0.007273690617668827,
+        "zero_feasible_probability_support": 0.0
+      },
+      "maxima": {
+        "actual_no_order": 0.0,
+        "ioc_unfilled": 0.0,
+        "raw_proposal_infeasible": 0.1623931623931624,
+        "boundary_exposed": 0.17094017094017094,
+        "no_feasible_action": 0.0,
+        "action_changed_from_raw": 0.1623931623931624,
+        "zero_feasible_probability_support": 0.0
+      },
+      "gates": {
+        "actual_no_order": {
+          "balanced_mean": 0.0,
+          "maximum_trajectory": 0.0,
+          "mean_pass": true,
+          "all_trajectories_pass": true,
+          "trajectories_over20pct": 0
+        },
+        "ioc_unfilled": {
+          "balanced_mean": 0.0,
+          "maximum_trajectory": 0.0,
+          "mean_pass": true,
+          "all_trajectories_pass": true,
+          "trajectories_over20pct": 0
+        },
+        "raw_proposal_infeasible": {
+          "balanced_mean": 0.007273690617668827,
+          "maximum_trajectory": 0.1623931623931624,
+          "mean_pass": true,
+          "all_trajectories_pass": true,
+          "trajectories_over20pct": 0
+        }
+      },
+      "total_counts": {
+        "actual_no_order": 0,
+        "ioc_unfilled": 0,
+        "raw_proposal_infeasible": 226,
+        "boundary_exposed": 271,
+        "no_feasible_action": 0,
+        "action_changed_from_raw": 226,
+        "zero_feasible_probability_support": 0
+      },
+      "total_planned_opportunities": 21390
+    }
+  }
+}

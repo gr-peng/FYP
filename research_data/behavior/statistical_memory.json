@@ -1,0 +1,29 @@
+{
+  "status": "independently_accepted_exploratory_training_analysis",
+  "new_model_POSTs": 0,
+  "cumulative_used_POSTs": 349,
+  "records": 63143,
+  "sessions": 51,
+  "recorded_participant_codes": 948,
+  "cross_session_recorded_codes": 0,
+  "methods": 7,
+  "fitted_models": 15,
+  "independently_recomputed_probabilities": 442001,
+  "independent_review_sha256": "020023303fccd9db4778c6fb272ae3f16c54ccea65a0b4a5934eac312b7dd553",
+  "primary_scores": {
+    "account_public_task_15": 0.24153381670525154,
+    "plus_current_period_17": 0.2275962009672095,
+    "plus_completed_history_23": 0.21578748193208921,
+    "fold_training_constant": 0.24713678961080615,
+    "constant_half": 0.24999999999999922,
+    "current_history_prior4": 0.2307566585474975,
+    "combined_history_prior4": 0.23163487708741543
+  },
+  "limits": [
+    "Previously used training sessions; exploratory rather than untouched confirmation",
+    "Fitted15/17/23statistical family only; pooled all-history simple prior is slightly worse than current-history prior",
+    "Does not prove language-model memory use, psychological mechanism or generated market realism",
+    "Recorded codes do not certify physical identities; raw-history prefixes were not reconstructed"
+  ],
+  "next_direction_fixed_before_results": "next_direction_before_training_results.json"
+}

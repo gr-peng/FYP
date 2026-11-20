@@ -1,0 +1,301 @@
+{
+  "version": "behavior-target-support-v1",
+  "evidence_scope": "accepted interfaces and historical reports only; not an exhaustive original-archive questionnaire search",
+  "current_hybrid_human_style_label_support": "not_verified_in_accepted_interfaces",
+  "new_model_POSTs": 0,
+  "human_rows_read": false,
+  "human_rows_sent": false,
+  "final_holdout_outcomes_read": false,
+  "sources": {
+    "src/behavioral_market/benchmarks/schemas.py": {
+      "bytes": 1193,
+      "sha256": "912fb987bb05b6d76e998758cf4f2dc6a328a3e6ab0511c7e1d1a9dfcb74a6d2"
+    },
+    "src/behavioral_market/benchmarks/choices13k.py": {
+      "bytes": 5182,
+      "sha256": "dceac1263304bdc077d163b1cb564c844ed5f600ae1d6ad778c1260c8e80033d"
+    },
+    "experiments/cpc18_data.py": {
+      "bytes": 6302,
+      "sha256": "66c42af4b4fc77178007a0268520e9f93cdbb0d2d186aac570078d0d1274ea75"
+    },
+    "docs/cpc18_external_protocol.md": {
+      "bytes": 4848,
+      "sha256": "1045e6814559ee2ea606403dced8625076efd1a143449eb1b14127e361338ca4"
+    },
+    "experiments/replication_quote_states.py": {
+      "bytes": 7381,
+      "sha256": "6baa99ea2a236ec3f4abb072ae8bee4808d9a46685a261f955bc7bb31ec26f15"
+    },
+    "experiments/financial_probability.py": {
+      "bytes": 5679,
+      "sha256": "7cce47ea3fa6228ef3db5210cf0dca38a29bc21cf4e07b201e8861c0ecf2256a"
+    },
+    "docs/market_replication_data_protocol.md": {
+      "bytes": 5034,
+      "sha256": "e3f2fb156cf669846bd7a0bec65fda52dad7becdcc0b98528625400f38150bf9"
+    },
+    "docs/market_replication_training_audit_20260922.md": {
+      "bytes": 10532,
+      "sha256": "02c74333f3310d4e35797419ab6ef09bffac0081ca0e882e23c3fe64a25c84dd"
+    },
+    "experiments/replication_development_data.py": {
+      "bytes": 4200,
+      "sha256": "8f86a51ad3de07153cf4e0996dfa7a263a5e1ac0dc8e7f6fb360f318f39d3552"
+    },
+    "experiments/scopic_states.py": {
+      "bytes": 5113,
+      "sha256": "8bee85225c8eed175077282caade192be25c4f884390b55e540c3778ef352367"
+    },
+    "docs/financial_data_protocol.md": {
+      "bytes": 4296,
+      "sha256": "e24c79cd75c7631123c7f4e5ff2dadd77ac6caff9fca15448cdf57bed350bfea"
+    },
+    "docs/financial_training_audit_20260922.md": {
+      "bytes": 4835,
+      "sha256": "f394f11752f66441ad286e3073eab23a7862eb715dc4d848f9e54a82d1cf2e7c"
+    },
+    "docs/financial_instructions_audit_20260922.md": {
+      "bytes": 3145,
+      "sha256": "a0a332b7ee4f7f1f7b8380a69dfc98399680575f36d3cc0195e62457dfc2a24c"
+    },
+    "docs/rp_progress_update_20261022.md": {
+      "bytes": 8374,
+      "sha256": "a8300b6271e204b130cd45ae211f0a60cd48b553d42faa33d376fc9c3b9e25fc"
+    },
+    "src/behavioral_market/llm/schemas.py": {
+      "bytes": 1347,
+      "sha256": "5fe0a4c3d51a5519a36f70464165ad447f3e1615068663a4e3b888e03de53d45"
+    },
+    "src/behavioral_market/simulation/event_runner.py": {
+      "bytes": 42780,
+      "sha256": "38de9d900ae73853b0419f4e56ce4dd0b8bb560cb0bc04251b6094bfdc1803ee"
+    },
+    "config/frozen/market_replication_partitions_20260922.json": {
+      "bytes": 5261,
+      "sha256": "1413d8be31df359ffa201fa9c777cc8ef45854a372e605cde3bfd3a80cee0f77"
+    }
+  },
+  "targets": [
+    {
+      "id": "choices13k_risk",
+      "role": "human_reference",
+      "label_status": "observed_aggregate",
+      "observable_target": "risk_choice_b_rate",
+      "field": "Choices13kItem.human_b_rate from source bRate",
+      "menu": [
+        "A",
+        "B"
+      ],
+      "conditioning": "declared_problem_and_feedback_block",
+      "decision_time": "binary risky-option decision; feedback/block metadata must match selected task",
+      "unit": "problem and feedback block aggregate; n_humans is not a longitudinal participant identifier",
+      "known_inputs": [
+        "option_a",
+        "option_b",
+        "ambiguity",
+        "feedback",
+        "block"
+      ],
+      "unavailable_inputs": [
+        "persistent individual trading history",
+        "cash/stock execution state",
+        "verified F/T choice"
+      ],
+      "split": "preserve existing problem partitions and historical comparisons; no new label access",
+      "source_refs": [
+        "src/behavioral_market/benchmarks/schemas.py",
+        "src/behavioral_market/benchmarks/choices13k.py"
+      ],
+      "supports": "population risk-choice probability comparison on matched declared items",
+      "does_not_support": [
+        "financial trading policy",
+        "persistent individual style",
+        "human F/T switch accuracy",
+        "market realism"
+      ]
+    },
+    {
+      "id": "cpc18_risk",
+      "role": "human_reference",
+      "label_status": "observed_binary_trials_aggregated",
+      "observable_target": "risk_choice_b_rate",
+      "field": "CPC18 B in eligible GameID/Trial1..5/Feedback0 rows",
+      "menu": [
+        "A",
+        "B"
+      ],
+      "conditioning": "eligible_nonambiguous_no_feedback_trials_1_to_5",
+      "decision_time": "no-feedback repeated binary risky-option choice",
+      "unit": "five repeated trials per participant/game; participant and problem clustering matter",
+      "known_inputs": [
+        "nonambiguous option probabilities and outcomes",
+        "declared no-feedback instruction"
+      ],
+      "unavailable_inputs": [
+        "cash/stock trading state",
+        "verified F/T choice"
+      ],
+      "split": "historical external175 design excluded overlaps; do not describe its already-evaluated labels as unopened today",
+      "source_refs": [
+        "experiments/cpc18_data.py",
+        "docs/cpc18_external_protocol.md"
+      ],
+      "supports": "risk-choice probabilities within the declared no-feedback population",
+      "does_not_support": [
+        "independent-person interpretation of five trials",
+        "lottery-to-financial transfer conclusion",
+        "human F/T switch accuracy",
+        "market realism"
+      ]
+    },
+    {
+      "id": "replication_active_order",
+      "role": "human_reference",
+      "label_status": "observed_conditional",
+      "observable_target": "active_order_buy",
+      "field": "quote_states target.buy = int(target.side == bid)",
+      "menu": [
+        "BUY",
+        "SELL"
+      ],
+      "conditioning": "participant_has_already_submitted_an_active_order",
+      "decision_time": "strictly before an eligible unique-second submission in a120-second period;10 periods per repetition",
+      "unit": "whole session split; people and both repetitions stay together",
+      "known_inputs": [
+        "total cash/shares reconstructed from earlier trades",
+        "completed earlier periods prices/dividends",
+        "earlier current-period trades",
+        "own earlier submissions",
+        "expected remaining dividends"
+      ],
+      "unavailable_inputs": [
+        "current resting order book",
+        "pending-order cash/share reservations",
+        "cancellation timestamps",
+        "unconditional no-order opportunities",
+        "verified F/T choice"
+      ],
+      "split": "51train/16development/16final; development already examined, later reuse exploratory; final16 remain closed",
+      "source_refs": [
+        "experiments/replication_quote_states.py",
+        "experiments/financial_probability.py",
+        "docs/market_replication_data_protocol.md",
+        "experiments/replication_development_data.py",
+        "docs/rp_progress_update_20261022.md"
+      ],
+      "supports": "conditional BUY/SELL probability forecast from partial historical human state",
+      "does_not_support": [
+        "BUY means fundamental / SELL means technical",
+        "unconditional HOLD rate",
+        "full quantity/price policy",
+        "self-generated personal memory validation",
+        "human F/T switch accuracy",
+        "autonomous market realism"
+      ]
+    },
+    {
+      "id": "scopic_owned_sell",
+      "role": "human_reference",
+      "label_status": "observed_conditional",
+      "observable_target": "owned_asset_sell_any",
+      "field": "sell_opportunities sell_any = int(target.sell[asset] > 0), only holdings[asset] > 0",
+      "menu": [
+        "SELL_SOME",
+        "SELL_NONE"
+      ],
+      "conditioning": "asset_owned_before_decision",
+      "decision_time": "main periods1..5, before first peer ranking display; announced ranking rules already known",
+      "unit": "owned-asset opportunities nested in person/period/session; whole peer groups and people retained in session splits",
+      "known_inputs": [
+        "predecision cash/holdings",
+        "current exogenous prices",
+        "past prices/trades",
+        "analyst-derived past acquisition cost",
+        "announced ranking rules as instruction context"
+      ],
+      "unavailable_inputs": [
+        "unrevealed stock types",
+        "later ranking values",
+        "future prices",
+        "fully identified within-period execution ordering",
+        "verified F/T choice"
+      ],
+      "split": "existing2train/2development/2test sessions, separate from replication51/16/16; preserve final test closure",
+      "source_refs": [
+        "experiments/scopic_states.py",
+        "docs/financial_data_protocol.md",
+        "docs/financial_training_audit_20260922.md",
+        "docs/financial_instructions_audit_20260922.md"
+      ],
+      "supports": "conditional liquidation decision for an already owned asset",
+      "does_not_support": [
+        "not-selling equals no trading",
+        "joint six-asset execution policy",
+        "gross buys must fit opening cash as an established human rule",
+        "human F/T switch accuracy",
+        "endogenous market realism"
+      ]
+    },
+    {
+      "id": "hybrid_style_review",
+      "role": "simulator_controller",
+      "label_status": "model_or_scripted_output_not_human_truth",
+      "observable_target": "fundamental_technical_controller_choice",
+      "field": "StyleDecision.target_style plus stay/switch consistency",
+      "menu": [
+        "fundamental",
+        "technical"
+      ],
+      "conditioning": "every5_completed_simulated_daily_sessions",
+      "decision_time": "post-close review; choice applies only to subsequent trading days",
+      "unit": "20synthetic accounts in one generated market;120responses are not120independent markets or people",
+      "known_inputs": [
+        "synthetic cash/holdings/cost",
+        "own generated memory",
+        "constructed market prices",
+        "finite assigned-quote rule comparison"
+      ],
+      "unavailable_inputs": [
+        "matched observed human F/T decision labels"
+      ],
+      "split": "hypothetical market mechanism study; not a human train/development/test split",
+      "source_refs": [
+        "src/behavioral_market/llm/schemas.py",
+        "src/behavioral_market/simulation/event_runner.py"
+      ],
+      "supports": "engineering control and conditional transmission to later rule orders/prices",
+      "does_not_support": [
+        "human-style accuracy against generated choices",
+        "F/T equals BUY/SELL",
+        "human alignment from higher hypothetical return",
+        "human alignment from changed market price"
+      ]
+    }
+  ],
+  "bridges": {
+    "shared_concepts": [
+      "cash",
+      "holdings",
+      "completed price history",
+      "earlier own decisions"
+    ],
+    "unmatched": [
+      "human120-second dividend periods versus simulated daily no-dividend sessions",
+      "human total balances may include resources reserved by unobserved pending orders; simulator tracks its own feasible balances",
+      "recorded human past versus model/rule-generated memory",
+      "active-submission eligibility versus every-day buy/sell/hold opportunities",
+      "observed order side versus selected strategy controller"
+    ],
+    "conclusion": "Shared field names do not establish matched information sets, feasible actions or a human style label."
+  },
+  "evaluation_ready": false,
+  "requirements_before_new_empirical_analysis": [
+    "Freeze an observable task and time/choice-menu correspondence",
+    "Keep labels/outcomes outside decision inputs",
+    "Declare reused-development analyses exploratory and retain simple baselines",
+    "Fix clustering/denominators and common valid sample policy",
+    "Keep final human and market holdouts closed until a separate final evaluation protocol"
+  ],
+  "status_qualification": "Older protocols describe then-unopened development data and then-provisional practice/reset timing. Later RP and instruction audits supersede those historical status statements; no human data was reread for this contract."
+}

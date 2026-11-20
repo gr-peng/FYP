@@ -1,0 +1,670 @@
+{
+  "protocol": "fixed-style-endowment-sensitivity-v1",
+  "new_model_POSTs": 0,
+  "runs": 6,
+  "pairs": [
+    {
+      "seed": 17,
+      "same_personas": true,
+      "arms": {
+        "original": {
+          "seed": 17,
+          "arm": "original",
+          "initial_cash_each": "1000",
+          "initial_shares_each": 2,
+          "initial_marked_wealth_each": "1200",
+          "decisions": {
+            "buy": 193,
+            "sell": 54,
+            "hold": 353
+          },
+          "active_size_clipping": {
+            "buy": 32,
+            "sell": 29
+          },
+          "hold_reasons": {
+            "rule signal below threshold": 69,
+            "rule portfolio bound": 284
+          },
+          "quantity": {
+            "buy": {
+              "requested_after_policy": 759,
+              "accepted": 759,
+              "filled_order_side": 127,
+              "unfilled": 632
+            },
+            "sell": {
+              "requested_after_policy": 170,
+              "accepted": 170,
+              "filled_order_side": 127,
+              "unfilled": 43
+            }
+          },
+          "single_side_traded_quantity": 127,
+          "zero_trade_days": 9,
+          "opening_zero_share_account_days": 345,
+          "opening_cash_cannot_buy_one_account_days": 21,
+          "final_zero_share_accounts": 14,
+          "daily_closes": [
+            100.3,
+            100.6,
+            100.9,
+            101.2,
+            101.2,
+            101.5,
+            101.8,
+            101.8,
+            101.8,
+            102.11,
+            102.11,
+            102.42,
+            102.42,
+            102.73,
+            102.73,
+            103.04,
+            103.35,
+            103.66,
+            103.35,
+            103.66,
+            103.97,
+            103.97,
+            104.28,
+            103.97,
+            104.28,
+            104.28,
+            103.97,
+            103.66,
+            103.66,
+            103.97
+          ],
+          "final_valuation": {
+            "total_cash": "20000.00",
+            "total_shares": 40,
+            "total_marked_wealth": "24158.80",
+            "wealth_change_from_price_mark": "158.80",
+            "sum_realized_pnl": "131.320272",
+            "sum_unrealized_pnl": "27.479728",
+            "net_cash_creation": "0"
+          },
+          "final_individual_wealth": {
+            "A000": 1201.8,
+            "A001": 1201.8,
+            "A002": 1215.73,
+            "A003": 1204.01,
+            "A004": 1201.8,
+            "A005": 1203.3,
+            "A006": 1223.19,
+            "A007": 1200.6,
+            "A008": 1200.6,
+            "A009": 1201.2,
+            "A010": 1200.6,
+            "A011": 1228.32,
+            "A012": 1208.32,
+            "A013": 1223.48,
+            "A014": 1201.2,
+            "A015": 1213.4,
+            "A016": 1211.66,
+            "A017": 1201.8,
+            "A018": 1212.08,
+            "A019": 1203.91
+          },
+          "checked_account_days": 600,
+          "checked_branch_days": 1200,
+          "limitations": "Pre-clipping raw HOLD direction and policy noise were not logged; keep unknown. Counts are repeated account-days, not independent people/markets."
+        },
+        "equal_value": {
+          "seed": 17,
+          "arm": "equal_value",
+          "initial_cash_each": "600",
+          "initial_shares_each": 6,
+          "initial_marked_wealth_each": "1200",
+          "decisions": {
+            "buy": 166,
+            "sell": 166,
+            "hold": 268
+          },
+          "active_size_clipping": {
+            "buy": 37,
+            "sell": 24
+          },
+          "hold_reasons": {
+            "rule signal below threshold": 151,
+            "rule portfolio bound": 117
+          },
+          "quantity": {
+            "buy": {
+              "requested_after_policy": 694,
+              "accepted": 694,
+              "filled_order_side": 496,
+              "unfilled": 198
+            },
+            "sell": {
+              "requested_after_policy": 729,
+              "accepted": 729,
+              "filled_order_side": 496,
+              "unfilled": 233
+            }
+          },
+          "single_side_traded_quantity": 496,
+          "zero_trade_days": 2,
+          "opening_zero_share_account_days": 122,
+          "opening_cash_cannot_buy_one_account_days": 145,
+          "final_zero_share_accounts": 5,
+          "daily_closes": [
+            99.7,
+            100.0,
+            99.7,
+            100.0,
+            99.7,
+            100.0,
+            99.7,
+            100.0,
+            100.3,
+            100.0,
+            100.3,
+            100.0,
+            100.3,
+            100.0,
+            99.7,
+            99.4,
+            99.7,
+            100.0,
+            99.7,
+            99.7,
+            100.0,
+            100.3,
+            100.6,
+            100.3,
+            100.6,
+            100.9,
+            100.6,
+            100.6,
+            100.3,
+            100.0
+          ],
+          "final_valuation": {
+            "total_cash": "12000.0",
+            "total_shares": 120,
+            "total_marked_wealth": "24000.0",
+            "wealth_change_from_price_mark": "0.0",
+            "sum_realized_pnl": "41.243569",
+            "sum_unrealized_pnl": "-41.243569",
+            "net_cash_creation": "0"
+          },
+          "final_individual_wealth": {
+            "A000": 1212.6,
+            "A001": 1209.0,
+            "A002": 1186.5,
+            "A003": 1192.5,
+            "A004": 1203.9,
+            "A005": 1212.0,
+            "A006": 1189.2,
+            "A007": 1212.6,
+            "A008": 1207.2,
+            "A009": 1208.7,
+            "A010": 1197.0,
+            "A011": 1187.1,
+            "A012": 1195.5,
+            "A013": 1195.8,
+            "A014": 1205.1,
+            "A015": 1192.5,
+            "A016": 1200.3,
+            "A017": 1204.5,
+            "A018": 1191.0,
+            "A019": 1197.0
+          },
+          "checked_account_days": 600,
+          "checked_branch_days": 1200,
+          "limitations": "Pre-clipping raw HOLD direction and policy noise were not logged; keep unknown. Counts are repeated account-days, not independent people/markets."
+        }
+      },
+      "equal_minus_original_volume": 369,
+      "equal_minus_original_final_close": "-3.97"
+    },
+    {
+      "seed": 29,
+      "same_personas": true,
+      "arms": {
+        "original": {
+          "seed": 29,
+          "arm": "original",
+          "initial_cash_each": "1000",
+          "initial_shares_each": 2,
+          "initial_marked_wealth_each": "1200",
+          "decisions": {
+            "buy": 129,
+            "sell": 98,
+            "hold": 373
+          },
+          "active_size_clipping": {
+            "buy": 14,
+            "sell": 48
+          },
+          "hold_reasons": {
+            "rule signal below threshold": 118,
+            "rule portfolio bound": 255
+          },
+          "quantity": {
+            "buy": {
+              "requested_after_policy": 634,
+              "accepted": 634,
+              "filled_order_side": 241,
+              "unfilled": 393
+            },
+            "sell": {
+              "requested_after_policy": 380,
+              "accepted": 380,
+              "filled_order_side": 241,
+              "unfilled": 139
+            }
+          },
+          "single_side_traded_quantity": 241,
+          "zero_trade_days": 8,
+          "opening_zero_share_account_days": 376,
+          "opening_cash_cannot_buy_one_account_days": 30,
+          "final_zero_share_accounts": 12,
+          "daily_closes": [
+            100.3,
+            100.6,
+            100.9,
+            100.9,
+            101.2,
+            101.2,
+            101.5,
+            101.8,
+            101.8,
+            101.8,
+            101.8,
+            101.8,
+            102.11,
+            102.11,
+            101.8,
+            101.49,
+            101.19,
+            101.19,
+            100.89,
+            100.59,
+            100.29,
+            100.59,
+            100.29,
+            99.99,
+            100.29,
+            99.99,
+            100.29,
+            99.99,
+            100.29,
+            100.59
+          ],
+          "final_valuation": {
+            "total_cash": "20000.00",
+            "total_shares": 40,
+            "total_marked_wealth": "24023.60",
+            "wealth_change_from_price_mark": "23.60",
+            "sum_realized_pnl": "8.75",
+            "sum_unrealized_pnl": "14.85",
+            "net_cash_creation": "0"
+          },
+          "final_individual_wealth": {
+            "A000": 1200.6,
+            "A001": 1203.0,
+            "A002": 1210.14,
+            "A003": 1192.48,
+            "A004": 1212.49,
+            "A005": 1184.84,
+            "A006": 1200.3,
+            "A007": 1203.9,
+            "A008": 1197.3,
+            "A009": 1212.58,
+            "A010": 1199.4,
+            "A011": 1194.22,
+            "A012": 1201.5,
+            "A013": 1206.6,
+            "A014": 1201.8,
+            "A015": 1202.4,
+            "A016": 1203.0,
+            "A017": 1199.4,
+            "A018": 1197.9,
+            "A019": 1199.75
+          },
+          "checked_account_days": 600,
+          "checked_branch_days": 1200,
+          "limitations": "Pre-clipping raw HOLD direction and policy noise were not logged; keep unknown. Counts are repeated account-days, not independent people/markets."
+        },
+        "equal_value": {
+          "seed": 29,
+          "arm": "equal_value",
+          "initial_cash_each": "600",
+          "initial_shares_each": 6,
+          "initial_marked_wealth_each": "1200",
+          "decisions": {
+            "buy": 152,
+            "sell": 103,
+            "hold": 345
+          },
+          "active_size_clipping": {
+            "buy": 23,
+            "sell": 30
+          },
+          "hold_reasons": {
+            "rule signal below threshold": 115,
+            "rule portfolio bound": 230
+          },
+          "quantity": {
+            "buy": {
+              "requested_after_policy": 742,
+              "accepted": 742,
+              "filled_order_side": 367,
+              "unfilled": 375
+            },
+            "sell": {
+              "requested_after_policy": 461,
+              "accepted": 461,
+              "filled_order_side": 367,
+              "unfilled": 94
+            }
+          },
+          "single_side_traded_quantity": 367,
+          "zero_trade_days": 3,
+          "opening_zero_share_account_days": 194,
+          "opening_cash_cannot_buy_one_account_days": 194,
+          "final_zero_share_accounts": 5,
+          "daily_closes": [
+            99.7,
+            99.4,
+            99.1,
+            98.8,
+            99.1,
+            98.8,
+            98.5,
+            98.8,
+            98.5,
+            98.8,
+            98.5,
+            98.5,
+            98.8,
+            99.1,
+            99.1,
+            98.8,
+            99.1,
+            98.8,
+            99.1,
+            99.4,
+            99.4,
+            99.7,
+            100.0,
+            100.3,
+            100.6,
+            100.3,
+            100.0,
+            100.3,
+            100.6,
+            100.9
+          ],
+          "final_valuation": {
+            "total_cash": "12000.0",
+            "total_shares": 120,
+            "total_marked_wealth": "24108.0",
+            "wealth_change_from_price_mark": "108.0",
+            "sum_realized_pnl": "29.637784",
+            "sum_unrealized_pnl": "78.362216",
+            "net_cash_creation": "0"
+          },
+          "final_individual_wealth": {
+            "A000": 1220.1,
+            "A001": 1207.2,
+            "A002": 1191.6,
+            "A003": 1208.7,
+            "A004": 1187.4,
+            "A005": 1207.5,
+            "A006": 1203.0,
+            "A007": 1209.0,
+            "A008": 1219.5,
+            "A009": 1202.7,
+            "A010": 1211.1,
+            "A011": 1206.3,
+            "A012": 1216.8,
+            "A013": 1207.5,
+            "A014": 1207.2,
+            "A015": 1195.8,
+            "A016": 1206.6,
+            "A017": 1201.5,
+            "A018": 1203.0,
+            "A019": 1195.5
+          },
+          "checked_account_days": 600,
+          "checked_branch_days": 1200,
+          "limitations": "Pre-clipping raw HOLD direction and policy noise were not logged; keep unknown. Counts are repeated account-days, not independent people/markets."
+        }
+      },
+      "equal_minus_original_volume": 126,
+      "equal_minus_original_final_close": "0.31"
+    },
+    {
+      "seed": 43,
+      "same_personas": true,
+      "arms": {
+        "original": {
+          "seed": 43,
+          "arm": "original",
+          "initial_cash_each": "1000",
+          "initial_shares_each": 2,
+          "initial_marked_wealth_each": "1200",
+          "decisions": {
+            "buy": 173,
+            "sell": 45,
+            "hold": 382
+          },
+          "active_size_clipping": {
+            "buy": 20,
+            "sell": 25
+          },
+          "hold_reasons": {
+            "rule signal below threshold": 92,
+            "rule portfolio bound": 290
+          },
+          "quantity": {
+            "buy": {
+              "requested_after_policy": 839,
+              "accepted": 839,
+              "filled_order_side": 162,
+              "unfilled": 677
+            },
+            "sell": {
+              "requested_after_policy": 167,
+              "accepted": 167,
+              "filled_order_side": 162,
+              "unfilled": 5
+            }
+          },
+          "single_side_traded_quantity": 162,
+          "zero_trade_days": 13,
+          "opening_zero_share_account_days": 377,
+          "opening_cash_cannot_buy_one_account_days": 38,
+          "final_zero_share_accounts": 13,
+          "daily_closes": [
+            100.3,
+            100.6,
+            100.9,
+            101.2,
+            101.5,
+            101.8,
+            101.8,
+            101.8,
+            101.8,
+            101.8,
+            102.11,
+            101.8,
+            102.11,
+            102.42,
+            102.42,
+            102.42,
+            102.73,
+            102.73,
+            102.73,
+            102.73,
+            103.04,
+            103.35,
+            103.35,
+            103.35,
+            103.35,
+            103.66,
+            103.35,
+            103.35,
+            103.66,
+            103.35
+          ],
+          "final_valuation": {
+            "total_cash": "20000.00",
+            "total_shares": 40,
+            "total_marked_wealth": "24134.00",
+            "wealth_change_from_price_mark": "134.00",
+            "sum_realized_pnl": "126.572218",
+            "sum_unrealized_pnl": "7.427782",
+            "net_cash_creation": "0"
+          },
+          "final_individual_wealth": {
+            "A000": 1208.4,
+            "A001": 1208.87,
+            "A002": 1201.2,
+            "A003": 1200.6,
+            "A004": 1206.6,
+            "A005": 1202.4,
+            "A006": 1204.94,
+            "A007": 1201.2,
+            "A008": 1216.91,
+            "A009": 1203.7,
+            "A010": 1201.8,
+            "A011": 1216.37,
+            "A012": 1202.77,
+            "A013": 1222.22,
+            "A014": 1207.94,
+            "A015": 1206.99,
+            "A016": 1217.49,
+            "A017": 1201.2,
+            "A018": 1201.2,
+            "A019": 1201.2
+          },
+          "checked_account_days": 600,
+          "checked_branch_days": 1200,
+          "limitations": "Pre-clipping raw HOLD direction and policy noise were not logged; keep unknown. Counts are repeated account-days, not independent people/markets."
+        },
+        "equal_value": {
+          "seed": 43,
+          "arm": "equal_value",
+          "initial_cash_each": "600",
+          "initial_shares_each": 6,
+          "initial_marked_wealth_each": "1200",
+          "decisions": {
+            "buy": 151,
+            "sell": 122,
+            "hold": 327
+          },
+          "active_size_clipping": {
+            "buy": 45,
+            "sell": 22
+          },
+          "hold_reasons": {
+            "rule signal below threshold": 154,
+            "rule portfolio bound": 173
+          },
+          "quantity": {
+            "buy": {
+              "requested_after_policy": 604,
+              "accepted": 604,
+              "filled_order_side": 402,
+              "unfilled": 202
+            },
+            "sell": {
+              "requested_after_policy": 528,
+              "accepted": 528,
+              "filled_order_side": 402,
+              "unfilled": 126
+            }
+          },
+          "single_side_traded_quantity": 402,
+          "zero_trade_days": 2,
+          "opening_zero_share_account_days": 156,
+          "opening_cash_cannot_buy_one_account_days": 149,
+          "final_zero_share_accounts": 9,
+          "daily_closes": [
+            99.7,
+            100.0,
+            99.7,
+            99.4,
+            99.7,
+            100.0,
+            100.3,
+            100.0,
+            100.3,
+            100.0,
+            100.3,
+            100.0,
+            100.3,
+            100.0,
+            100.3,
+            100.6,
+            100.3,
+            100.0,
+            99.7,
+            99.4,
+            99.1,
+            98.8,
+            99.1,
+            98.8,
+            98.5,
+            98.2,
+            98.49,
+            98.49,
+            98.79,
+            98.79
+          ],
+          "final_valuation": {
+            "total_cash": "12000.00",
+            "total_shares": 120,
+            "total_marked_wealth": "23854.80",
+            "wealth_change_from_price_mark": "-145.20",
+            "sum_realized_pnl": "-54.587239",
+            "sum_unrealized_pnl": "-90.612761",
+            "net_cash_creation": "0"
+          },
+          "final_individual_wealth": {
+            "A000": 1190.28,
+            "A001": 1198.8,
+            "A002": 1195.68,
+            "A003": 1193.58,
+            "A004": 1187.58,
+            "A005": 1194.18,
+            "A006": 1204.2,
+            "A007": 1198.08,
+            "A008": 1185.6,
+            "A009": 1194.0,
+            "A010": 1188.48,
+            "A011": 1196.06,
+            "A012": 1194.9,
+            "A013": 1190.4,
+            "A014": 1183.8,
+            "A015": 1188.3,
+            "A016": 1190.4,
+            "A017": 1189.68,
+            "A018": 1199.92,
+            "A019": 1190.88
+          },
+          "checked_account_days": 600,
+          "checked_branch_days": 1200,
+          "limitations": "Pre-clipping raw HOLD direction and policy noise were not logged; keep unknown. Counts are repeated account-days, not independent people/markets."
+        }
+      },
+      "equal_minus_original_volume": 240,
+      "equal_minus_original_final_close": "-4.56"
+    }
+  ],
+  "plan_sha256": "54ee06bc543e56833a34a68b6c51c7a6eec0be3e53e7b31895238d024a9e1ef0",
+  "limits": [
+    "Retain all6runs and every zero activity result",
+    "Report each paired seed separately, no pooled independent-person significance test",
+    "No requirement that prices flatten or volume rises",
+    "Alternative changes both totalcash and stock supply; it is composition sensitivity, not isolated inventory causation",
+    "Equal cash/stock starting value does not make bid/ask execution capacities equal",
+    "Programmed rules only: no human likeness, herding or realistic-market conclusion"
+  ]
+}

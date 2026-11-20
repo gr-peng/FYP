@@ -27,9 +27,21 @@ from behavioral_market.llm.client import MockLLMClient, OpenAICompatibleClient, 
 from behavioral_market.llm.prompts import PROMPT_VERSION, prompts
 from behavioral_market.llm.schemas import OrderDecision, StyleDecision
 from behavioral_market.population.mean_field import compute_mean_field
+from behavioral_market.simulation.finite_rule_pair import (
+    LEGACY_METHOD,
+    FiniteRulePair,
+    return_columns,
+)
+from behavioral_market.simulation.finite_rule_pair import (
+    PROMPT_VERSION as FINITE_PROMPT_VERSION,
+)
+from behavioral_market.simulation.finite_rule_pair import (
+    settings as return_settings,
+)
+from behavioral_market.simulation.hybrid_review import append_event, review_batch, validate_client
 
 ROOT = Path(__file__).resolve().parents[3]
-TREATMENTS = ("rule_abm", "vanilla_llm", "low_herding", "high_herding")
+TREATMENTS = ("rule_abm", "vanilla_llm", "low_herding", "high_herding", "hybrid_style_llm")
 LIVE_PROVIDERS = ("siliconflow", "aigc_relay")
 
 
@@ -91,6 +103,13 @@ def output_path(config, mode, treatment, provider):
         suffix = f"n{count}_seed{seed}_shock{shock:g}_{condition}"
     else:
         suffix = f"n{count}_seed{seed}_shock{shock:g}_e2{int(condition == 'e1_e2')}"
+    if config["behavior"].get("mean_field_visibility", "visible") == "hidden":
+        suffix += "_mean_field_hidden"
+    method, _ = return_settings(config["behavior"])
+    if method != LEGACY_METHOD:
+        suffix += "_" + method
+    if "rule_style_adaptation" in config["behavior"]:
+        suffix += "_rule_style_" + rule_adaptation(config["behavior"], treatment, method)
     return root / mode / treatment / suffix
 
 
@@ -114,6 +133,17 @@ def source_hash():
     return digest(b"".join(str(p.relative_to(ROOT)).encode() + p.read_bytes() for p in paths))
 
 
+def rule_adaptation(behavior, treatment, return_method):
+    mode = behavior.get("rule_style_adaptation", "adaptive")
+    if mode not in ("fixed", "adaptive"):
+        raise ValueError("rule_style_adaptation must be fixed or adaptive")
+    if "rule_style_adaptation" in behavior and (
+        treatment != "rule_abm" or return_method == LEGACY_METHOD
+    ):
+        raise ValueError("explicit rule_style_adaptation requires finite rule_abm")
+    return mode
+
+
 async def run_experiment(
     config,
     mode,
@@ -135,13 +165,61 @@ async def run_experiment(
         raise ValueError("unsupported experiment mode/treatment")
     if provider not in {"mock", *LIVE_PROVIDERS}:
         raise ValueError("unsupported provider")
+    return_method, finite_spec = return_settings(config["behavior"])
+    adaptation = rule_adaptation(config["behavior"], treatment, return_method)
+    hybrid = treatment == "hybrid_style_llm"
+    rule_orders = treatment == "rule_abm" or hybrid
+    if hybrid:
+        if finite_spec is None or mode != "endogenous" or cache_only:
+            raise ValueError(
+                "hybrid_style_llm requires finite endogenous mode without cache replay"
+            )
+        validate_client(client)
+    source_record = (
+        {
+            "order_source": "rule",
+            "style_source": "model_interface",
+            "review_provenance": client.review_provenance,
+            "review_protocol": client.hybrid_review_protocol,
+        }
+        if hybrid
+        else {}
+    )
+    adaptation_record = (
+        {"rule_style_adaptation": adaptation}
+        if "rule_style_adaptation" in config["behavior"]
+        else {}
+    )
+    prompt_version = PROMPT_VERSION if finite_spec is None else FINITE_PROMPT_VERSION
+    mean_field_visibility = config["behavior"].get("mean_field_visibility", "visible")
+    if not isinstance(mean_field_visibility, str) or mean_field_visibility not in (
+        "visible",
+        "hidden",
+    ):
+        raise ValueError("behavior.mean_field_visibility must be visible or hidden")
+    # This records the client interface, not evidence of a real model dispatch.
+    prompt_mean_field_supplied = (
+        None if treatment == "rule_abm" else mean_field_visibility == "visible"
+    )
     if provider in LIVE_PROVIDERS and treatment != "rule_abm" and client is None and pacer is None:
         pacer = RequestPacer(4.0)
-    config["run"] = {"mode": mode, "treatment": treatment, "provider": provider}
+    config["run"] = {
+        "mode": mode,
+        "treatment": treatment,
+        "provider": provider,
+        "mean_field_visibility": mean_field_visibility,
+        "prompt_mean_field_supplied": prompt_mean_field_supplied,
+        **adaptation_record,
+        **source_record,
+    }
+    if finite_spec is not None:
+        config["run"]["strategy_return_method"] = return_method
     condition = event_condition(config)
+    output = output or output_path(config, mode, treatment, provider)
+    if hybrid and output.exists() and any(output.iterdir()):
+        raise RuntimeError("hybrid runs require a new empty output directory; no resume or replay")
     if bars is None:
         bars, events, facts, manifest_hash = load_dataset(config)
-    output = output or output_path(config, mode, treatment, provider)
     config_hash = digest(json.dumps(config, sort_keys=True).encode())
     commit, dirty = git_state()
     if provider in LIVE_PROVIDERS and treatment != "rule_abm" and require_clean and dirty:
@@ -184,7 +262,7 @@ async def run_experiment(
         "model": "rule"
         if treatment == "rule_abm"
         else (llm_config(config, provider)["model"] if provider in LIVE_PROVIDERS else provider),
-        "prompt_version": PROMPT_VERSION,
+        "prompt_version": prompt_version,
         "mode": mode,
         "treatment": treatment,
         "seed": config["experiment"]["seed"],
@@ -196,10 +274,19 @@ async def run_experiment(
         "n_agents": config["population"]["n_agents"],
         "request_rate_limit_rps": pacer.requests_per_second if pacer else None,
         "cache_only_replay": cache_only,
+        "mean_field_visibility": mean_field_visibility,
+        "prompt_mean_field_supplied": prompt_mean_field_supplied,
+        "population_alignment_interpretation": "alignment_not_proof_of_population_information_use",
+        **adaptation_record,
+        **source_record,
     }
+    if finite_spec is not None:
+        metadata.update(strategy_return_method=return_method, finite_rule_pair=finite_spec)
     write_json(metadata_path, metadata)
     write_json(output / "config_snapshot.json", config)
     (output / "observations.jsonl").write_text("")
+    if hybrid:
+        (output / "hybrid_review_batches.jsonl").write_text("")
     spec = config["data"]
     primary = (
         bars.loc[bars.symbol == spec["primary_symbol"]]
@@ -210,6 +297,13 @@ async def run_experiment(
         primary.loc[primary.session_date < spec["experiment_start"], "close"].iloc[-1]
     )
     agents = population(config, treatment, str(initial_price))
+    finite_pairs = {}
+    if finite_spec is not None:
+        for agent in agents:
+            pair = FiniteRulePair(agent, initial_price, finite_spec, 0)
+            finite_pairs[agent.persona.agent_id] = pair
+            agent.finite_review = pair.summary(agent.portfolio)
+        (output / "finite_rule_replay.jsonl").write_text("")
     environment = (
         HistoricalReplayEnvironment(primary, spec["experiment_start"])
         if mode == "historical"
@@ -220,7 +314,8 @@ async def run_experiment(
     calendar = spec.get("calendar", "XNYS")
     schedule = sessions(spec["experiment_start"], spec["experiment_end"], calendar)
     previous_cutoff = sessions(
-        environment.history.session_date.iloc[-1], environment.history.session_date.iloc[-1],
+        environment.history.session_date.iloc[-1],
+        environment.history.session_date.iloc[-1],
         calendar,
     ).market_open.iloc[-1]
     if condition == "no_event":
@@ -245,9 +340,7 @@ async def run_experiment(
         client = (
             OpenAICompatibleClient(
                 llm_config(config, provider),
-                None
-                if cache_only
-                else os.getenv(llm_config(config, provider)["api_key_env"]),
+                None if cache_only else os.getenv(llm_config(config, provider)["api_key_env"]),
                 output,
                 ROOT / llm_config(config, provider)["cache_dir"],
                 semaphore,
@@ -263,8 +356,15 @@ async def run_experiment(
     order_rows, trade_rows, market_rows, agent_rows = tables[:4]
     mean_rows, switch_rows, event_rows, book_rows = tables[4:]
 
-    async def decide(agent, observation, kind):
-        system, user = prompts(agent, observation, treatment, kind, config["experiment"]["seed"])
+    def prepare_decision(agent, observation, kind):
+        system, user = prompts(
+            agent,
+            observation,
+            "vanilla_llm" if hybrid else treatment,
+            kind,
+            config["experiment"]["seed"],
+            mean_field_visibility=mean_field_visibility,
+        )
         identity = {
             "agent_id": agent.persona.agent_id,
             "session_date": observation["session_date"],
@@ -276,12 +376,46 @@ async def run_experiment(
             "event_condition": condition,
             "decision_batch": observation.get("decision_batch"),
         }
+        # Preserve existing visible request identities and their cache entries.
+        if mean_field_visibility == "hidden":
+            identity["mean_field_visibility"] = "hidden"
+        if finite_spec is not None:
+            identity.update(strategy_return_method=return_method, prompt_version=prompt_version)
+        if hybrid:
+            identity.update(order_source="rule", style_source="model_interface")
+        return system, user, identity
+
+    async def decide(agent, observation, kind):
+        system, user, identity = prepare_decision(agent, observation, kind)
         return await client.decide(
             system, user, OrderDecision if kind == "order" else StyleDecision, identity
         )
 
+    def save_tables():
+        named = dict(
+            zip(
+                (
+                    "orders",
+                    "trades",
+                    "market",
+                    "agents",
+                    "mean_field",
+                    "style_switches",
+                    "events_seen",
+                    "order_book_snapshots",
+                ),
+                tables,
+                strict=True,
+            )
+        )
+        for name, rows in named.items():
+            frame = pd.DataFrame(rows)
+            frame.to_parquet(output / f"{name}.parquet", index=False)
+            frame.to_csv(output / f"{name}.csv", index=False)
+
     try:
         for day, (session, timing) in enumerate(schedule.iterrows()):
+            failure_phase = "trading_and_daily_accounting"
             cutoff = timing.market_open
             if not shock_applied and any(
                 e.event_id == config["events"]["primary"] and e.first_seen_at <= cutoff
@@ -337,6 +471,10 @@ async def run_experiment(
             with (output / "observations.jsonl").open("a", encoding="utf-8") as handle:
                 handle.write(json.dumps(observation, ensure_ascii=False, allow_nan=False) + "\n")
             previous_cutoff = cutoff
+            # Execute the two hypothetical rules before observing today's close or
+            # mutating the actual account. These accounts never enter the actual book.
+            for pair in finite_pairs.values():
+                pair.open_session(observation)
             for event in observation["visible_events"]:
                 event_rows.append(
                     {
@@ -354,11 +492,7 @@ async def run_experiment(
             arrival = list(range(len(agents)))
             rng.shuffle(arrival)
             batch_size = config["behavior"].get("order_decision_batch_size", len(agents))
-            microbatch = (
-                mode == "endogenous"
-                and treatment != "rule_abm"
-                and batch_size < len(agents)
-            )
+            microbatch = mode == "endogenous" and not rule_orders and batch_size < len(agents)
             decision_contexts = [observation] * len(agents)
             if microbatch:
                 environment.start_session(session)
@@ -393,7 +527,7 @@ async def run_experiment(
                         validations[index] = violation or result[1]["status"]
                         environment.submit(agents[index], valid)
                 close, volume, execution, fills = environment.finish_session(agents)
-            elif treatment == "rule_abm":
+            elif rule_orders:
                 results = [
                     (rule_order(a, observation, policy_rngs[i]), {"status": "rule"})
                     for i, a in enumerate(agents)
@@ -431,6 +565,10 @@ async def run_experiment(
                         "session_date": session,
                         "agent_id": agent.persona.agent_id,
                         "style": agent.current_style,
+                        "mean_field_visibility": mean_field_visibility,
+                        "prompt_mean_field_supplied": None
+                        if hybrid
+                        else prompt_mean_field_supplied,
                         **decision.model_dump(),
                         **fill,
                         "validation_status": validations[i],
@@ -461,9 +599,21 @@ async def run_experiment(
                         else 0.0,
                     }
                 )
-                alternative = "technical" if agent.current_style == "fundamental" else "fundamental"
-                exposure = 1.0 if signal(alternative, observation) > 0 else 0.0
-                agent.shadow_growth *= 1 + exposure * (close / last - 1)
+                if finite_spec is None:
+                    alternative = (
+                        "technical" if agent.current_style == "fundamental" else "fundamental"
+                    )
+                    exposure = 1.0 if signal(alternative, observation) > 0 else 0.0
+                    agent.shadow_growth *= 1 + exposure * (close / last - 1)
+                else:
+                    pair = finite_pairs[agent.persona.agent_id]
+                    rows = pair.close_session(close)
+                    agent.finite_review = pair.summary(agent.portfolio)
+                    with (output / "finite_rule_replay.jsonl").open(
+                        "a", encoding="utf-8"
+                    ) as handle:
+                        for row in rows:
+                            handle.write(json.dumps(row, allow_nan=False) + "\n")
                 equity = float(agent.portfolio.total_equity)
                 agent.peak_equity = max(agent.peak_equity, equity)
                 agent.memory.append(
@@ -484,55 +634,11 @@ async def run_experiment(
                         "agent_id": agent.persona.agent_id,
                         "current_style": agent.current_style,
                         **agent.context()["portfolio"],
-                        "actual_block_return": equity / agent.block_start_equity - 1,
-                        "counterfactual_block_return": agent.shadow_growth - 1,
+                        **return_columns(agent),
                     }
                 )
-            if (day + 1) % config["behavior"]["strategy_switch_interval"] == 0:
-                end_observation = {
-                    **observation,
-                    **features(environment.history),
-                    "decision_at_utc": timing.market_close.isoformat(),
-                    "decision_at_et": timing.market_close.tz_convert(
-                        "America/New_York"
-                    ).isoformat(),
-                    "history_last_session": session,
-                    "phase": "post_close_style_review",
-                }
-                style_results = (
-                    [(rule_style(a), {"status": "rule"}) for a in agents]
-                    if treatment == "rule_abm"
-                    else await asyncio.gather(
-                        *(decide(a, end_observation, "style") for a in agents)
-                    )
-                )
-                for agent, (decision, meta) in zip(agents, style_results, strict=True):
-                    coherent = (decision.decision == "stay") == (
-                        decision.target_style == agent.current_style
-                    )
-                    switch_rows.append(
-                        {
-                            "session_date": session,
-                            "agent_id": agent.persona.agent_id,
-                            "from_style": agent.current_style,
-                            "decision": decision.decision if coherent else "stay",
-                            "target_style": decision.target_style
-                            if coherent
-                            else agent.current_style,
-                            "rationale": decision.rationale,
-                            "validation_status": meta["status"]
-                            if coherent
-                            else "inconsistent_style",
-                            "actual_block_return": float(agent.portfolio.total_equity)
-                            / agent.block_start_equity
-                            - 1,
-                            "counterfactual_block_return": agent.shadow_growth - 1,
-                        }
-                    )
-                    if coherent:
-                        agent.current_style = decision.target_style
-                    agent.block_start_equity = float(agent.portfolio.total_equity)
-                    agent.shadow_growth = 1.0
+            # Trading and valuation are complete even if the following review fails.
+            # Preserve the pre-review population snapshot until all choices commit.
             mean_field = compute_mean_field(
                 agents, decisions, session, majority_threshold=majority_threshold
             )
@@ -552,6 +658,177 @@ async def run_experiment(
                     "order_imbalance": mean_field["buy_sell_imbalance"],
                 }
             )
+            if (day + 1) % config["behavior"]["strategy_switch_interval"] == 0:
+                interval = config["behavior"]["strategy_switch_interval"]
+                closing_book = (
+                    {
+                        **environment.book_context(),
+                        "scope": "post_close_after_day_order_expiry",
+                    }
+                    if mode == "endogenous"
+                    else {**observation["order_book"], "last_trade": close}
+                )
+                end_observation = {
+                    **observation,
+                    **features(environment.history),
+                    "decision_at_utc": timing.market_close.isoformat(),
+                    "decision_at_et": timing.market_close.tz_convert(
+                        "America/New_York"
+                    ).isoformat(),
+                    "history_last_session": session,
+                    "phase": "post_close_style_review",
+                    "order_book": closing_book,
+                    "review_block": {
+                        "start_session": schedule.index[day + 1 - interval],
+                        "end_session": session,
+                        "completed_sessions": interval,
+                    },
+                }
+                # The opening order-price constraint is no longer a current review fact.
+                end_observation.pop("permitted_price_band")
+                if hybrid:
+                    failure_phase = "style_review_dispatch"
+                    prepared = [prepare_decision(a, end_observation, "style") for a in agents]
+                    style_results = await review_batch(
+                        client,
+                        prepared,
+                        [a.current_style for a in agents],
+                        output / "hybrid_review_batches.jsonl",
+                    )
+                    # Validate every reset before mutating any real agent or ledger.
+                    failure_phase = "prepare_review_resets"
+                    next_pairs = {}
+                    next_summaries = {}
+                    for agent, (decision, _) in zip(agents, style_results, strict=True):
+                        clone = copy.deepcopy(agent)
+                        clone.current_style = decision.target_style
+                        next_pairs[agent.persona.agent_id] = FiniteRulePair(
+                            clone,
+                            close,
+                            finite_spec,
+                            finite_pairs[agent.persona.agent_id].block_index + 1,
+                        )
+                        next_summaries[agent.persona.agent_id] = next_pairs[
+                            agent.persona.agent_id
+                        ].summary(agent.portfolio)
+                else:
+                    style_results = (
+                        [
+                            (
+                                StyleDecision(
+                                    decision="stay",
+                                    target_style=a.current_style,
+                                    rationale=(
+                                        "fixed rule policy: review and reset without switching"
+                                    ),
+                                )
+                                if adaptation == "fixed"
+                                else rule_style(a),
+                                {"status": "rule"},
+                            )
+                            for a in agents
+                        ]
+                        if treatment == "rule_abm"
+                        else await asyncio.gather(
+                            *(decide(a, end_observation, "style") for a in agents)
+                        )
+                    )
+                if treatment == "rule_abm":
+                    decision_source = "fixed_rule" if adaptation == "fixed" else "rule"
+                elif isinstance(client, MockLLMClient):
+                    decision_source = "MockLLMClient"
+                elif isinstance(client, OpenAICompatibleClient):
+                    decision_source = "OpenAICompatibleClient"
+                else:
+                    decision_source = "injected_client"
+                failure_phase = "prepare_review_rows"
+                pending_switch_rows = []
+                for agent, (decision, meta) in zip(agents, style_results, strict=True):
+                    request_metadata = (
+                        {} if decision_source in {"rule", "fixed_rule", "MockLLMClient"} else meta
+                    )
+                    coherent = (decision.decision == "stay") == (
+                        decision.target_style == agent.current_style
+                    )
+                    valid_choice = (
+                        coherent
+                        and meta["status"] in {"ok", "mock", "rule"}
+                        and not meta.get("fallback", False)
+                    )
+                    pending_switch_rows.append(
+                        {
+                            "session_date": session,
+                            "agent_id": agent.persona.agent_id,
+                            "from_style": agent.current_style,
+                            "phase": end_observation["phase"],
+                            "decision_at_utc": end_observation["decision_at_utc"],
+                            "prompt_version": prompt_version,
+                            "decision_source": decision_source,
+                            "mean_field_visibility": mean_field_visibility,
+                            "prompt_mean_field_supplied": prompt_mean_field_supplied,
+                            **adaptation_record,
+                            **source_record,
+                            "request_hash": request_metadata.get("request_hash"),
+                            "cache_hit": request_metadata.get("cache_hit"),
+                            "repair_count": request_metadata.get("repair_count"),
+                            "requested_decision": None
+                            if meta.get("fallback", False)
+                            else decision.decision,
+                            "requested_target_style": None
+                            if meta.get("fallback", False)
+                            else decision.target_style,
+                            "decision": decision.decision if valid_choice else "stay",
+                            "target_style": decision.target_style
+                            if valid_choice
+                            else agent.current_style,
+                            "choice_valid": valid_choice,
+                            "fallback": bool(meta.get("fallback", False)),
+                            "rationale": decision.rationale,
+                            "validation_status": meta["status"]
+                            if coherent
+                            else "inconsistent_style",
+                            **return_columns(agent),
+                        }
+                    )
+                failure_phase = "apply_completed_review"
+                for agent, row in zip(agents, pending_switch_rows, strict=True):
+                    valid_choice = row["choice_valid"]
+                    if valid_choice:
+                        agent.current_style = row["target_style"]
+                    agent.block_start_equity = float(agent.portfolio.total_equity)
+                    agent.shadow_growth = 1.0
+                    if finite_spec is not None:
+                        pair = (
+                            next_pairs[agent.persona.agent_id]
+                            if hybrid
+                            else FiniteRulePair(
+                                agent,
+                                close,
+                                finite_spec,
+                                finite_pairs[agent.persona.agent_id].block_index + 1,
+                            )
+                        )
+                        finite_pairs[agent.persona.agent_id] = pair
+                        agent.finite_review = (
+                            next_summaries[agent.persona.agent_id]
+                            if hybrid
+                            else pair.summary(agent.portfolio)
+                        )
+                switch_rows.extend(pending_switch_rows)
+                if hybrid:
+                    append_event(
+                        output / "hybrid_review_batches.jsonl",
+                        {
+                            "phase": "applied",
+                            "batch": session,
+                            "count": len(agents),
+                        },
+                    )
+            mean_field = compute_mean_field(
+                agents, decisions, session, majority_threshold=majority_threshold
+            )
+            mean_rows[-1] = {"session_date": session, **mean_field}
+            failure_phase = "save_daily_progress"
             write_json(
                 output / "progress.json",
                 {
@@ -573,25 +850,31 @@ async def run_experiment(
             finished_at=datetime.now(UTC).isoformat(),
             error_type=type(exc).__name__,
         )
+        if hybrid:
+            save_tables()
+            metadata.update(
+                completed_market_sessions=len(market_rows),
+                last_completed_market_session=market_rows[-1]["session_date"]
+                if market_rows
+                else None,
+                applied_review_rows=len(switch_rows),
+                last_applied_review=switch_rows[-1]["session_date"] if switch_rows else None,
+                evidence_status="incomplete_not_eligible_for_result_comparison",
+                failure_phase=failure_phase,
+                current_styles={a.persona.agent_id: a.current_style for a in agents},
+                artifact_hashes={
+                    p.name: digest(p.read_bytes()) for p in sorted(output.glob("*.parquet"))
+                },
+            )
+            for name in ("finite_rule_replay.jsonl", "hybrid_review_batches.jsonl"):
+                if (output / name).exists():
+                    metadata["artifact_hashes"][name] = digest((output / name).read_bytes())
         write_json(metadata_path, metadata)
         raise
     finally:
         if owned and isinstance(client, OpenAICompatibleClient):
             await client.close()
-    tables = {
-        "agents": agent_rows,
-        "orders": order_rows,
-        "trades": trade_rows,
-        "market": market_rows,
-        "mean_field": mean_rows,
-        "events_seen": event_rows,
-        "style_switches": switch_rows,
-        "order_book_snapshots": book_rows,
-    }
-    for name, rows in tables.items():
-        frame = pd.DataFrame(rows)
-        frame.to_parquet(output / f"{name}.parquet", index=False)
-        frame.to_csv(output / f"{name}.csv", index=False)
+    save_tables()
     metrics = run_metrics(
         pd.DataFrame(market_rows),
         pd.DataFrame(order_rows),
@@ -609,11 +892,23 @@ async def run_experiment(
         sessions=len(schedule),
         quality="engineering_mock"
         if provider == "mock"
-        else ("degraded" if metrics["fallback_rate"] > 0.05 else "pilot"),
+        else (
+            "degraded"
+            if max(metrics["fallback_rate"], metrics["invalid_style_rate"]) > 0.05
+            else "pilot"
+        ),
     )
     metadata["artifact_hashes"] = {
         p.name: digest(p.read_bytes()) for p in sorted(output.glob("*.parquet"))
     }
+    if finite_spec is not None:
+        metadata["artifact_hashes"]["finite_rule_replay.jsonl"] = digest(
+            (output / "finite_rule_replay.jsonl").read_bytes()
+        )
+    if hybrid:
+        metadata["artifact_hashes"]["hybrid_review_batches.jsonl"] = digest(
+            (output / "hybrid_review_batches.jsonl").read_bytes()
+        )
     write_json(metadata_path, metadata)
     return metrics
 
@@ -625,16 +920,12 @@ def main(mode=None):
         "--mode", choices=["historical", "endogenous"], default=mode or "historical"
     )
     parser.add_argument("--treatment", choices=TREATMENTS, default="vanilla_llm")
-    parser.add_argument(
-        "--provider", choices=["mock", *LIVE_PROVIDERS], default="siliconflow"
-    )
+    parser.add_argument("--provider", choices=["mock", *LIVE_PROVIDERS], default="siliconflow")
     parser.add_argument("--seed", type=int)
     parser.add_argument("--agents", type=int)
     parser.add_argument("--shock", type=float)
     parser.add_argument("--symbol")
-    parser.add_argument(
-        "--event-condition", choices=["no_event", "e1_only", "e1_e2"]
-    )
+    parser.add_argument("--event-condition", choices=["no_event", "e1_only", "e1_e2"])
     parser.add_argument("--cache-only", action="store_true")
     args = parser.parse_args()
     config = json.loads(args.config.read_text())

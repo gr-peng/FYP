@@ -1,0 +1,264 @@
+{
+  "scope": "exploratory reused development; no independent test or financial claim",
+  "plan_hash": "38f5bbab64bd6b89f10ef2015f21761f837b952e42c12f915ed20f49f99a85f8",
+  "items": 200,
+  "responses": 1600,
+  "metrics": {
+    "Jev_P0": {
+      "items": 200,
+      "mae": 0.19359258885796113,
+      "rmse": 0.2472349608816828,
+      "mean_js": 0.05067505617921585,
+      "pearson": 0.4726851577563887,
+      "spearman": 0.4775647734009852,
+      "mae_expected_sampled_10": 0.22549119940357337
+    },
+    "Jev_P_true": {
+      "items": 200,
+      "mae": 0.2081988092771633,
+      "rmse": 0.26314846737767966,
+      "mean_js": 0.05891267678830221,
+      "pearson": 0.5266606648501869,
+      "spearman": 0.5355407435347235,
+      "mae_expected_sampled_10": 0.23509652898612465
+    },
+    "Jev_P_neutral": {
+      "items": 200,
+      "mae": 0.2168822947403141,
+      "rmse": 0.27168024261571266,
+      "mean_js": 0.06237391705076647,
+      "pearson": 0.5017529879799874,
+      "spearman": 0.5043474315090081,
+      "mae_expected_sampled_10": 0.24190618416379028
+    },
+    "Jev_P_shuffled": {
+      "items": 200,
+      "mae": 0.20025126025755544,
+      "rmse": 0.2548069926684062,
+      "mean_js": 0.05453534779891274,
+      "pearson": 0.5333823027407734,
+      "spearman": 0.5464025673030497,
+      "mae_expected_sampled_10": 0.22948715970176223
+    },
+    "LLM_P0": {
+      "items": 200,
+      "mae": 0.1794541099033294,
+      "rmse": 0.2191514815804455,
+      "mean_js": 0.03853774574015402,
+      "pearson": 0.29044053332577374,
+      "spearman": 0.28437380299087894,
+      "mae_expected_sampled_10": 0.21555254136519253
+    },
+    "LLM_P_true": {
+      "items": 200,
+      "mae": 0.163021136917897,
+      "rmse": 0.19832851222731837,
+      "mean_js": 0.03191237832777138,
+      "pearson": 0.4322437669694592,
+      "spearman": 0.4347404362122505,
+      "mae_expected_sampled_10": 0.2016066526664072
+    },
+    "LLM_P_neutral": {
+      "items": 200,
+      "mae": 0.17088378904771445,
+      "rmse": 0.20495335877167017,
+      "mean_js": 0.034106563866217264,
+      "pearson": 0.35140312938605317,
+      "spearman": 0.3616613507235132,
+      "mae_expected_sampled_10": 0.20810056709767089
+    },
+    "LLM_P_shuffled": {
+      "items": 200,
+      "mae": 0.16654408316536148,
+      "rmse": 0.20563037484385863,
+      "mean_js": 0.03407812779936079,
+      "pearson": 0.3664530555951239,
+      "spearman": 0.377130892203513,
+      "mae_expected_sampled_10": 0.20574642449839736
+    },
+    "constant_half": {
+      "items": 200,
+      "mae": 0.18109136480529023,
+      "rmse": 0.21148587500809288,
+      "mean_js": 0.03666184497884362,
+      "pearson": null,
+      "spearman": null,
+      "mae_expected_sampled_10": 0.21610842848183368
+    }
+  },
+  "contrasts": {
+    "Jev_P0_minus_LLM_P0": {
+      "delta_mae": 0.014138478954631703,
+      "ci95_item_bootstrap": [
+        -0.009153919430308785,
+        0.03707540270470357
+      ]
+    },
+    "Jev_P_true_minus_LLM_P_true": {
+      "delta_mae": 0.04517767235926628,
+      "ci95_item_bootstrap": [
+        0.023124085230866526,
+        0.06782097367172672
+      ]
+    },
+    "Jev_P_neutral_minus_LLM_P_neutral": {
+      "delta_mae": 0.04599850569259962,
+      "ci95_item_bootstrap": [
+        0.021891068350727388,
+        0.0701944601913346
+      ]
+    },
+    "Jev_P_shuffled_minus_LLM_P_shuffled": {
+      "delta_mae": 0.03370717709219394,
+      "ci95_item_bootstrap": [
+        0.011797193743320467,
+        0.055517819786145804
+      ]
+    },
+    "Jev_P_true_minus_Jev_P0": {
+      "delta_mae": 0.014606220419202155,
+      "ci95_item_bootstrap": [
+        0.0010064972109533402,
+        0.02870820191007437
+      ]
+    },
+    "Jev_P_true_minus_Jev_P_neutral": {
+      "delta_mae": -0.008683485463150783,
+      "ci95_item_bootstrap": [
+        -0.017619473039215693,
+        0.00010249957741716567
+      ]
+    },
+    "Jev_P_true_minus_Jev_P_shuffled": {
+      "delta_mae": 0.007947549019607838,
+      "ci95_item_bootstrap": [
+        -0.0006866789215686358,
+        0.017081237745098028
+      ]
+    }
+  },
+  "risk_only_items": 161,
+  "risk_only_metrics": {
+    "Jev_P0": {
+      "items": 161,
+      "mae": 0.19943439605431193,
+      "rmse": 0.25382098665124075,
+      "mean_js": 0.05289798938672289,
+      "pearson": 0.42153277074888346,
+      "spearman": 0.42000135170892583,
+      "mae_expected_sampled_10": 0.23018361398465084
+    },
+    "Jev_P_true": {
+      "items": 161,
+      "mae": 0.2210779230303197,
+      "rmse": 0.2773971732328616,
+      "mean_js": 0.065120531214882,
+      "pearson": 0.47087205033312896,
+      "spearman": 0.4883955186858033,
+      "mae_expected_sampled_10": 0.2461782009415883
+    },
+    "Jev_P_neutral": {
+      "items": 161,
+      "mae": 0.2282932439412928,
+      "rmse": 0.2837437820002532,
+      "mean_js": 0.06787575869314866,
+      "pearson": 0.44031339561931593,
+      "spearman": 0.4471205039310607,
+      "mae_expected_sampled_10": 0.2518046552756482
+    },
+    "Jev_P_shuffled": {
+      "items": 161,
+      "mae": 0.2121131197176903,
+      "rmse": 0.2672370638148933,
+      "mean_js": 0.05961330967236326,
+      "pearson": 0.4691161099427289,
+      "spearman": 0.4886650164880405,
+      "mae_expected_sampled_10": 0.23947418885292887
+    },
+    "LLM_P0": {
+      "items": 161,
+      "mae": 0.1662682183247731,
+      "rmse": 0.20220700872530595,
+      "mean_js": 0.03246382685788896,
+      "pearson": 0.35793951193556756,
+      "spearman": 0.3265118660301717,
+      "mae_expected_sampled_10": 0.20473464133557587
+    },
+    "LLM_P_true": {
+      "items": 161,
+      "mae": 0.15890860649585178,
+      "rmse": 0.19292974048862505,
+      "mean_js": 0.029719267157463623,
+      "pearson": 0.42645495980373843,
+      "spearman": 0.4309324801131638,
+      "mae_expected_sampled_10": 0.19837774509792555
+    },
+    "LLM_P_neutral": {
+      "items": 161,
+      "mae": 0.1657150247153135,
+      "rmse": 0.19862732275532696,
+      "mean_js": 0.031566313754532054,
+      "pearson": 0.34353799791988676,
+      "spearman": 0.34787496195559026,
+      "mae_expected_sampled_10": 0.20366465292420344
+    },
+    "LLM_P_shuffled": {
+      "items": 161,
+      "mae": 0.16290477017871624,
+      "rmse": 0.20095594736931996,
+      "mean_js": 0.032026257719079576,
+      "pearson": 0.3517333881230627,
+      "spearman": 0.3579242332143093,
+      "mae_expected_sampled_10": 0.20255254844968595
+    },
+    "constant_half": {
+      "items": 161,
+      "mae": 0.17486522234377194,
+      "rmse": 0.20424737137125015,
+      "mean_js": 0.033780410016447125,
+      "pearson": null,
+      "spearman": null,
+      "mae_expected_sampled_10": 0.21107149301521816
+    },
+    "symmetric_fractional_logistic": {
+      "items": 161,
+      "mae": 0.08663797400231449,
+      "rmse": 0.10919852919730937,
+      "mean_js": 0.010428613138680643,
+      "pearson": 0.8529568382566393,
+      "spearman": 0.873241929799011,
+      "mae_expected_sampled_10": 0.1482132450552779
+    },
+    "aligned_knn_16": {
+      "items": 161,
+      "mae": 0.10001072432895487,
+      "rmse": 0.12403313982748425,
+      "mean_js": 0.013006434186377076,
+      "pearson": 0.8057067308901963,
+      "spearman": 0.8078449182403624,
+      "mae_expected_sampled_10": 0.15625128139166947
+    }
+  },
+  "mean_absolute_orientation_effect": {
+    "Jev_P0": 0.14095,
+    "Jev_P_true": 0.11865,
+    "Jev_P_neutral": 0.10095000000000001,
+    "Jev_P_shuffled": 0.1254,
+    "LLM_P0": 0.13824999999999998,
+    "LLM_P_true": 0.144,
+    "LLM_P_neutral": 0.12024999999999998,
+    "LLM_P_shuffled": 0.13075
+  },
+  "usage_main_successful_responses": {
+    "input_tokens": 1260860,
+    "output_tokens": 49600,
+    "responses_missing_usage": 0,
+    "cache_hits": 0
+  },
+  "latency_seconds": {
+    "median": 0.35563949728384614,
+    "p95": 0.49468715153634546
+  },
+  "response_hash": "8314dace646a334ba879848fbc7888c7da7852e8afb302f8a26c81d494aef63a",
+  "limitations": "Reused development, no participant bootstrap; historical LLM latency is not a controlled speed trial. No financial or market inference."
+}

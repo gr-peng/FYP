@@ -1,0 +1,1661 @@
+{
+  "scope": "invented_two_period_execution_mapping_callback_provenance_not_attested",
+  "arm": "plus_current_period_17",
+  "direct_model_POSTs": 0,
+  "callback_external_POSTs": null,
+  "config": {
+    "cash": [
+      500,
+      500
+    ],
+    "shares": [
+      4,
+      4
+    ],
+    "quantities": [
+      2,
+      3
+    ],
+    "dividends": [
+      10,
+      0
+    ],
+    "opportunities": [
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true
+    ],
+    "seed": 20261115
+  },
+  "priority": [
+    "invented_alpha",
+    "invented_beta"
+  ],
+  "preallocated_uniforms": [
+    0.30083737541245636,
+    0.47569455729687127,
+    0.7662541845303695,
+    0.6610918702814841,
+    0.6050100040545567,
+    0.35161819441153197,
+    0.697425683597601,
+    0.7794122084961369,
+    0.45228555521952807,
+    0.19235707013811076,
+    0.9486955757518364,
+    0.992197380177337
+  ],
+  "memory_semantics": "accepted_order_submissions_not_fills_or_rejected_intents",
+  "denominators": {
+    "potential_opportunities": 12,
+    "externally_offered": 12,
+    "blocked": 8,
+    "probability_callbacks": 4,
+    "accepted_submissions": 4,
+    "rejected_submissions": 0
+  },
+  "events": [
+    {
+      "period": 1,
+      "second": 0,
+      "accounts_before": {
+        "invented_alpha": {
+          "cash": "500",
+          "shares": 4,
+          "available_cash": "500",
+          "available_shares": 4,
+          "marked_equity": "700"
+        },
+        "invented_beta": {
+          "cash": "500",
+          "shares": 4,
+          "available_cash": "500",
+          "available_shares": 4,
+          "marked_equity": "700"
+        }
+      },
+      "opportunities": [
+        {
+          "slot": 0,
+          "agent_id": "invented_alpha",
+          "period": 1,
+          "second": 0,
+          "external_opportunity": true,
+          "gate_reasons": [],
+          "uniform": 0.30083737541245636,
+          "state_before": {
+            "cash": 500.0,
+            "shares": 4,
+            "period": 1,
+            "repetition": 1,
+            "elapsed_seconds": 0,
+            "displayed_expected_remaining_dividends_per_share": 50,
+            "pre_market_task": {
+              "task": "video",
+              "condition": "calm"
+            },
+            "earlier_current_period_trades": {
+              "count": 0,
+              "mean_price": null,
+              "last_completed_trade_second": null,
+              "mean_price_in_last_completed_trade_second": null
+            },
+            "earlier_periods": [],
+            "own_earlier_current_period_submissions": {
+              "buy": 0,
+              "sell": 0
+            },
+            "own_completed_period_memory": {
+              "earlier_periods_this_repetition": {
+                "buy": 0,
+                "sell": 0
+              },
+              "previous_repetitions": {
+                "buy": 0,
+                "sell": 0
+              },
+              "last_completed_period_with_own_orders": null
+            }
+          },
+          "status": "accepted",
+          "question": {
+            "messages": [
+              {
+                "role": "system",
+                "content": "Forecast the BUY versus SELL side of an active order, conditional on the participant already having decided to submit one. HOLD is not an option. This is a probability forecast, not an optimal action or a trading recommendation. The supplied observations may be synthetic research scenarios. Do not treat them as verified human records. The specified task is a continuous double auction with ten 120-second periods per repetition and two repetitions with account resets. Each share pays a period dividend of 0 or 10 with equal probabilities. Expected remaining dividends are displayed. Shares expire after period 10; there is no guaranteed terminal resale value. Cash and shares are total balances, not necessarily available balances. Resting orders, cancellations, and the current order book are unobserved. Public history and personal submission counts, when supplied, refer only to earlier observations. Personal counts are order submissions, not completed trades. Last-completed-period counts are a subset of the completed-history totals; do not add them again. Omitted history is withheld or unknown, not evidence of zero activity. Account balances and public history still reflect past events even when explicit personal counts are withheld. Computed features are deterministic summaries of the supplied observations, not extra examples or answers. Use the supplied menu labels. Return only a JSON object with keys A and B and numeric values, each a probability from 0 to 1, summing to 1. Do not output HOLD, quantities, prices, strategy names, explanations, or a predicted realized label."
+              },
+              {
+                "role": "user",
+                "content": "{\"choices\":{\"A\":\"Submit an active BUY order.\",\"B\":\"Submit an active SELL order.\"},\"observation\":{\"computed_features\":{\"cash_fraction_at_fundamental_value\":0.7142857142857143,\"congruent_stroop\":0.0,\"elapsed_fraction\":0.0,\"incongruent_stroop\":0.0,\"intense_video\":0.0,\"last_second_mean_over_fv\":0.0,\"log_fundamental_wealth\":6.55250788703459,\"log_own_submissions\":0.0,\"log_public_trade_count\":0.0,\"log_shares\":1.6094379124341003,\"mean_price_over_fv\":0.0,\"no_previous_period_price\":1.0,\"no_prior_trade\":1.0,\"own_buy_fraction_laplace\":0.5,\"period_fraction\":0.1,\"previous_period_mean_over_fv\":0.0,\"second_repetition\":0.0},\"partial_observation\":{\"cash\":500.0,\"displayed_expected_remaining_dividends_per_share\":50.0,\"earlier_current_period_trades\":{\"count\":0,\"last_completed_trade_second\":null,\"mean_price\":null,\"mean_price_in_last_completed_trade_second\":null},\"earlier_periods\":[],\"elapsed_seconds\":0,\"own_earlier_current_period_submissions\":{\"buy\":0,\"sell\":0},\"period\":1,\"pre_market_task\":{\"condition\":\"calm\",\"task\":\"video\"},\"repetition\":1,\"shares\":4}}}"
+              }
+            ],
+            "buy_label": "A",
+            "arm": "plus_current_period_17",
+            "menu_order": "buy_first",
+            "scope": "construction_only_no_data_or_model_validation"
+          },
+          "probability_buy": 0.5700000000000001,
+          "side": "buy",
+          "order_id": "O00000001"
+        },
+        {
+          "slot": 1,
+          "agent_id": "invented_beta",
+          "period": 1,
+          "second": 0,
+          "external_opportunity": true,
+          "gate_reasons": [],
+          "uniform": 0.47569455729687127,
+          "state_before": {
+            "cash": 500.0,
+            "shares": 4,
+            "period": 1,
+            "repetition": 1,
+            "elapsed_seconds": 0,
+            "displayed_expected_remaining_dividends_per_share": 50,
+            "pre_market_task": {
+              "task": "video",
+              "condition": "calm"
+            },
+            "earlier_current_period_trades": {
+              "count": 0,
+              "mean_price": null,
+              "last_completed_trade_second": null,
+              "mean_price_in_last_completed_trade_second": null
+            },
+            "earlier_periods": [],
+            "own_earlier_current_period_submissions": {
+              "buy": 0,
+              "sell": 0
+            },
+            "own_completed_period_memory": {
+              "earlier_periods_this_repetition": {
+                "buy": 0,
+                "sell": 0
+              },
+              "previous_repetitions": {
+                "buy": 0,
+                "sell": 0
+              },
+              "last_completed_period_with_own_orders": null
+            }
+          },
+          "status": "accepted",
+          "question": {
+            "messages": [
+              {
+                "role": "system",
+                "content": "Forecast the BUY versus SELL side of an active order, conditional on the participant already having decided to submit one. HOLD is not an option. This is a probability forecast, not an optimal action or a trading recommendation. The supplied observations may be synthetic research scenarios. Do not treat them as verified human records. The specified task is a continuous double auction with ten 120-second periods per repetition and two repetitions with account resets. Each share pays a period dividend of 0 or 10 with equal probabilities. Expected remaining dividends are displayed. Shares expire after period 10; there is no guaranteed terminal resale value. Cash and shares are total balances, not necessarily available balances. Resting orders, cancellations, and the current order book are unobserved. Public history and personal submission counts, when supplied, refer only to earlier observations. Personal counts are order submissions, not completed trades. Last-completed-period counts are a subset of the completed-history totals; do not add them again. Omitted history is withheld or unknown, not evidence of zero activity. Account balances and public history still reflect past events even when explicit personal counts are withheld. Computed features are deterministic summaries of the supplied observations, not extra examples or answers. Use the supplied menu labels. Return only a JSON object with keys A and B and numeric values, each a probability from 0 to 1, summing to 1. Do not output HOLD, quantities, prices, strategy names, explanations, or a predicted realized label."
+              },
+              {
+                "role": "user",
+                "content": "{\"choices\":{\"A\":\"Submit an active BUY order.\",\"B\":\"Submit an active SELL order.\"},\"observation\":{\"computed_features\":{\"cash_fraction_at_fundamental_value\":0.7142857142857143,\"congruent_stroop\":0.0,\"elapsed_fraction\":0.0,\"incongruent_stroop\":0.0,\"intense_video\":0.0,\"last_second_mean_over_fv\":0.0,\"log_fundamental_wealth\":6.55250788703459,\"log_own_submissions\":0.0,\"log_public_trade_count\":0.0,\"log_shares\":1.6094379124341003,\"mean_price_over_fv\":0.0,\"no_previous_period_price\":1.0,\"no_prior_trade\":1.0,\"own_buy_fraction_laplace\":0.5,\"period_fraction\":0.1,\"previous_period_mean_over_fv\":0.0,\"second_repetition\":0.0},\"partial_observation\":{\"cash\":500.0,\"displayed_expected_remaining_dividends_per_share\":50.0,\"earlier_current_period_trades\":{\"count\":0,\"last_completed_trade_second\":null,\"mean_price\":null,\"mean_price_in_last_completed_trade_second\":null},\"earlier_periods\":[],\"elapsed_seconds\":0,\"own_earlier_current_period_submissions\":{\"buy\":0,\"sell\":0},\"period\":1,\"pre_market_task\":{\"condition\":\"calm\",\"task\":\"video\"},\"repetition\":1,\"shares\":4}}}"
+              }
+            ],
+            "buy_label": "A",
+            "arm": "plus_current_period_17",
+            "menu_order": "buy_first",
+            "scope": "construction_only_no_data_or_model_validation"
+          },
+          "probability_buy": 0.54,
+          "side": "buy",
+          "order_id": "O00000002"
+        }
+      ],
+      "trades": [],
+      "orders_after_trading": [
+        {
+          "order_id": "O00000001",
+          "agent_id": "invented_alpha",
+          "side": "buy",
+          "price": "50",
+          "quantity": 2,
+          "remaining_quantity": 2,
+          "filled_quantity": 0,
+          "status": "open",
+          "accepted": true
+        },
+        {
+          "order_id": "O00000002",
+          "agent_id": "invented_beta",
+          "side": "buy",
+          "price": "50",
+          "quantity": 3,
+          "remaining_quantity": 3,
+          "filled_quantity": 0,
+          "status": "open",
+          "accepted": true
+        }
+      ],
+      "accounts_after_trading": {
+        "invented_alpha": {
+          "cash": "500",
+          "shares": 4,
+          "available_cash": "400",
+          "available_shares": 4,
+          "marked_equity": "700"
+        },
+        "invented_beta": {
+          "cash": "500",
+          "shares": 4,
+          "available_cash": "350",
+          "available_shares": 4,
+          "marked_equity": "700"
+        }
+      },
+      "expired_order_ids": [],
+      "dividends": [],
+      "mark_price": "50",
+      "expected_remaining_dividends": 50,
+      "period_close_second": null,
+      "accounts_end": {
+        "invented_alpha": {
+          "cash": "500",
+          "shares": 4,
+          "available_cash": "400",
+          "available_shares": 4,
+          "marked_equity": "700"
+        },
+        "invented_beta": {
+          "cash": "500",
+          "shares": 4,
+          "available_cash": "350",
+          "available_shares": 4,
+          "marked_equity": "700"
+        }
+      },
+      "period_close": null
+    },
+    {
+      "period": 1,
+      "second": 40,
+      "accounts_before": {
+        "invented_alpha": {
+          "cash": "500",
+          "shares": 4,
+          "available_cash": "400",
+          "available_shares": 4,
+          "marked_equity": "700"
+        },
+        "invented_beta": {
+          "cash": "500",
+          "shares": 4,
+          "available_cash": "350",
+          "available_shares": 4,
+          "marked_equity": "700"
+        }
+      },
+      "opportunities": [
+        {
+          "slot": 2,
+          "agent_id": "invented_alpha",
+          "period": 1,
+          "second": 40,
+          "external_opportunity": true,
+          "gate_reasons": [
+            "one_direction_would_cross_own_resting_order"
+          ],
+          "uniform": 0.7662541845303695,
+          "state_before": {
+            "cash": 500.0,
+            "shares": 4,
+            "period": 1,
+            "repetition": 1,
+            "elapsed_seconds": 40,
+            "displayed_expected_remaining_dividends_per_share": 50,
+            "pre_market_task": {
+              "task": "video",
+              "condition": "calm"
+            },
+            "earlier_current_period_trades": {
+              "count": 0,
+              "mean_price": null,
+              "last_completed_trade_second": null,
+              "mean_price_in_last_completed_trade_second": null
+            },
+            "earlier_periods": [],
+            "own_earlier_current_period_submissions": {
+              "buy": 1,
+              "sell": 0
+            },
+            "own_completed_period_memory": {
+              "earlier_periods_this_repetition": {
+                "buy": 0,
+                "sell": 0
+              },
+              "previous_repetitions": {
+                "buy": 0,
+                "sell": 0
+              },
+              "last_completed_period_with_own_orders": null
+            }
+          },
+          "status": "blocked_external_opportunity",
+          "question": null
+        },
+        {
+          "slot": 3,
+          "agent_id": "invented_beta",
+          "period": 1,
+          "second": 40,
+          "external_opportunity": true,
+          "gate_reasons": [
+            "one_direction_would_cross_own_resting_order"
+          ],
+          "uniform": 0.6610918702814841,
+          "state_before": {
+            "cash": 500.0,
+            "shares": 4,
+            "period": 1,
+            "repetition": 1,
+            "elapsed_seconds": 40,
+            "displayed_expected_remaining_dividends_per_share": 50,
+            "pre_market_task": {
+              "task": "video",
+              "condition": "calm"
+            },
+            "earlier_current_period_trades": {
+              "count": 0,
+              "mean_price": null,
+              "last_completed_trade_second": null,
+              "mean_price_in_last_completed_trade_second": null
+            },
+            "earlier_periods": [],
+            "own_earlier_current_period_submissions": {
+              "buy": 1,
+              "sell": 0
+            },
+            "own_completed_period_memory": {
+              "earlier_periods_this_repetition": {
+                "buy": 0,
+                "sell": 0
+              },
+              "previous_repetitions": {
+                "buy": 0,
+                "sell": 0
+              },
+              "last_completed_period_with_own_orders": null
+            }
+          },
+          "status": "blocked_external_opportunity",
+          "question": null
+        }
+      ],
+      "trades": [],
+      "orders_after_trading": [
+        {
+          "order_id": "O00000001",
+          "agent_id": "invented_alpha",
+          "side": "buy",
+          "price": "50",
+          "quantity": 2,
+          "remaining_quantity": 2,
+          "filled_quantity": 0,
+          "status": "open",
+          "accepted": true
+        },
+        {
+          "order_id": "O00000002",
+          "agent_id": "invented_beta",
+          "side": "buy",
+          "price": "50",
+          "quantity": 3,
+          "remaining_quantity": 3,
+          "filled_quantity": 0,
+          "status": "open",
+          "accepted": true
+        }
+      ],
+      "accounts_after_trading": {
+        "invented_alpha": {
+          "cash": "500",
+          "shares": 4,
+          "available_cash": "400",
+          "available_shares": 4,
+          "marked_equity": "700"
+        },
+        "invented_beta": {
+          "cash": "500",
+          "shares": 4,
+          "available_cash": "350",
+          "available_shares": 4,
+          "marked_equity": "700"
+        }
+      },
+      "expired_order_ids": [],
+      "dividends": [],
+      "mark_price": "50",
+      "expected_remaining_dividends": 50,
+      "period_close_second": null,
+      "accounts_end": {
+        "invented_alpha": {
+          "cash": "500",
+          "shares": 4,
+          "available_cash": "400",
+          "available_shares": 4,
+          "marked_equity": "700"
+        },
+        "invented_beta": {
+          "cash": "500",
+          "shares": 4,
+          "available_cash": "350",
+          "available_shares": 4,
+          "marked_equity": "700"
+        }
+      },
+      "period_close": null
+    },
+    {
+      "period": 1,
+      "second": 80,
+      "accounts_before": {
+        "invented_alpha": {
+          "cash": "500",
+          "shares": 4,
+          "available_cash": "400",
+          "available_shares": 4,
+          "marked_equity": "700"
+        },
+        "invented_beta": {
+          "cash": "500",
+          "shares": 4,
+          "available_cash": "350",
+          "available_shares": 4,
+          "marked_equity": "700"
+        }
+      },
+      "opportunities": [
+        {
+          "slot": 4,
+          "agent_id": "invented_alpha",
+          "period": 1,
+          "second": 80,
+          "external_opportunity": true,
+          "gate_reasons": [
+            "one_direction_would_cross_own_resting_order"
+          ],
+          "uniform": 0.6050100040545567,
+          "state_before": {
+            "cash": 500.0,
+            "shares": 4,
+            "period": 1,
+            "repetition": 1,
+            "elapsed_seconds": 80,
+            "displayed_expected_remaining_dividends_per_share": 50,
+            "pre_market_task": {
+              "task": "video",
+              "condition": "calm"
+            },
+            "earlier_current_period_trades": {
+              "count": 0,
+              "mean_price": null,
+              "last_completed_trade_second": null,
+              "mean_price_in_last_completed_trade_second": null
+            },
+            "earlier_periods": [],
+            "own_earlier_current_period_submissions": {
+              "buy": 1,
+              "sell": 0
+            },
+            "own_completed_period_memory": {
+              "earlier_periods_this_repetition": {
+                "buy": 0,
+                "sell": 0
+              },
+              "previous_repetitions": {
+                "buy": 0,
+                "sell": 0
+              },
+              "last_completed_period_with_own_orders": null
+            }
+          },
+          "status": "blocked_external_opportunity",
+          "question": null
+        },
+        {
+          "slot": 5,
+          "agent_id": "invented_beta",
+          "period": 1,
+          "second": 80,
+          "external_opportunity": true,
+          "gate_reasons": [
+            "one_direction_would_cross_own_resting_order"
+          ],
+          "uniform": 0.35161819441153197,
+          "state_before": {
+            "cash": 500.0,
+            "shares": 4,
+            "period": 1,
+            "repetition": 1,
+            "elapsed_seconds": 80,
+            "displayed_expected_remaining_dividends_per_share": 50,
+            "pre_market_task": {
+              "task": "video",
+              "condition": "calm"
+            },
+            "earlier_current_period_trades": {
+              "count": 0,
+              "mean_price": null,
+              "last_completed_trade_second": null,
+              "mean_price_in_last_completed_trade_second": null
+            },
+            "earlier_periods": [],
+            "own_earlier_current_period_submissions": {
+              "buy": 1,
+              "sell": 0
+            },
+            "own_completed_period_memory": {
+              "earlier_periods_this_repetition": {
+                "buy": 0,
+                "sell": 0
+              },
+              "previous_repetitions": {
+                "buy": 0,
+                "sell": 0
+              },
+              "last_completed_period_with_own_orders": null
+            }
+          },
+          "status": "blocked_external_opportunity",
+          "question": null
+        }
+      ],
+      "trades": [],
+      "orders_after_trading": [
+        {
+          "order_id": "O00000001",
+          "agent_id": "invented_alpha",
+          "side": "buy",
+          "price": "50",
+          "quantity": 2,
+          "remaining_quantity": 2,
+          "filled_quantity": 0,
+          "status": "open",
+          "accepted": true
+        },
+        {
+          "order_id": "O00000002",
+          "agent_id": "invented_beta",
+          "side": "buy",
+          "price": "50",
+          "quantity": 3,
+          "remaining_quantity": 3,
+          "filled_quantity": 0,
+          "status": "open",
+          "accepted": true
+        }
+      ],
+      "accounts_after_trading": {
+        "invented_alpha": {
+          "cash": "500",
+          "shares": 4,
+          "available_cash": "400",
+          "available_shares": 4,
+          "marked_equity": "700"
+        },
+        "invented_beta": {
+          "cash": "500",
+          "shares": 4,
+          "available_cash": "350",
+          "available_shares": 4,
+          "marked_equity": "700"
+        }
+      },
+      "expired_order_ids": [
+        "O00000001",
+        "O00000002"
+      ],
+      "dividends": [
+        {
+          "period": 1,
+          "agent_id": "invented_alpha",
+          "shares": 4,
+          "per_share": 10,
+          "cash_created": "40"
+        },
+        {
+          "period": 1,
+          "agent_id": "invented_beta",
+          "shares": 4,
+          "per_share": 10,
+          "cash_created": "40"
+        }
+      ],
+      "mark_price": "50",
+      "expected_remaining_dividends": 50,
+      "period_close_second": 120,
+      "accounts_end": {
+        "invented_alpha": {
+          "cash": "540",
+          "shares": 4,
+          "available_cash": "540",
+          "available_shares": 4,
+          "marked_equity": "740"
+        },
+        "invented_beta": {
+          "cash": "540",
+          "shares": 4,
+          "available_cash": "540",
+          "available_shares": 4,
+          "marked_equity": "740"
+        }
+      },
+      "period_close": {
+        "period": 1,
+        "second": 120,
+        "expired_order_ids": [
+          "O00000001",
+          "O00000002"
+        ],
+        "dividends": [
+          {
+            "period": 1,
+            "agent_id": "invented_alpha",
+            "shares": 4,
+            "per_share": 10,
+            "cash_created": "40"
+          },
+          {
+            "period": 1,
+            "agent_id": "invented_beta",
+            "shares": 4,
+            "per_share": 10,
+            "cash_created": "40"
+          }
+        ],
+        "accounts_before": {
+          "invented_alpha": {
+            "cash": "500",
+            "shares": 4,
+            "available_cash": "400",
+            "available_shares": 4,
+            "marked_equity": "700"
+          },
+          "invented_beta": {
+            "cash": "500",
+            "shares": 4,
+            "available_cash": "350",
+            "available_shares": 4,
+            "marked_equity": "700"
+          }
+        },
+        "accounts_after": {
+          "invented_alpha": {
+            "cash": "540",
+            "shares": 4,
+            "available_cash": "540",
+            "available_shares": 4,
+            "marked_equity": "740"
+          },
+          "invented_beta": {
+            "cash": "540",
+            "shares": 4,
+            "available_cash": "540",
+            "available_shares": 4,
+            "marked_equity": "740"
+          }
+        }
+      }
+    },
+    {
+      "period": 2,
+      "second": 0,
+      "accounts_before": {
+        "invented_alpha": {
+          "cash": "540",
+          "shares": 4,
+          "available_cash": "540",
+          "available_shares": 4,
+          "marked_equity": "740"
+        },
+        "invented_beta": {
+          "cash": "540",
+          "shares": 4,
+          "available_cash": "540",
+          "available_shares": 4,
+          "marked_equity": "740"
+        }
+      },
+      "opportunities": [
+        {
+          "slot": 6,
+          "agent_id": "invented_alpha",
+          "period": 2,
+          "second": 0,
+          "external_opportunity": true,
+          "gate_reasons": [],
+          "uniform": 0.697425683597601,
+          "state_before": {
+            "cash": 540.0,
+            "shares": 4,
+            "period": 2,
+            "repetition": 1,
+            "elapsed_seconds": 0,
+            "displayed_expected_remaining_dividends_per_share": 45,
+            "pre_market_task": {
+              "task": "video",
+              "condition": "calm"
+            },
+            "earlier_current_period_trades": {
+              "count": 0,
+              "mean_price": null,
+              "last_completed_trade_second": null,
+              "mean_price_in_last_completed_trade_second": null
+            },
+            "earlier_periods": [
+              {
+                "period": 1,
+                "mean_trade_price": null,
+                "closing_price": null,
+                "dividend": 10
+              }
+            ],
+            "own_earlier_current_period_submissions": {
+              "buy": 0,
+              "sell": 0
+            },
+            "own_completed_period_memory": {
+              "earlier_periods_this_repetition": {
+                "buy": 1,
+                "sell": 0
+              },
+              "previous_repetitions": {
+                "buy": 0,
+                "sell": 0
+              },
+              "last_completed_period_with_own_orders": {
+                "buy": 1,
+                "sell": 0
+              }
+            }
+          },
+          "status": "accepted",
+          "question": {
+            "messages": [
+              {
+                "role": "system",
+                "content": "Forecast the BUY versus SELL side of an active order, conditional on the participant already having decided to submit one. HOLD is not an option. This is a probability forecast, not an optimal action or a trading recommendation. The supplied observations may be synthetic research scenarios. Do not treat them as verified human records. The specified task is a continuous double auction with ten 120-second periods per repetition and two repetitions with account resets. Each share pays a period dividend of 0 or 10 with equal probabilities. Expected remaining dividends are displayed. Shares expire after period 10; there is no guaranteed terminal resale value. Cash and shares are total balances, not necessarily available balances. Resting orders, cancellations, and the current order book are unobserved. Public history and personal submission counts, when supplied, refer only to earlier observations. Personal counts are order submissions, not completed trades. Last-completed-period counts are a subset of the completed-history totals; do not add them again. Omitted history is withheld or unknown, not evidence of zero activity. Account balances and public history still reflect past events even when explicit personal counts are withheld. Computed features are deterministic summaries of the supplied observations, not extra examples or answers. Use the supplied menu labels. Return only a JSON object with keys A and B and numeric values, each a probability from 0 to 1, summing to 1. Do not output HOLD, quantities, prices, strategy names, explanations, or a predicted realized label."
+              },
+              {
+                "role": "user",
+                "content": "{\"choices\":{\"A\":\"Submit an active BUY order.\",\"B\":\"Submit an active SELL order.\"},\"observation\":{\"computed_features\":{\"cash_fraction_at_fundamental_value\":0.75,\"congruent_stroop\":0.0,\"elapsed_fraction\":0.0,\"incongruent_stroop\":0.0,\"intense_video\":0.0,\"last_second_mean_over_fv\":0.0,\"log_fundamental_wealth\":6.580639137284949,\"log_own_submissions\":0.0,\"log_public_trade_count\":0.0,\"log_shares\":1.6094379124341003,\"mean_price_over_fv\":0.0,\"no_previous_period_price\":1.0,\"no_prior_trade\":1.0,\"own_buy_fraction_laplace\":0.5,\"period_fraction\":0.2,\"previous_period_mean_over_fv\":0.0,\"second_repetition\":0.0},\"partial_observation\":{\"cash\":540.0,\"displayed_expected_remaining_dividends_per_share\":45.0,\"earlier_current_period_trades\":{\"count\":0,\"last_completed_trade_second\":null,\"mean_price\":null,\"mean_price_in_last_completed_trade_second\":null},\"earlier_periods\":[{\"closing_price\":null,\"dividend\":10,\"mean_trade_price\":null,\"period\":1}],\"elapsed_seconds\":0,\"own_earlier_current_period_submissions\":{\"buy\":0,\"sell\":0},\"period\":2,\"pre_market_task\":{\"condition\":\"calm\",\"task\":\"video\"},\"repetition\":1,\"shares\":4}}}"
+              }
+            ],
+            "buy_label": "A",
+            "arm": "plus_current_period_17",
+            "menu_order": "buy_first",
+            "scope": "construction_only_no_data_or_model_validation"
+          },
+          "probability_buy": 0.585,
+          "side": "sell",
+          "order_id": "O00000003"
+        },
+        {
+          "slot": 7,
+          "agent_id": "invented_beta",
+          "period": 2,
+          "second": 0,
+          "external_opportunity": true,
+          "gate_reasons": [],
+          "uniform": 0.7794122084961369,
+          "state_before": {
+            "cash": 540.0,
+            "shares": 4,
+            "period": 2,
+            "repetition": 1,
+            "elapsed_seconds": 0,
+            "displayed_expected_remaining_dividends_per_share": 45,
+            "pre_market_task": {
+              "task": "video",
+              "condition": "calm"
+            },
+            "earlier_current_period_trades": {
+              "count": 0,
+              "mean_price": null,
+              "last_completed_trade_second": null,
+              "mean_price_in_last_completed_trade_second": null
+            },
+            "earlier_periods": [
+              {
+                "period": 1,
+                "mean_trade_price": null,
+                "closing_price": null,
+                "dividend": 10
+              }
+            ],
+            "own_earlier_current_period_submissions": {
+              "buy": 0,
+              "sell": 0
+            },
+            "own_completed_period_memory": {
+              "earlier_periods_this_repetition": {
+                "buy": 1,
+                "sell": 0
+              },
+              "previous_repetitions": {
+                "buy": 0,
+                "sell": 0
+              },
+              "last_completed_period_with_own_orders": {
+                "buy": 1,
+                "sell": 0
+              }
+            }
+          },
+          "status": "accepted",
+          "question": {
+            "messages": [
+              {
+                "role": "system",
+                "content": "Forecast the BUY versus SELL side of an active order, conditional on the participant already having decided to submit one. HOLD is not an option. This is a probability forecast, not an optimal action or a trading recommendation. The supplied observations may be synthetic research scenarios. Do not treat them as verified human records. The specified task is a continuous double auction with ten 120-second periods per repetition and two repetitions with account resets. Each share pays a period dividend of 0 or 10 with equal probabilities. Expected remaining dividends are displayed. Shares expire after period 10; there is no guaranteed terminal resale value. Cash and shares are total balances, not necessarily available balances. Resting orders, cancellations, and the current order book are unobserved. Public history and personal submission counts, when supplied, refer only to earlier observations. Personal counts are order submissions, not completed trades. Last-completed-period counts are a subset of the completed-history totals; do not add them again. Omitted history is withheld or unknown, not evidence of zero activity. Account balances and public history still reflect past events even when explicit personal counts are withheld. Computed features are deterministic summaries of the supplied observations, not extra examples or answers. Use the supplied menu labels. Return only a JSON object with keys A and B and numeric values, each a probability from 0 to 1, summing to 1. Do not output HOLD, quantities, prices, strategy names, explanations, or a predicted realized label."
+              },
+              {
+                "role": "user",
+                "content": "{\"choices\":{\"A\":\"Submit an active BUY order.\",\"B\":\"Submit an active SELL order.\"},\"observation\":{\"computed_features\":{\"cash_fraction_at_fundamental_value\":0.75,\"congruent_stroop\":0.0,\"elapsed_fraction\":0.0,\"incongruent_stroop\":0.0,\"intense_video\":0.0,\"last_second_mean_over_fv\":0.0,\"log_fundamental_wealth\":6.580639137284949,\"log_own_submissions\":0.0,\"log_public_trade_count\":0.0,\"log_shares\":1.6094379124341003,\"mean_price_over_fv\":0.0,\"no_previous_period_price\":1.0,\"no_prior_trade\":1.0,\"own_buy_fraction_laplace\":0.5,\"period_fraction\":0.2,\"previous_period_mean_over_fv\":0.0,\"second_repetition\":0.0},\"partial_observation\":{\"cash\":540.0,\"displayed_expected_remaining_dividends_per_share\":45.0,\"earlier_current_period_trades\":{\"count\":0,\"last_completed_trade_second\":null,\"mean_price\":null,\"mean_price_in_last_completed_trade_second\":null},\"earlier_periods\":[{\"closing_price\":null,\"dividend\":10,\"mean_trade_price\":null,\"period\":1}],\"elapsed_seconds\":0,\"own_earlier_current_period_submissions\":{\"buy\":0,\"sell\":0},\"period\":2,\"pre_market_task\":{\"condition\":\"calm\",\"task\":\"video\"},\"repetition\":1,\"shares\":4}}}"
+              }
+            ],
+            "buy_label": "A",
+            "arm": "plus_current_period_17",
+            "menu_order": "buy_first",
+            "scope": "construction_only_no_data_or_model_validation"
+          },
+          "probability_buy": 0.585,
+          "side": "sell",
+          "order_id": "O00000004"
+        }
+      ],
+      "trades": [],
+      "orders_after_trading": [
+        {
+          "order_id": "O00000001",
+          "agent_id": "invented_alpha",
+          "side": "buy",
+          "price": "50",
+          "quantity": 2,
+          "remaining_quantity": 2,
+          "filled_quantity": 0,
+          "status": "expired",
+          "accepted": true
+        },
+        {
+          "order_id": "O00000002",
+          "agent_id": "invented_beta",
+          "side": "buy",
+          "price": "50",
+          "quantity": 3,
+          "remaining_quantity": 3,
+          "filled_quantity": 0,
+          "status": "expired",
+          "accepted": true
+        },
+        {
+          "order_id": "O00000003",
+          "agent_id": "invented_alpha",
+          "side": "sell",
+          "price": "50",
+          "quantity": 2,
+          "remaining_quantity": 2,
+          "filled_quantity": 0,
+          "status": "open",
+          "accepted": true
+        },
+        {
+          "order_id": "O00000004",
+          "agent_id": "invented_beta",
+          "side": "sell",
+          "price": "50",
+          "quantity": 3,
+          "remaining_quantity": 3,
+          "filled_quantity": 0,
+          "status": "open",
+          "accepted": true
+        }
+      ],
+      "accounts_after_trading": {
+        "invented_alpha": {
+          "cash": "540",
+          "shares": 4,
+          "available_cash": "540",
+          "available_shares": 2,
+          "marked_equity": "740"
+        },
+        "invented_beta": {
+          "cash": "540",
+          "shares": 4,
+          "available_cash": "540",
+          "available_shares": 1,
+          "marked_equity": "740"
+        }
+      },
+      "expired_order_ids": [],
+      "dividends": [],
+      "mark_price": "50",
+      "expected_remaining_dividends": 45,
+      "period_close_second": null,
+      "accounts_end": {
+        "invented_alpha": {
+          "cash": "540",
+          "shares": 4,
+          "available_cash": "540",
+          "available_shares": 2,
+          "marked_equity": "740"
+        },
+        "invented_beta": {
+          "cash": "540",
+          "shares": 4,
+          "available_cash": "540",
+          "available_shares": 1,
+          "marked_equity": "740"
+        }
+      },
+      "period_close": null
+    },
+    {
+      "period": 2,
+      "second": 40,
+      "accounts_before": {
+        "invented_alpha": {
+          "cash": "540",
+          "shares": 4,
+          "available_cash": "540",
+          "available_shares": 2,
+          "marked_equity": "740"
+        },
+        "invented_beta": {
+          "cash": "540",
+          "shares": 4,
+          "available_cash": "540",
+          "available_shares": 1,
+          "marked_equity": "740"
+        }
+      },
+      "opportunities": [
+        {
+          "slot": 8,
+          "agent_id": "invented_alpha",
+          "period": 2,
+          "second": 40,
+          "external_opportunity": true,
+          "gate_reasons": [
+            "one_direction_would_cross_own_resting_order"
+          ],
+          "uniform": 0.45228555521952807,
+          "state_before": {
+            "cash": 540.0,
+            "shares": 4,
+            "period": 2,
+            "repetition": 1,
+            "elapsed_seconds": 40,
+            "displayed_expected_remaining_dividends_per_share": 45,
+            "pre_market_task": {
+              "task": "video",
+              "condition": "calm"
+            },
+            "earlier_current_period_trades": {
+              "count": 0,
+              "mean_price": null,
+              "last_completed_trade_second": null,
+              "mean_price_in_last_completed_trade_second": null
+            },
+            "earlier_periods": [
+              {
+                "period": 1,
+                "mean_trade_price": null,
+                "closing_price": null,
+                "dividend": 10
+              }
+            ],
+            "own_earlier_current_period_submissions": {
+              "buy": 0,
+              "sell": 1
+            },
+            "own_completed_period_memory": {
+              "earlier_periods_this_repetition": {
+                "buy": 1,
+                "sell": 0
+              },
+              "previous_repetitions": {
+                "buy": 0,
+                "sell": 0
+              },
+              "last_completed_period_with_own_orders": {
+                "buy": 1,
+                "sell": 0
+              }
+            }
+          },
+          "status": "blocked_external_opportunity",
+          "question": null
+        },
+        {
+          "slot": 9,
+          "agent_id": "invented_beta",
+          "period": 2,
+          "second": 40,
+          "external_opportunity": true,
+          "gate_reasons": [
+            "insufficient_available_shares_for_sell",
+            "one_direction_would_cross_own_resting_order"
+          ],
+          "uniform": 0.19235707013811076,
+          "state_before": {
+            "cash": 540.0,
+            "shares": 4,
+            "period": 2,
+            "repetition": 1,
+            "elapsed_seconds": 40,
+            "displayed_expected_remaining_dividends_per_share": 45,
+            "pre_market_task": {
+              "task": "video",
+              "condition": "calm"
+            },
+            "earlier_current_period_trades": {
+              "count": 0,
+              "mean_price": null,
+              "last_completed_trade_second": null,
+              "mean_price_in_last_completed_trade_second": null
+            },
+            "earlier_periods": [
+              {
+                "period": 1,
+                "mean_trade_price": null,
+                "closing_price": null,
+                "dividend": 10
+              }
+            ],
+            "own_earlier_current_period_submissions": {
+              "buy": 0,
+              "sell": 1
+            },
+            "own_completed_period_memory": {
+              "earlier_periods_this_repetition": {
+                "buy": 1,
+                "sell": 0
+              },
+              "previous_repetitions": {
+                "buy": 0,
+                "sell": 0
+              },
+              "last_completed_period_with_own_orders": {
+                "buy": 1,
+                "sell": 0
+              }
+            }
+          },
+          "status": "blocked_external_opportunity",
+          "question": null
+        }
+      ],
+      "trades": [],
+      "orders_after_trading": [
+        {
+          "order_id": "O00000001",
+          "agent_id": "invented_alpha",
+          "side": "buy",
+          "price": "50",
+          "quantity": 2,
+          "remaining_quantity": 2,
+          "filled_quantity": 0,
+          "status": "expired",
+          "accepted": true
+        },
+        {
+          "order_id": "O00000002",
+          "agent_id": "invented_beta",
+          "side": "buy",
+          "price": "50",
+          "quantity": 3,
+          "remaining_quantity": 3,
+          "filled_quantity": 0,
+          "status": "expired",
+          "accepted": true
+        },
+        {
+          "order_id": "O00000003",
+          "agent_id": "invented_alpha",
+          "side": "sell",
+          "price": "50",
+          "quantity": 2,
+          "remaining_quantity": 2,
+          "filled_quantity": 0,
+          "status": "open",
+          "accepted": true
+        },
+        {
+          "order_id": "O00000004",
+          "agent_id": "invented_beta",
+          "side": "sell",
+          "price": "50",
+          "quantity": 3,
+          "remaining_quantity": 3,
+          "filled_quantity": 0,
+          "status": "open",
+          "accepted": true
+        }
+      ],
+      "accounts_after_trading": {
+        "invented_alpha": {
+          "cash": "540",
+          "shares": 4,
+          "available_cash": "540",
+          "available_shares": 2,
+          "marked_equity": "740"
+        },
+        "invented_beta": {
+          "cash": "540",
+          "shares": 4,
+          "available_cash": "540",
+          "available_shares": 1,
+          "marked_equity": "740"
+        }
+      },
+      "expired_order_ids": [],
+      "dividends": [],
+      "mark_price": "50",
+      "expected_remaining_dividends": 45,
+      "period_close_second": null,
+      "accounts_end": {
+        "invented_alpha": {
+          "cash": "540",
+          "shares": 4,
+          "available_cash": "540",
+          "available_shares": 2,
+          "marked_equity": "740"
+        },
+        "invented_beta": {
+          "cash": "540",
+          "shares": 4,
+          "available_cash": "540",
+          "available_shares": 1,
+          "marked_equity": "740"
+        }
+      },
+      "period_close": null
+    },
+    {
+      "period": 2,
+      "second": 80,
+      "accounts_before": {
+        "invented_alpha": {
+          "cash": "540",
+          "shares": 4,
+          "available_cash": "540",
+          "available_shares": 2,
+          "marked_equity": "740"
+        },
+        "invented_beta": {
+          "cash": "540",
+          "shares": 4,
+          "available_cash": "540",
+          "available_shares": 1,
+          "marked_equity": "740"
+        }
+      },
+      "opportunities": [
+        {
+          "slot": 10,
+          "agent_id": "invented_alpha",
+          "period": 2,
+          "second": 80,
+          "external_opportunity": true,
+          "gate_reasons": [
+            "one_direction_would_cross_own_resting_order"
+          ],
+          "uniform": 0.9486955757518364,
+          "state_before": {
+            "cash": 540.0,
+            "shares": 4,
+            "period": 2,
+            "repetition": 1,
+            "elapsed_seconds": 80,
+            "displayed_expected_remaining_dividends_per_share": 45,
+            "pre_market_task": {
+              "task": "video",
+              "condition": "calm"
+            },
+            "earlier_current_period_trades": {
+              "count": 0,
+              "mean_price": null,
+              "last_completed_trade_second": null,
+              "mean_price_in_last_completed_trade_second": null
+            },
+            "earlier_periods": [
+              {
+                "period": 1,
+                "mean_trade_price": null,
+                "closing_price": null,
+                "dividend": 10
+              }
+            ],
+            "own_earlier_current_period_submissions": {
+              "buy": 0,
+              "sell": 1
+            },
+            "own_completed_period_memory": {
+              "earlier_periods_this_repetition": {
+                "buy": 1,
+                "sell": 0
+              },
+              "previous_repetitions": {
+                "buy": 0,
+                "sell": 0
+              },
+              "last_completed_period_with_own_orders": {
+                "buy": 1,
+                "sell": 0
+              }
+            }
+          },
+          "status": "blocked_external_opportunity",
+          "question": null
+        },
+        {
+          "slot": 11,
+          "agent_id": "invented_beta",
+          "period": 2,
+          "second": 80,
+          "external_opportunity": true,
+          "gate_reasons": [
+            "insufficient_available_shares_for_sell",
+            "one_direction_would_cross_own_resting_order"
+          ],
+          "uniform": 0.992197380177337,
+          "state_before": {
+            "cash": 540.0,
+            "shares": 4,
+            "period": 2,
+            "repetition": 1,
+            "elapsed_seconds": 80,
+            "displayed_expected_remaining_dividends_per_share": 45,
+            "pre_market_task": {
+              "task": "video",
+              "condition": "calm"
+            },
+            "earlier_current_period_trades": {
+              "count": 0,
+              "mean_price": null,
+              "last_completed_trade_second": null,
+              "mean_price_in_last_completed_trade_second": null
+            },
+            "earlier_periods": [
+              {
+                "period": 1,
+                "mean_trade_price": null,
+                "closing_price": null,
+                "dividend": 10
+              }
+            ],
+            "own_earlier_current_period_submissions": {
+              "buy": 0,
+              "sell": 1
+            },
+            "own_completed_period_memory": {
+              "earlier_periods_this_repetition": {
+                "buy": 1,
+                "sell": 0
+              },
+              "previous_repetitions": {
+                "buy": 0,
+                "sell": 0
+              },
+              "last_completed_period_with_own_orders": {
+                "buy": 1,
+                "sell": 0
+              }
+            }
+          },
+          "status": "blocked_external_opportunity",
+          "question": null
+        }
+      ],
+      "trades": [],
+      "orders_after_trading": [
+        {
+          "order_id": "O00000001",
+          "agent_id": "invented_alpha",
+          "side": "buy",
+          "price": "50",
+          "quantity": 2,
+          "remaining_quantity": 2,
+          "filled_quantity": 0,
+          "status": "expired",
+          "accepted": true
+        },
+        {
+          "order_id": "O00000002",
+          "agent_id": "invented_beta",
+          "side": "buy",
+          "price": "50",
+          "quantity": 3,
+          "remaining_quantity": 3,
+          "filled_quantity": 0,
+          "status": "expired",
+          "accepted": true
+        },
+        {
+          "order_id": "O00000003",
+          "agent_id": "invented_alpha",
+          "side": "sell",
+          "price": "50",
+          "quantity": 2,
+          "remaining_quantity": 2,
+          "filled_quantity": 0,
+          "status": "open",
+          "accepted": true
+        },
+        {
+          "order_id": "O00000004",
+          "agent_id": "invented_beta",
+          "side": "sell",
+          "price": "50",
+          "quantity": 3,
+          "remaining_quantity": 3,
+          "filled_quantity": 0,
+          "status": "open",
+          "accepted": true
+        }
+      ],
+      "accounts_after_trading": {
+        "invented_alpha": {
+          "cash": "540",
+          "shares": 4,
+          "available_cash": "540",
+          "available_shares": 2,
+          "marked_equity": "740"
+        },
+        "invented_beta": {
+          "cash": "540",
+          "shares": 4,
+          "available_cash": "540",
+          "available_shares": 1,
+          "marked_equity": "740"
+        }
+      },
+      "expired_order_ids": [
+        "O00000003",
+        "O00000004"
+      ],
+      "dividends": [
+        {
+          "period": 2,
+          "agent_id": "invented_alpha",
+          "shares": 4,
+          "per_share": 0,
+          "cash_created": "0"
+        },
+        {
+          "period": 2,
+          "agent_id": "invented_beta",
+          "shares": 4,
+          "per_share": 0,
+          "cash_created": "0"
+        }
+      ],
+      "mark_price": "50",
+      "expected_remaining_dividends": 45,
+      "period_close_second": 120,
+      "accounts_end": {
+        "invented_alpha": {
+          "cash": "540",
+          "shares": 4,
+          "available_cash": "540",
+          "available_shares": 4,
+          "marked_equity": "740"
+        },
+        "invented_beta": {
+          "cash": "540",
+          "shares": 4,
+          "available_cash": "540",
+          "available_shares": 4,
+          "marked_equity": "740"
+        }
+      },
+      "period_close": {
+        "period": 2,
+        "second": 120,
+        "expired_order_ids": [
+          "O00000003",
+          "O00000004"
+        ],
+        "dividends": [
+          {
+            "period": 2,
+            "agent_id": "invented_alpha",
+            "shares": 4,
+            "per_share": 0,
+            "cash_created": "0"
+          },
+          {
+            "period": 2,
+            "agent_id": "invented_beta",
+            "shares": 4,
+            "per_share": 0,
+            "cash_created": "0"
+          }
+        ],
+        "accounts_before": {
+          "invented_alpha": {
+            "cash": "540",
+            "shares": 4,
+            "available_cash": "540",
+            "available_shares": 2,
+            "marked_equity": "740"
+          },
+          "invented_beta": {
+            "cash": "540",
+            "shares": 4,
+            "available_cash": "540",
+            "available_shares": 1,
+            "marked_equity": "740"
+          }
+        },
+        "accounts_after": {
+          "invented_alpha": {
+            "cash": "540",
+            "shares": 4,
+            "available_cash": "540",
+            "available_shares": 4,
+            "marked_equity": "740"
+          },
+          "invented_beta": {
+            "cash": "540",
+            "shares": 4,
+            "available_cash": "540",
+            "available_shares": 4,
+            "marked_equity": "740"
+          }
+        }
+      }
+    }
+  ],
+  "orders": [
+    {
+      "order_id": "O00000001",
+      "agent_id": "invented_alpha",
+      "side": "buy",
+      "price": "50",
+      "quantity": 2,
+      "remaining_quantity": 2,
+      "filled_quantity": 0,
+      "status": "expired",
+      "accepted": true
+    },
+    {
+      "order_id": "O00000002",
+      "agent_id": "invented_beta",
+      "side": "buy",
+      "price": "50",
+      "quantity": 3,
+      "remaining_quantity": 3,
+      "filled_quantity": 0,
+      "status": "expired",
+      "accepted": true
+    },
+    {
+      "order_id": "O00000003",
+      "agent_id": "invented_alpha",
+      "side": "sell",
+      "price": "50",
+      "quantity": 2,
+      "remaining_quantity": 2,
+      "filled_quantity": 0,
+      "status": "expired",
+      "accepted": true
+    },
+    {
+      "order_id": "O00000004",
+      "agent_id": "invented_beta",
+      "side": "sell",
+      "price": "50",
+      "quantity": 3,
+      "remaining_quantity": 3,
+      "filled_quantity": 0,
+      "status": "expired",
+      "accepted": true
+    }
+  ],
+  "trades": [],
+  "accounts_final": {
+    "invented_alpha": {
+      "cash": "540",
+      "shares": 4,
+      "available_cash": "540",
+      "available_shares": 4,
+      "marked_equity": "740"
+    },
+    "invented_beta": {
+      "cash": "540",
+      "shares": 4,
+      "available_cash": "540",
+      "available_shares": 4,
+      "marked_equity": "740"
+    }
+  },
+  "dividends": [
+    {
+      "period": 1,
+      "agent_id": "invented_alpha",
+      "shares": 4,
+      "per_share": 10,
+      "cash_created": "40"
+    },
+    {
+      "period": 1,
+      "agent_id": "invented_beta",
+      "shares": 4,
+      "per_share": 10,
+      "cash_created": "40"
+    },
+    {
+      "period": 2,
+      "agent_id": "invented_alpha",
+      "shares": 4,
+      "per_share": 0,
+      "cash_created": "0"
+    },
+    {
+      "period": 2,
+      "agent_id": "invented_beta",
+      "shares": 4,
+      "per_share": 0,
+      "cash_created": "0"
+    }
+  ],
+  "rp_metrics": {
+    "definition_version": "rp-slide11-explicit-v1",
+    "evidence_kind": "invented_execution_demo_fixed_quote_carry_forward_mark",
+    "price_observations": 7,
+    "log_returns": {
+      "status": "available",
+      "value": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "reason": null
+    },
+    "cumulative_log_return": {
+      "status": "available",
+      "value": 0.0,
+      "reason": null
+    },
+    "maximum_price_drawdown_fraction": {
+      "status": "available",
+      "value": 0.0,
+      "reason": null
+    },
+    "mean_squared_price_reference_deviation": {
+      "status": "available",
+      "value": 10.714285714285715,
+      "reason": null
+    },
+    "execution": {
+      "accepted_order_count": 4,
+      "submitted_side_quantity": 10,
+      "orders_with_any_fill": 0,
+      "fully_filled_orders": 0,
+      "single_side_trade_volume": 0,
+      "filled_side_quantity": 0,
+      "executed_order_fraction": {
+        "status": "available",
+        "value": 0.0,
+        "reason": null
+      },
+      "fully_filled_order_fraction": {
+        "status": "available",
+        "value": 0.0,
+        "reason": null
+      },
+      "filled_side_quantity_fraction": {
+        "status": "available",
+        "value": 0.0,
+        "reason": null
+      }
+    },
+    "definitions": {
+      "log_returns": "ln(Pt)-ln(Pt-1), per observed interval",
+      "deviation": "mean((price-reference)^2), raw price squared units",
+      "drawdown": "max(1-price/running_peak); reporting requires at least2 observations",
+      "executed_order_fraction": "accepted orders with any fill / accepted orders",
+      "filled_side_quantity_fraction": "filled buy+sell side quantity / submitted side quantity",
+      "single_side_trade_volume": "sum trade quantity, each matched quantity counted once"
+    },
+    "limits": [
+      "Supplied references are not authenticated true asset values.",
+      "Order acceptance and interval completeness are input evidence conventions, not external authentication or reconstructed cash settlement.",
+      "HOLD/rejected intentions and rows without order IDs cannot supply order counts.",
+      "Synthetic diagnostics do not establish human alignment or market realism."
+    ]
+  },
+  "human_probability_error": {
+    "status": "unknown",
+    "value": null,
+    "reason": "no_human_targets_in_invented_demo"
+  },
+  "human_alignment": {
+    "status": "unknown",
+    "value": null,
+    "reason": "no_human_targets_in_invented_demo"
+  },
+  "limits": [
+    "Only two accounts and first two of ten periods; shares do not expire early.",
+    "Opportunities, price50, quantities, priority and dividends are externally fixed.",
+    "The adapter itself loads no human rows, fitted predictor or static I responses.",
+    "Caller-supplied callback provenance and external calls are not attested here.",
+    "Predictor is trusted local code receiving only fresh filtered messages.",
+    "Mark price carries forward when no trade; not an observed market transaction.",
+    "A legal-order mapping is not a validated autonomous human trading policy."
+  ]
+}

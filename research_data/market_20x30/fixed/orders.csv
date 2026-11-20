@@ -1,0 +1,601 @@
+session_date,agent_id,style,mean_field_visibility,prompt_mean_field_supplied,action,quantity,limit_price,rationale,sentiment,order_id,status,filled_quantity,validation_status,fallback,requested_action,requested_quantity,decision_batch,seen_best_bid,seen_best_ask,seen_spread_bps,bid_distance_to_ask_bps,ask_distance_to_bid_bps,prior_majority_action,prior_majority_strength,aggressiveness
+2026-01-01,A000,technical,hidden,,hold,0,,rule signal below threshold,neutral,,hold,0,rule,False,hold,0,,,,,,,,0.0,0.0
+2026-01-01,A001,fundamental,hidden,,sell,2,99.7,seeded fundamental or momentum rule,bearish,O00000015,filled,2,rule,False,sell,2,,,,,,,,0.0,0.0030000000000000027
+2026-01-01,A002,fundamental,hidden,,buy,4,100.3,seeded fundamental or momentum rule,bullish,O00000013,expired,0,rule,False,buy,4,,,,,,,,0.0,0.0029999999999998916
+2026-01-01,A003,technical,hidden,,buy,3,100.3,seeded fundamental or momentum rule,bullish,O00000006,filled,3,rule,False,buy,3,,,,,,,,0.0,0.0029999999999998916
+2026-01-01,A004,technical,hidden,,hold,0,,rule signal below threshold,neutral,,hold,0,rule,False,hold,0,,,,,,,,0.0,0.0
+2026-01-01,A005,technical,hidden,,buy,4,100.3,seeded fundamental or momentum rule,bullish,O00000012,expired,0,rule,False,buy,4,,,,,,,,0.0,0.0029999999999998916
+2026-01-01,A006,technical,hidden,,sell,2,99.7,seeded fundamental or momentum rule,bearish,O00000004,filled,2,rule,False,sell,2,,,,,,,,0.0,0.0030000000000000027
+2026-01-01,A007,technical,hidden,,sell,2,99.7,seeded fundamental or momentum rule,bearish,O00000009,filled,2,rule,False,sell,2,,,,,,,,0.0,0.0030000000000000027
+2026-01-01,A008,technical,hidden,,sell,2,99.7,seeded fundamental or momentum rule,bearish,O00000005,filled,2,rule,False,sell,2,,,,,,,,0.0,0.0030000000000000027
+2026-01-01,A009,technical,hidden,,buy,7,100.3,seeded fundamental or momentum rule,bullish,O00000001,filled,7,rule,False,buy,7,,,,,,,,0.0,0.0029999999999998916
+2026-01-01,A010,technical,hidden,,sell,2,99.7,seeded fundamental or momentum rule,bearish,O00000010,filled,2,rule,False,sell,2,,,,,,,,0.0,0.0030000000000000027
+2026-01-01,A011,fundamental,hidden,,buy,7,100.3,seeded fundamental or momentum rule,bullish,O00000017,expired,0,rule,False,buy,7,,,,,,,,0.0,0.0029999999999998916
+2026-01-01,A012,fundamental,hidden,,sell,2,99.7,seeded fundamental or momentum rule,bearish,O00000007,filled,2,rule,False,sell,2,,,,,,,,0.0,0.0030000000000000027
+2026-01-01,A013,technical,hidden,,sell,2,99.7,seeded fundamental or momentum rule,bearish,O00000003,filled,2,rule,False,sell,2,,,,,,,,0.0,0.0030000000000000027
+2026-01-01,A014,fundamental,hidden,,buy,6,100.3,seeded fundamental or momentum rule,bullish,O00000008,filled,6,rule,False,buy,6,,,,,,,,0.0,0.0029999999999998916
+2026-01-01,A015,fundamental,hidden,,sell,2,99.7,seeded fundamental or momentum rule,bearish,O00000016,filled,2,rule,False,sell,2,,,,,,,,0.0,0.0030000000000000027
+2026-01-01,A016,fundamental,hidden,,buy,6,100.3,seeded fundamental or momentum rule,bullish,O00000014,expired,0,rule,False,buy,6,,,,,,,,0.0,0.0029999999999998916
+2026-01-01,A017,fundamental,hidden,,hold,0,,rule signal below threshold,neutral,,hold,0,rule,False,hold,0,,,,,,,,0.0,0.0
+2026-01-01,A018,fundamental,hidden,,sell,2,99.7,seeded fundamental or momentum rule,bearish,O00000002,filled,2,rule,False,sell,2,,,,,,,,0.0,0.0030000000000000027
+2026-01-01,A019,fundamental,hidden,,buy,3,100.3,seeded fundamental or momentum rule,bullish,O00000011,expired,2,rule,False,buy,3,,,,,,,,0.0,0.0029999999999998916
+2026-01-02,A000,technical,hidden,,sell,2,100.0,seeded fundamental or momentum rule,bearish,O00000020,filled,2,rule,False,sell,2,,,,,,,buy,0.3793103448275862,0.0029910269192422456
+2026-01-02,A001,fundamental,hidden,,hold,0,,rule portfolio bound,neutral,,hold,0,rule,False,hold,0,,,,,,,buy,0.3793103448275862,0.0
+2026-01-02,A002,fundamental,hidden,,sell,2,100.0,seeded fundamental or momentum rule,bearish,O00000018,filled,2,rule,False,sell,2,,,,,,,buy,0.3793103448275862,0.0029910269192422456
+2026-01-02,A003,technical,hidden,,buy,3,100.6,seeded fundamental or momentum rule,bullish,O00000019,filled,3,rule,False,buy,3,,,,,,,buy,0.3793103448275862,0.0029910269192421346
+2026-01-02,A004,technical,hidden,,sell,2,100.0,seeded fundamental or momentum rule,bearish,O00000021,filled,2,rule,False,sell,2,,,,,,,buy,0.3793103448275862,0.0029910269192422456
+2026-01-02,A005,technical,hidden,,sell,2,100.0,seeded fundamental or momentum rule,bearish,O00000025,filled,2,rule,False,sell,2,,,,,,,buy,0.3793103448275862,0.0029910269192422456
+2026-01-02,A006,technical,hidden,,hold,0,,rule signal below threshold,neutral,,hold,0,rule,False,hold,0,,,,,,,buy,0.3793103448275862,0.0
+2026-01-02,A007,technical,hidden,,hold,0,,rule signal below threshold,neutral,,hold,0,rule,False,hold,0,,,,,,,buy,0.3793103448275862,0.0
+2026-01-02,A008,technical,hidden,,buy,5,100.6,seeded fundamental or momentum rule,bullish,O00000027,expired,3,rule,False,buy,5,,,,,,,buy,0.3793103448275862,0.0029910269192421346
+2026-01-02,A009,technical,hidden,,buy,2,100.6,seeded fundamental or momentum rule,bullish,O00000024,filled,2,rule,False,buy,2,,,,,,,buy,0.3793103448275862,0.0029910269192421346
+2026-01-02,A010,technical,hidden,,hold,0,,rule portfolio bound,neutral,,hold,0,rule,False,hold,0,,,,,,,buy,0.3793103448275862,0.0
+2026-01-02,A011,fundamental,hidden,,sell,2,100.0,seeded fundamental or momentum rule,bearish,O00000022,filled,2,rule,False,sell,2,,,,,,,buy,0.3793103448275862,0.0029910269192422456
+2026-01-02,A012,fundamental,hidden,,hold,0,,rule signal below threshold,neutral,,hold,0,rule,False,hold,0,,,,,,,buy,0.3793103448275862,0.0
+2026-01-02,A013,technical,hidden,,buy,3,100.6,seeded fundamental or momentum rule,bullish,O00000026,filled,3,rule,False,buy,3,,,,,,,buy,0.3793103448275862,0.0029910269192421346
+2026-01-02,A014,fundamental,hidden,,hold,0,,rule signal below threshold,neutral,,hold,0,rule,False,hold,0,,,,,,,buy,0.3793103448275862,0.0
+2026-01-02,A015,fundamental,hidden,,hold,0,,rule signal below threshold,neutral,,hold,0,rule,False,hold,0,,,,,,,buy,0.3793103448275862,0.0
+2026-01-02,A016,fundamental,hidden,,sell,2,100.0,seeded fundamental or momentum rule,bearish,O00000028,filled,2,rule,False,sell,2,,,,,,,buy,0.3793103448275862,0.0029910269192422456
+2026-01-02,A017,fundamental,hidden,,sell,2,100.0,seeded fundamental or momentum rule,bearish,O00000029,filled,2,rule,False,sell,2,,,,,,,buy,0.3793103448275862,0.0029910269192422456
+2026-01-02,A018,fundamental,hidden,,hold,0,,rule portfolio bound,neutral,,hold,0,rule,False,hold,0,,,,,,,buy,0.3793103448275862,0.0
+2026-01-02,A019,fundamental,hidden,,buy,3,100.6,seeded fundamental or momentum rule,bullish,O00000023,filled,3,rule,False,buy,3,,,,,,,buy,0.3793103448275862,0.0029910269192421346
+2026-01-03,A000,technical,hidden,,buy,4,100.9,seeded fundamental or momentum rule,bullish,O00000035,expired,0,rule,False,buy,4,,,,,,,,0.0,0.0029821073558649047
+2026-01-03,A001,fundamental,hidden,,hold,0,,rule portfolio bound,neutral,,hold,0,rule,False,hold,0,,,,,,,,0.0,0.0
+2026-01-03,A002,fundamental,hidden,,hold,0,,rule portfolio bound,neutral,,hold,0,rule,False,hold,0,,,,,,,,0.0,0.0
+2026-01-03,A003,technical,hidden,,hold,0,,rule signal below threshold,neutral,,hold,0,rule,False,hold,0,,,,,,,,0.0,0.0
+2026-01-03,A004,technical,hidden,,buy,6,100.9,seeded fundamental or momentum rule,bullish,O00000034,expired,0,rule,False,buy,6,,,,,,,,0.0,0.0029821073558649047
+2026-01-03,A005,technical,hidden,,buy,4,100.9,seeded fundamental or momentum rule,bullish,O00000040,expired,0,rule,False,buy,4,,,,,,,,0.0,0.0029821073558649047
+2026-01-03,A006,technical,hidden,,hold,0,,rule portfolio bound,neutral,,hold,0,rule,False,hold,0,,,,,,,,0.0,0.0
+2026-01-03,A007,technical,hidden,,buy,3,100.9,seeded fundamental or momentum rule,bullish,O00000038,expired,0,rule,False,buy,3,,,,,,,,0.0,0.0029821073558649047
+2026-01-03,A008,technical,hidden,,buy,5,100.9,seeded fundamental or momentum rule,bullish,O00000033,expired,1,rule,False,buy,5,,,,,,,,0.0,0.0029821073558649047
+2026-01-03,A009,technical,hidden,,sell,7,100.3,seeded fundamental or momentum rule,bearish,O00000037,filled,7,rule,False,sell,7,,,,,,,,0.0,0.0029821073558647937
+2026-01-03,A010,technical,hidden,,buy,7,100.9,seeded fundamental or momentum rule,bullish,O00000032,filled,7,rule,False,buy,7,,,,,,,,0.0,0.0029821073558649047
+2026-01-03,A011,fundamental,hidden,,hold,0,,rule portfolio bound,neutral,,hold,0,rule,False,hold,0,,,,,,,,0.0,0.0
+2026-01-03,A012,fundamental,hidden,,buy,5,100.9,seeded fundamental or momentum rule,bullish,O00000039,expired,0,rule,False,buy,5,,,,,,,,0.0,0.0029821073558649047
+2026-01-03,A013,technical,hidden,,buy,3,100.9,seeded fundamental or momentum rule,bullish,O00000036,expired,0,rule,False,buy,3,,,,,,,,0.0,0.0029821073558649047
+2026-01-03,A014,fundamental,hidden,,sell,6,100.3,seeded fundamental or momentum rule,bearish,O00000031,filled,6,rule,False,sell,6,,,,,,,,0.0,0.0029821073558647937
+2026-01-03,A015,fundamental,hidden,,hold,0,,rule signal below threshold,neutral,,hold,0,rule,False,hold,0,,,,,,,,0.0,0.0
+2026-01-03,A016,fundamental,hidden,,hold,0,,rule portfolio bound,neutral,,hold,0,rule,False,hold,0,,,,,,,,0.0,0.0
+2026-01-03,A017,fundamental,hidden,,buy,5,100.9,seeded fundamental or momentum rule,bullish,O00000030,filled,5,rule,False,buy,5,,,,,,,,0.0,0.0029821073558649047
+2026-01-03,A018,fundamental,hidden,,hold,0,,rule portfolio bound,neutral,,hold,0,rule,False,hold,0,,,,,,,,0.0,0.0
+2026-01-03,A019,fundamental,hidden,,hold,0,,rule signal below threshold,neutral,,hold,0,rule,False,hold,0,,,,,,,,0.0,0.0
+2026-01-04,A000,technical,hidden,,buy,4,101.2,seeded fundamental or momentum rule,bullish,O00000044,expired,0,rule,False,buy,4,,,,,,,buy,0.5272727272727272,0.0029732408325073845
+2026-01-04,A001,fundamental,hidden,,hold,0,,rule signal below threshold,neutral,,hold,0,rule,False,hold,0,,,,,,,buy,0.5272727272727272,0.0
+2026-01-04,A002,fundamental,hidden,,hold,0,,rule signal below threshold,neutral,,hold,0,rule,False,hold,0,,,,,,,buy,0.5272727272727272,0.0
+2026-01-04,A003,technical,hidden,,buy,3,101.2,seeded fundamental or momentum rule,bullish,O00000045,expired,0,rule,False,buy,3,,,,,,,buy,0.5272727272727272,0.0029732408325073845
+2026-01-04,A004,technical,hidden,,hold,0,,rule signal below threshold,neutral,,hold,0,rule,False,hold,0,,,,,,,buy,0.5272727272727272,0.0
+2026-01-04,A005,technical,hidden,,buy,4,101.2,seeded fundamental or momentum rule,bullish,O00000051,expired,0,rule,False,buy,4,,,,,,,buy,0.5272727272727272,0.0029732408325073845
+2026-01-04,A006,technical,hidden,,buy,3,101.2,seeded fundamental or momentum rule,bullish,O00000050,expired,0,rule,False,buy,3,,,,,,,buy,0.5272727272727272,0.0029732408325073845
+2026-01-04,A007,technical,hidden,,buy,3,101.2,seeded fundamental or momentum rule,bullish,O00000048,expired,0,rule,False,buy,3,,,,,,,buy,0.5272727272727272,0.0029732408325073845
+2026-01-04,A008,technical,hidden,,hold,0,,rule signal below threshold,neutral,,hold,0,rule,False,hold,0,,,,,,,buy,0.5272727272727272,0.0
+2026-01-04,A009,technical,hidden,,buy,7,101.2,seeded fundamental or momentum rule,bullish,O00000042,expired,5,rule,False,buy,7,,,,,,,buy,0.5272727272727272,0.0029732408325073845
+2026-01-04,A010,technical,hidden,,buy,4,101.2,seeded fundamental or momentum rule,bullish,O00000043,expired,0,rule,False,buy,4,,,,,,,buy,0.5272727272727272,0.0029732408325073845
+2026-01-04,A011,fundamental,hidden,,hold,0,,rule portfolio bound,neutral,,hold,0,rule,False,hold,0,,,,,,,buy,0.5272727272727272,0.0
+2026-01-04,A012,fundamental,hidden,,hold,0,,rule portfolio bound,neutral,,hold,0,rule,False,hold,0,,,,,,,buy,0.5272727272727272,0.0
+2026-01-04,A013,technical,hidden,,sell,3,100.6,seeded fundamental or momentum rule,bearish,O00000046,filled,3,rule,False,sell,3,,,,,,,buy,0.5272727272727272,0.0029732408325074955
+2026-01-04,A014,fundamental,hidden,,buy,6,101.2,seeded fundamental or momentum rule,bullish,O00000041,filled,6,rule,False,buy,6,,,,,,,buy,0.5272727272727272,0.0029732408325073845
+2026-01-04,A015,fundamental,hidden,,hold,0,,rule portfolio bound,neutral,,hold,0,rule,False,hold,0,,,,,,,buy,0.5272727272727272,0.0
+2026-01-04,A016,fundamental,hidden,,hold,0,,rule portfolio bound,neutral,,hold,0,rule,False,hold,0,,,,,,,buy,0.5272727272727272,0.0
+2026-01-04,A017,fundamental,hidden,,sell,5,100.6,seeded fundamental or momentum rule,bearish,O00000047,filled,5,rule,False,sell,5,,,,,,,buy,0.5272727272727272,0.0029732408325074955
+2026-01-04,A018,fundamental,hidden,,hold,0,,rule signal below threshold,neutral,,hold,0,rule,False,hold,0,,,,,,,buy,0.5272727272727272,0.0
+2026-01-04,A019,fundamental,hidden,,sell,3,100.6,seeded fundamental or momentum rule,bearish,O00000049,filled,3,rule,False,sell,3,,,,,,,buy,0.5272727272727272,0.0029732408325074955
+2026-01-05,A000,technical,hidden,,buy,4,101.5,seeded fundamental or momentum rule,bullish,O00000059,expired,0,rule,False,buy,4,,,,,,,buy,0.5111111111111111,0.0029644268774702276
+2026-01-05,A001,fundamental,hidden,,hold,0,,rule portfolio bound,neutral,,hold,0,rule,False,hold,0,,,,,,,buy,0.5111111111111111,0.0
+2026-01-05,A002,fundamental,hidden,,hold,0,,rule portfolio bound,neutral,,hold,0,rule,False,hold,0,,,,,,,buy,0.5111111111111111,0.0
+2026-01-05,A003,technical,hidden,,buy,3,101.5,seeded fundamental or momentum rule,bullish,O00000055,expired,0,rule,False,buy,3,,,,,,,buy,0.5111111111111111,0.0029644268774702276
+2026-01-05,A004,technical,hidden,,buy,6,101.5,seeded fundamental or momentum rule,bullish,O00000052,expired,0,rule,False,buy,6,,,,,,,buy,0.5111111111111111,0.0029644268774702276
+2026-01-05,A005,technical,hidden,,buy,4,101.5,seeded fundamental or momentum rule,bullish,O00000061,expired,0,rule,False,buy,4,,,,,,,buy,0.5111111111111111,0.0029644268774702276
+2026-01-05,A006,technical,hidden,,hold,0,,rule portfolio bound,neutral,,hold,0,rule,False,hold,0,,,,,,,buy,0.5111111111111111,0.0
+2026-01-05,A007,technical,hidden,,buy,3,101.5,seeded fundamental or momentum rule,bullish,O00000060,expired,0,rule,False,buy,3,,,,,,,buy,0.5111111111111111,0.0029644268774702276
+2026-01-05,A008,technical,hidden,,buy,5,101.5,seeded fundamental or momentum rule,bullish,O00000053,expired,0,rule,False,buy,5,,,,,,,buy,0.5111111111111111,0.0029644268774702276
+2026-01-05,A009,technical,hidden,,buy,2,101.5,seeded fundamental or momentum rule,bullish,O00000057,expired,0,rule,False,buy,2,,,,,,,buy,0.5111111111111111,0.0029644268774702276
+2026-01-05,A010,technical,hidden,,buy,4,101.5,seeded fundamental or momentum rule,bullish,O00000056,expired,0,rule,False,buy,4,,,,,,,buy,0.5111111111111111,0.0029644268774702276
+2026-01-05,A011,fundamental,hidden,,hold,0,,rule signal below threshold,neutral,,hold,0,rule,False,hold,0,,,,,,,buy,0.5111111111111111,0.0
+2026-01-05,A012,fundamental,hidden,,hold,0,,rule portfolio bound,neutral,,hold,0,rule,False,hold,0,,,,,,,buy,0.5111111111111111,0.0
+2026-01-05,A013,technical,hidden,,buy,3,101.5,seeded fundamental or momentum rule,bullish,O00000058,expired,0,rule,False,buy,3,,,,,,,buy,0.5111111111111111,0.0029644268774702276
+2026-01-05,A014,fundamental,hidden,,hold,0,,rule signal below threshold,neutral,,hold,0,rule,False,hold,0,,,,,,,buy,0.5111111111111111,0.0
+2026-01-05,A015,fundamental,hidden,,hold,0,,rule portfolio bound,neutral,,hold,0,rule,False,hold,0,,,,,,,buy,0.5111111111111111,0.0
+2026-01-05,A016,fundamental,hidden,,hold,0,,rule portfolio bound,neutral,,hold,0,rule,False,hold,0,,,,,,,buy,0.5111111111111111,0.0
+2026-01-05,A017,fundamental,hidden,,hold,0,,rule portfolio bound,neutral,,hold,0,rule,False,hold,0,,,,,,,buy,0.5111111111111111,0.0
+2026-01-05,A018,fundamental,hidden,,hold,0,,rule portfolio bound,neutral,,hold,0,rule,False,hold,0,,,,,,,buy,0.5111111111111111,0.0
+2026-01-05,A019,fundamental,hidden,,buy,3,101.5,seeded fundamental or momentum rule,bullish,O00000054,expired,0,rule,False,buy,3,,,,,,,buy,0.5111111111111111,0.0029644268774702276
+2026-01-06,A000,technical,hidden,,buy,4,101.5,seeded fundamental or momentum rule,bullish,O00000062,filled,4,rule,False,buy,4,,,,,,,buy,1.0,0.0029644268774702276
+2026-01-06,A001,fundamental,hidden,,hold,0,,rule portfolio bound,neutral,,hold,0,rule,False,hold,0,,,,,,,buy,1.0,0.0
+2026-01-06,A002,fundamental,hidden,,hold,0,,rule portfolio bound,neutral,,hold,0,rule,False,hold,0,,,,,,,buy,1.0,0.0
+2026-01-06,A003,technical,hidden,,buy,3,101.5,seeded fundamental or momentum rule,bullish,O00000070,expired,0,rule,False,buy,3,,,,,,,buy,1.0,0.0029644268774702276
+2026-01-06,A004,technical,hidden,,buy,6,101.5,seeded fundamental or momentum rule,bullish,O00000064,expired,0,rule,False,buy,6,,,,,,,buy,1.0,0.0029644268774702276
+2026-01-06,A005,technical,hidden,,buy,4,101.5,seeded fundamental or momentum rule,bullish,O00000065,expired,0,rule,False,buy,4,,,,,,,buy,1.0,0.0029644268774702276
+2026-01-06,A006,technical,hidden,,buy,3,101.5,seeded fundamental or momentum rule,bullish,O00000066,expired,0,rule,False,buy,3,,,,,,,buy,1.0,0.0029644268774702276
+2026-01-06,A007,technical,hidden,,buy,3,101.5,seeded fundamental or momentum rule,bullish,O00000069,expired,0,rule,False,buy,3,,,,,,,buy,1.0,0.0029644268774702276
+2026-01-06,A008,technical,hidden,,buy,5,101.5,seeded fundamental or momentum rule,bullish,O00000068,expired,0,rule,False,buy,5,,,,,,,buy,1.0,0.0029644268774702276
+2026-01-06,A009,technical,hidden,,buy,2,101.5,seeded fundamental or momentum rule,bullish,O00000063,filled,2,rule,False,buy,2,,,,,,,buy,1.0,0.0029644268774702276
+2026-01-06,A010,technical,hidden,,buy,4,101.5,seeded fundamental or momentum rule,bullish,O00000071,expired,0,rule,False,buy,4,,,,,,,buy,1.0,0.0029644268774702276
+2026-01-06,A011,fundamental,hidden,,hold,0,,rule portfolio bound,neutral,,hold,0,rule,False,hold,0,,,,,,,buy,1.0,0.0
+2026-01-06,A012,fundamental,hidden,,hold,0,,rule portfolio bound,neutral,,hold,0,rule,False,hold,0,,,,,,,buy,1.0,0.0
+2026-01-06,A013,technical,hidden,,hold,0,,rule signal below threshold,neutral,,hold,0,rule,False,hold,0,,,,,,,buy,1.0,0.0
+2026-01-06,A014,fundamental,hidden,,sell,6,100.9,seeded fundamental or momentum rule,bearish,O00000072,filled,6,rule,False,sell,6,,,,,,,buy,1.0,0.0029644268774703386
+2026-01-06,A015,fundamental,hidden,,hold,0,,rule portfolio bound,neutral,,hold,0,rule,False,hold,0,,,,,,,buy,1.0,0.0
+2026-01-06,A016,fundamental,hidden,,hold,0,,rule portfolio bound,neutral,,hold,0,rule,False,hold,0,,,,,,,buy,1.0,0.0
+2026-01-06,A017,fundamental,hidden,,hold,0,,rule portfolio bound,neutral,,hold,0,rule,False,hold,0,,,,,,,buy,1.0,0.0
+2026-01-06,A018,fundamental,hidden,,hold,0,,rule signal below threshold,neutral,,hold,0,rule,False,hold,0,,,,,,,buy,1.0,0.0
+2026-01-06,A019,fundamental,hidden,,buy,3,101.5,seeded fundamental or momentum rule,bullish,O00000067,expired,0,rule,False,buy,3,,,,,,,buy,1.0,0.0029644268774702276
+2026-01-07,A000,technical,hidden,,buy,4,101.8,seeded fundamental or momentum rule,bullish,O00000077,expired,0,rule,False,buy,4,,,,,,,buy,0.7209302325581395,0.002955665024630516
+2026-01-07,A001,fundamental,hidden,,hold,0,,rule portfolio bound,neutral,,hold,0,rule,False,hold,0,,,,,,,buy,0.7209302325581395,0.0
+2026-01-07,A002,fundamental,hidden,,hold,0,,rule portfolio bound,neutral,,hold,0,rule,False,hold,0,,,,,,,buy,0.7209302325581395,0.0
+2026-01-07,A003,technical,hidden,,buy,3,101.8,seeded fundamental or momentum rule,bullish,O00000073,filled,3,rule,False,buy,3,,,,,,,buy,0.7209302325581395,0.002955665024630516
+2026-01-07,A004,technical,hidden,,buy,6,101.8,seeded fundamental or momentum rule,bullish,O00000074,expired,2,rule,False,buy,6,,,,,,,buy,0.7209302325581395,0.002955665024630516
+2026-01-07,A005,technical,hidden,,buy,4,101.8,seeded fundamental or momentum rule,bullish,O00000082,expired,0,rule,False,buy,4,,,,,,,buy,0.7209302325581395,0.002955665024630516
+2026-01-07,A006,technical,hidden,,buy,3,101.8,seeded fundamental or momentum rule,bullish,O00000080,expired,0,rule,False,buy,3,,,,,,,buy,0.7209302325581395,0.002955665024630516
+2026-01-07,A007,technical,hidden,,buy,3,101.8,seeded fundamental or momentum rule,bullish,O00000079,expired,0,rule,False,buy,3,,,,,,,buy,0.7209302325581395,0.002955665024630516
+2026-01-07,A008,technical,hidden,,buy,5,101.8,seeded fundamental or momentum rule,bullish,O00000075,expired,0,rule,False,buy,5,,,,,,,buy,0.7209302325581395,0.002955665024630516
+2026-01-07,A009,technical,hidden,,hold,0,,rule portfolio bound,neutral,,hold,0,rule,False,hold,0,,,,,,,buy,0.7209302325581395,0.0
+2026-01-07,A010,technical,hidden,,buy,4,101.8,seeded fundamental or momentum rule,bullish,O00000081,expired,0,rule,False,buy,4,,,,,,,buy,0.7209302325581395,0.002955665024630516
+2026-01-07,A011,fundamental,hidden,,hold,0,,rule portfolio bound,neutral,,hold,0,rule,False,hold,0,,,,,,,buy,0.7209302325581395,0.0
+2026-01-07,A012,fundamental,hidden,,hold,0,,rule portfolio bound,neutral,,hold,0,rule,False,hold,0,,,,,,,buy,0.7209302325581395,0.0
+2026-01-07,A013,technical,hidden,,buy,3,101.8,seeded fundamental or momentum rule,bullish,O00000076,expired,0,rule,False,buy,3,,,,,,,buy,0.7209302325581395,0.002955665024630516
+2026-01-07,A014,fundamental,hidden,,sell,2,101.2,seeded fundamental or momentum rule,bearish,O00000078,filled,2,rule,False,sell,2,,,,,,,buy,0.7209302325581395,0.002955665024630516
+2026-01-07,A015,fundamental,hidden,,hold,0,,rule portfolio bound,neutral,,hold,0,rule,False,hold,0,,,,,,,buy,0.7209302325581395,0.0
+2026-01-07,A016,fundamental,hidden,,hold,0,,rule portfolio bound,neutral,,hold,0,rule,False,hold,0,,,,,,,buy,0.7209302325581395,0.0
+2026-01-07,A017,fundamental,hidden,,hold,0,,rule portfolio bound,neutral,,hold,0,rule,False,hold,0,,,,,,,buy,0.7209302325581395,0.0
+2026-01-07,A018,fundamental,hidden,,hold,0,,rule signal below threshold,neutral,,hold,0,rule,False,hold,0,,,,,,,buy,0.7209302325581395,0.0
+2026-01-07,A019,fundamental,hidden,,sell,3,101.2,seeded fundamental or momentum rule,bearish,O00000083,filled,3,rule,False,sell,3,,,,,,,buy,0.7209302325581395,0.002955665024630516
+2026-01-08,A000,technical,hidden,,buy,4,102.11,seeded fundamental or momentum rule,bullish,O00000085,expired,0,rule,False,buy,4,,,,,,,buy,0.75,0.0030451866404714867
+2026-01-08,A001,fundamental,hidden,,hold,0,,rule portfolio bound,neutral,,hold,0,rule,False,hold,0,,,,,,,buy,0.75,0.0
+2026-01-08,A002,fundamental,hidden,,hold,0,,rule portfolio bound,neutral,,hold,0,rule,False,hold,0,,,,,,,buy,0.75,0.0
+2026-01-08,A003,technical,hidden,,hold,0,,rule portfolio bound,neutral,,hold,0,rule,False,hold,0,,,,,,,buy,0.75,0.0
+2026-01-08,A004,technical,hidden,,buy,6,102.11,seeded fundamental or momentum rule,bullish,O00000089,expired,0,rule,False,buy,6,,,,,,,buy,0.75,0.0030451866404714867
+2026-01-08,A005,technical,hidden,,buy,4,102.11,seeded fundamental or momentum rule,bullish,O00000090,expired,0,rule,False,buy,4,,,,,,,buy,0.75,0.0030451866404714867
+2026-01-08,A006,technical,hidden,,buy,3,102.11,seeded fundamental or momentum rule,bullish,O00000084,expired,1,rule,False,buy,3,,,,,,,buy,0.75,0.0030451866404714867
+2026-01-08,A007,technical,hidden,,buy,3,102.11,seeded fundamental or momentum rule,bullish,O00000088,expired,0,rule,False,buy,3,,,,,,,buy,0.75,0.0030451866404714867
+2026-01-08,A008,technical,hidden,,buy,5,102.11,seeded fundamental or momentum rule,bullish,O00000087,expired,0,rule,False,buy,5,,,,,,,buy,0.75,0.0030451866404714867
+2026-01-08,A009,technical,hidden,,hold,0,,rule signal below threshold,neutral,,hold,0,rule,False,hold,0,,,,,,,buy,0.75,0.0
+2026-01-08,A010,technical,hidden,,hold,0,,rule signal below threshold,neutral,,hold,0,rule,False,hold,0,,,,,,,buy,0.75,0.0
+2026-01-08,A011,fundamental,hidden,,hold,0,,rule portfolio bound,neutral,,hold,0,rule,False,hold,0,,,,,,,buy,0.75,0.0
+2026-01-08,A012,fundamental,hidden,,hold,0,,rule portfolio bound,neutral,,hold,0,rule,False,hold,0,,,,,,,buy,0.75,0.0
+2026-01-08,A013,technical,hidden,,buy,3,102.11,seeded fundamental or momentum rule,bullish,O00000086,expired,0,rule,False,buy,3,,,,,,,buy,0.75,0.0030451866404714867
+2026-01-08,A014,fundamental,hidden,,hold,0,,rule portfolio bound,neutral,,hold,0,rule,False,hold,0,,,,,,,buy,0.75,0.0
+2026-01-08,A015,fundamental,hidden,,hold,0,,rule portfolio bound,neutral,,hold,0,rule,False,hold,0,,,,,,,buy,0.75,0.0
+2026-01-08,A016,fundamental,hidden,,hold,0,,rule portfolio bound,neutral,,hold,0,rule,False,hold,0,,,,,,,buy,0.75,0.0
+2026-01-08,A017,fundamental,hidden,,hold,0,,rule portfolio bound,neutral,,hold,0,rule,False,hold,0,,,,,,,buy,0.75,0.0
+2026-01-08,A018,fundamental,hidden,,hold,0,,rule portfolio bound,neutral,,hold,0,rule,False,hold,0,,,,,,,buy,0.75,0.0
+2026-01-08,A019,fundamental,hidden,,sell,1,101.49,seeded fundamental or momentum rule,bearish,O00000091,filled,1,rule,False,sell,1,,,,,,,buy,0.75,0.0030451866404714867
+2026-01-09,A000,technical,hidden,,buy,4,102.42,seeded fundamental or momentum rule,bullish,O00000098,expired,0,rule,False,buy,4,,,,,,,buy,0.9310344827586207,0.003035941631573724
+2026-01-09,A001,fundamental,hidden,,hold,0,,rule portfolio bound,neutral,,hold,0,rule,False,hold,0,,,,,,,buy,0.9310344827586207,0.0
+2026-01-09,A002,fundamental,hidden,,hold,0,,rule portfolio bound,neutral,,hold,0,rule,False,hold,0,,,,,,,buy,0.9310344827586207,0.0
+2026-01-09,A003,technical,hidden,,hold,0,,rule portfolio bound,neutral,,hold,0,rule,False,hold,0,,,,,,,buy,0.9310344827586207,0.0
+2026-01-09,A004,technical,hidden,,buy,6,102.42,seeded fundamental or momentum rule,bullish,O00000096,expired,0,rule,False,buy,6,,,,,,,buy,0.9310344827586207,0.003035941631573724
+2026-01-09,A005,technical,hidden,,buy,4,102.42,seeded fundamental or momentum rule,bullish,O00000094,expired,0,rule,False,buy,4,,,,,,,buy,0.9310344827586207,0.003035941631573724
+2026-01-09,A006,technical,hidden,,buy,3,102.42,seeded fundamental or momentum rule,bullish,O00000097,expired,0,rule,False,buy,3,,,,,,,buy,0.9310344827586207,0.003035941631573724
+2026-01-09,A007,technical,hidden,,buy,3,102.42,seeded fundamental or momentum rule,bullish,O00000095,expired,0,rule,False,buy,3,,,,,,,buy,0.9310344827586207,0.003035941631573724
+2026-01-09,A008,technical,hidden,,buy,5,102.42,seeded fundamental or momentum rule,bullish,O00000099,expired,0,rule,False,buy,5,,,,,,,buy,0.9310344827586207,0.003035941631573724
+2026-01-09,A009,technical,hidden,,hold,0,,rule portfolio bound,neutral,,hold,0,rule,False,hold,0,,,,,,,buy,0.9310344827586207,0.0
+2026-01-09,A010,technical,hidden,,buy,4,102.42,seeded fundamental or momentum rule,bullish,O00000093,expired,0,rule,False,buy,4,,,,,,,buy,0.9310344827586207,0.003035941631573724
+2026-01-09,A011,fundamental,hidden,,hold,0,,rule portfolio bound,neutral,,hold,0,rule,False,hold,0,,,,,,,buy,0.9310344827586207,0.0
+2026-01-09,A012,fundamental,hidden,,hold,0,,rule portfolio bound,neutral,,hold,0,rule,False,hold,0,,,,,,,buy,0.9310344827586207,0.0
+2026-01-09,A013,technical,hidden,,buy,3,102.42,seeded fundamental or momentum rule,bullish,O00000092,expired,0,rule,False,buy,3,,,,,,,buy,0.9310344827586207,0.003035941631573724
+2026-01-09,A014,fundamental,hidden,,hold,0,,rule portfolio bound,neutral,,hold,0,rule,False,hold,0,,,,,,,buy,0.9310344827586207,0.0
+2026-01-09,A015,fundamental,hidden,,hold,0,,rule portfolio bound,neutral,,hold,0,rule,False,hold,0,,,,,,,buy,0.9310344827586207,0.0
+2026-01-09,A016,fundamental,hidden,,hold,0,,rule portfolio bound,neutral,,hold,0,rule,False,hold,0,,,,,,,buy,0.9310344827586207,0.0
+2026-01-09,A017,fundamental,hidden,,hold,0,,rule portfolio bound,neutral,,hold,0,rule,False,hold,0,,,,,,,buy,0.9310344827586207,0.0
+2026-01-09,A018,fundamental,hidden,,hold,0,,rule portfolio bound,neutral,,hold,0,rule,False,hold,0,,,,,,,buy,0.9310344827586207,0.0
+2026-01-09,A019,fundamental,hidden,,hold,0,,rule portfolio bound,neutral,,hold,0,rule,False,hold,0,,,,,,,buy,0.9310344827586207,0.0
+2026-01-10,A000,technical,hidden,,buy,4,102.42,seeded fundamental or momentum rule,bullish,O00000105,expired,0,rule,False,buy,4,,,,,,,buy,1.0,0.003035941631573724
+2026-01-10,A001,fundamental,hidden,,hold,0,,rule portfolio bound,neutral,,hold,0,rule,False,hold,0,,,,,,,buy,1.0,0.0
+2026-01-10,A002,fundamental,hidden,,hold,0,,rule portfolio bound,neutral,,hold,0,rule,False,hold,0,,,,,,,buy,1.0,0.0
+2026-01-10,A003,technical,hidden,,hold,0,,rule portfolio bound,neutral,,hold,0,rule,False,hold,0,,,,,,,buy,1.0,0.0
+2026-01-10,A004,technical,hidden,,hold,0,,rule signal below threshold,neutral,,hold,0,rule,False,hold,0,,,,,,,buy,1.0,0.0
+2026-01-10,A005,technical,hidden,,buy,4,102.42,seeded fundamental or momentum rule,bullish,O00000100,expired,0,rule,False,buy,4,,,,,,,buy,1.0,0.003035941631573724
+2026-01-10,A006,technical,hidden,,buy,3,102.42,seeded fundamental or momentum rule,bullish,O00000106,expired,0,rule,False,buy,3,,,,,,,buy,1.0,0.003035941631573724
+2026-01-10,A007,technical,hidden,,buy,3,102.42,seeded fundamental or momentum rule,bullish,O00000104,expired,0,rule,False,buy,3,,,,,,,buy,1.0,0.003035941631573724
+2026-01-10,A008,technical,hidden,,buy,5,102.42,seeded fundamental or momentum rule,bullish,O00000101,expired,0,rule,False,buy,5,,,,,,,buy,1.0,0.003035941631573724
+2026-01-10,A009,technical,hidden,,hold,0,,rule portfolio bound,neutral,,hold,0,rule,False,hold,0,,,,,,,buy,1.0,0.0
+2026-01-10,A010,technical,hidden,,buy,4,102.42,seeded fundamental or momentum rule,bullish,O00000103,expired,0,rule,False,buy,4,,,,,,,buy,1.0,0.003035941631573724
+2026-01-10,A011,fundamental,hidden,,hold,0,,rule portfolio bound,neutral,,hold,0,rule,False,hold,0,,,,,,,buy,1.0,0.0
+2026-01-10,A012,fundamental,hidden,,hold,0,,rule portfolio bound,neutral,,hold,0,rule,False,hold,0,,,,,,,buy,1.0,0.0
+2026-01-10,A013,technical,hidden,,buy,3,102.42,seeded fundamental or momentum rule,bullish,O00000102,expired,0,rule,False,buy,3,,,,,,,buy,1.0,0.003035941631573724
+2026-01-10,A014,fundamental,hidden,,hold,0,,rule portfolio bound,neutral,,hold,0,rule,False,hold,0,,,,,,,buy,1.0,0.0
+2026-01-10,A015,fundamental,hidden,,hold,0,,rule portfolio bound,neutral,,hold,0,rule,False,hold,0,,,,,,,buy,1.0,0.0
+2026-01-10,A016,fundamental,hidden,,hold,0,,rule portfolio bound,neutral,,hold,0,rule,False,hold,0,,,,,,,buy,1.0,0.0
+2026-01-10,A017,fundamental,hidden,,hold,0,,rule portfolio bound,neutral,,hold,0,rule,False,hold,0,,,,,,,buy,1.0,0.0
+2026-01-10,A018,fundamental,hidden,,hold,0,,rule portfolio bound,neutral,,hold,0,rule,False,hold,0,,,,,,,buy,1.0,0.0
+2026-01-10,A019,fundamental,hidden,,hold,0,,rule portfolio bound,neutral,,hold,0,rule,False,hold,0,,,,,,,buy,1.0,0.0
+2026-01-11,A000,technical,hidden,,buy,4,102.42,seeded fundamental or momentum rule,bullish,O00000111,expired,0,rule,False,buy,4,,,,,,,buy,1.0,0.003035941631573724
+2026-01-11,A001,fundamental,hidden,,hold,0,,rule portfolio bound,neutral,,hold,0,rule,False,hold,0,,,,,,,buy,1.0,0.0
+2026-01-11,A002,fundamental,hidden,,hold,0,,rule portfolio bound,neutral,,hold,0,rule,False,hold,0,,,,,,,buy,1.0,0.0
+2026-01-11,A003,technical,hidden,,hold,0,,rule portfolio bound,neutral,,hold,0,rule,False,hold,0,,,,,,,buy,1.0,0.0
+2026-01-11,A004,technical,hidden,,buy,6,102.42,seeded fundamental or momentum rule,bullish,O00000108,expired,0,rule,False,buy,6,,,,,,,buy,1.0,0.003035941631573724
+2026-01-11,A005,technical,hidden,,buy,4,102.42,seeded fundamental or momentum rule,bullish,O00000109,expired,0,rule,False,buy,4,,,,,,,buy,1.0,0.003035941631573724
+2026-01-11,A006,technical,hidden,,buy,3,102.42,seeded fundamental or momentum rule,bullish,O00000110,expired,0,rule,False,buy,3,,,,,,,buy,1.0,0.003035941631573724
+2026-01-11,A007,technical,hidden,,hold,0,,rule portfolio bound,neutral,,hold,0,rule,False,hold,0,,,,,,,buy,1.0,0.0
+2026-01-11,A008,technical,hidden,,hold,0,,rule signal below threshold,neutral,,hold,0,rule,False,hold,0,,,,,,,buy,1.0,0.0
+2026-01-11,A009,technical,hidden,,hold,0,,rule portfolio bound,neutral,,hold,0,rule,False,hold,0,,,,,,,buy,1.0,0.0
+2026-01-11,A010,technical,hidden,,buy,4,102.42,seeded fundamental or momentum rule,bullish,O00000107,expired,0,rule,False,buy,4,,,,,,,buy,1.0,0.003035941631573724
+2026-01-11,A011,fundamental,hidden,,hold,0,,rule portfolio bound,neutral,,hold,0,rule,False,hold,0,,,,,,,buy,1.0,0.0
+2026-01-11,A012,fundamental,hidden,,hold,0,,rule portfolio bound,neutral,,hold,0,rule,False,hold,0,,,,,,,buy,1.0,0.0
+2026-01-11,A013,technical,hidden,,hold,0,,rule signal below threshold,neutral,,hold,0,rule,False,hold,0,,,,,,,buy,1.0,0.0
+2026-01-11,A014,fundamental,hidden,,hold,0,,rule portfolio bound,neutral,,hold,0,rule,False,hold,0,,,,,,,buy,1.0,0.0
+2026-01-11,A015,fundamental,hidden,,hold,0,,rule portfolio bound,neutral,,hold,0,rule,False,hold,0,,,,,,,buy,1.0,0.0
+2026-01-11,A016,fundamental,hidden,,hold,0,,rule portfolio bound,neutral,,hold,0,rule,False,hold,0,,,,,,,buy,1.0,0.0
+2026-01-11,A017,fundamental,hidden,,hold,0,,rule portfolio bound,neutral,,hold,0,rule,False,hold,0,,,,,,,buy,1.0,0.0
+2026-01-11,A018,fundamental,hidden,,hold,0,,rule portfolio bound,neutral,,hold,0,rule,False,hold,0,,,,,,,buy,1.0,0.0
+2026-01-11,A019,fundamental,hidden,,hold,0,,rule portfolio bound,neutral,,hold,0,rule,False,hold,0,,,,,,,buy,1.0,0.0
+2026-01-12,A000,technical,hidden,,buy,4,102.42,seeded fundamental or momentum rule,bullish,O00000118,expired,0,rule,False,buy,4,,,,,,,buy,1.0,0.003035941631573724
+2026-01-12,A001,fundamental,hidden,,hold,0,,rule portfolio bound,neutral,,hold,0,rule,False,hold,0,,,,,,,buy,1.0,0.0
+2026-01-12,A002,fundamental,hidden,,hold,0,,rule portfolio bound,neutral,,hold,0,rule,False,hold,0,,,,,,,buy,1.0,0.0
+2026-01-12,A003,technical,hidden,,hold,0,,rule portfolio bound,neutral,,hold,0,rule,False,hold,0,,,,,,,buy,1.0,0.0
+2026-01-12,A004,technical,hidden,,buy,6,102.42,seeded fundamental or momentum rule,bullish,O00000112,expired,0,rule,False,buy,6,,,,,,,buy,1.0,0.003035941631573724
+2026-01-12,A005,technical,hidden,,buy,4,102.42,seeded fundamental or momentum rule,bullish,O00000114,expired,0,rule,False,buy,4,,,,,,,buy,1.0,0.003035941631573724
+2026-01-12,A006,technical,hidden,,buy,3,102.42,seeded fundamental or momentum rule,bullish,O00000117,expired,0,rule,False,buy,3,,,,,,,buy,1.0,0.003035941631573724
+2026-01-12,A007,technical,hidden,,hold,0,,rule portfolio bound,neutral,,hold,0,rule,False,hold,0,,,,,,,buy,1.0,0.0
+2026-01-12,A008,technical,hidden,,buy,5,102.42,seeded fundamental or momentum rule,bullish,O00000116,expired,0,rule,False,buy,5,,,,,,,buy,1.0,0.003035941631573724
+2026-01-12,A009,technical,hidden,,hold,0,,rule signal below threshold,neutral,,hold,0,rule,False,hold,0,,,,,,,buy,1.0,0.0
+2026-01-12,A010,technical,hidden,,buy,4,102.42,seeded fundamental or momentum rule,bullish,O00000113,expired,0,rule,False,buy,4,,,,,,,buy,1.0,0.003035941631573724
+2026-01-12,A011,fundamental,hidden,,hold,0,,rule portfolio bound,neutral,,hold,0,rule,False,hold,0,,,,,,,buy,1.0,0.0
+2026-01-12,A012,fundamental,hidden,,hold,0,,rule portfolio bound,neutral,,hold,0,rule,False,hold,0,,,,,,,buy,1.0,0.0
+2026-01-12,A013,technical,hidden,,buy,3,102.42,seeded fundamental or momentum rule,bullish,O00000115,expired,0,rule,False,buy,3,,,,,,,buy,1.0,0.003035941631573724
+2026-01-12,A014,fundamental,hidden,,hold,0,,rule portfolio bound,neutral,,hold,0,rule,False,hold,0,,,,,,,buy,1.0,0.0
+2026-01-12,A015,fundamental,hidden,,hold,0,,rule portfolio bound,neutral,,hold,0,rule,False,hold,0,,,,,,,buy,1.0,0.0
+2026-01-12,A016,fundamental,hidden,,hold,0,,rule portfolio bound,neutral,,hold,0,rule,False,hold,0,,,,,,,buy,1.0,0.0
+2026-01-12,A017,fundamental,hidden,,hold,0,,rule portfolio bound,neutral,,hold,0,rule,False,hold,0,,,,,,,buy,1.0,0.0
+2026-01-12,A018,fundamental,hidden,,hold,0,,rule portfolio bound,neutral,,hold,0,rule,False,hold,0,,,,,,,buy,1.0,0.0
+2026-01-12,A019,fundamental,hidden,,hold,0,,rule portfolio bound,neutral,,hold,0,rule,False,hold,0,,,,,,,buy,1.0,0.0
+2026-01-13,A000,technical,hidden,,hold,0,,rule signal below threshold,neutral,,hold,0,rule,False,hold,0,,,,,,,buy,1.0,0.0
+2026-01-13,A001,fundamental,hidden,,hold,0,,rule portfolio bound,neutral,,hold,0,rule,False,hold,0,,,,,,,buy,1.0,0.0
+2026-01-13,A002,fundamental,hidden,,hold,0,,rule portfolio bound,neutral,,hold,0,rule,False,hold,0,,,,,,,buy,1.0,0.0
+2026-01-13,A003,technical,hidden,,hold,0,,rule signal below threshold,neutral,,hold,0,rule,False,hold,0,,,,,,,buy,1.0,0.0
+2026-01-13,A004,technical,hidden,,sell,2,101.8,seeded fundamental or momentum rule,bearish,O00000120,filled,2,rule,False,sell,2,,,,,,,buy,1.0,0.0030359416315738352
+2026-01-13,A005,technical,hidden,,hold,0,,rule portfolio bound,neutral,,hold,0,rule,False,hold,0,,,,,,,buy,1.0,0.0
+2026-01-13,A006,technical,hidden,,buy,3,102.42,seeded fundamental or momentum rule,bullish,O00000122,expired,0,rule,False,buy,3,,,,,,,buy,1.0,0.003035941631573724
+2026-01-13,A007,technical,hidden,,hold,0,,rule portfolio bound,neutral,,hold,0,rule,False,hold,0,,,,,,,buy,1.0,0.0
+2026-01-13,A008,technical,hidden,,hold,0,,rule signal below threshold,neutral,,hold,0,rule,False,hold,0,,,,,,,buy,1.0,0.0
+2026-01-13,A009,technical,hidden,,hold,0,,rule portfolio bound,neutral,,hold,0,rule,False,hold,0,,,,,,,buy,1.0,0.0
+2026-01-13,A010,technical,hidden,,buy,4,102.42,seeded fundamental or momentum rule,bullish,O00000119,expired,2,rule,False,buy,4,,,,,,,buy,1.0,0.003035941631573724
+2026-01-13,A011,fundamental,hidden,,hold,0,,rule portfolio bound,neutral,,hold,0,rule,False,hold,0,,,,,,,buy,1.0,0.0
+2026-01-13,A012,fundamental,hidden,,hold,0,,rule portfolio bound,neutral,,hold,0,rule,False,hold,0,,,,,,,buy,1.0,0.0
+2026-01-13,A013,technical,hidden,,buy,3,102.42,seeded fundamental or momentum rule,bullish,O00000121,expired,0,rule,False,buy,3,,,,,,,buy,1.0,0.003035941631573724
+2026-01-13,A014,fundamental,hidden,,hold,0,,rule portfolio bound,neutral,,hold,0,rule,False,hold,0,,,,,,,buy,1.0,0.0
+2026-01-13,A015,fundamental,hidden,,hold,0,,rule portfolio bound,neutral,,hold,0,rule,False,hold,0,,,,,,,buy,1.0,0.0
+2026-01-13,A016,fundamental,hidden,,hold,0,,rule portfolio bound,neutral,,hold,0,rule,False,hold,0,,,,,,,buy,1.0,0.0
+2026-01-13,A017,fundamental,hidden,,hold,0,,rule portfolio bound,neutral,,hold,0,rule,False,hold,0,,,,,,,buy,1.0,0.0
+2026-01-13,A018,fundamental,hidden,,hold,0,,rule portfolio bound,neutral,,hold,0,rule,False,hold,0,,,,,,,buy,1.0,0.0
+2026-01-13,A019,fundamental,hidden,,hold,0,,rule portfolio bound,neutral,,hold,0,rule,False,hold,0,,,,,,,buy,1.0,0.0
+2026-01-14,A000,technical,hidden,,buy,4,102.73,seeded fundamental or momentum rule,bullish,O00000128,filled,4,rule,False,buy,4,,,,,,,buy,0.6666666666666666,0.003026752587385273
+2026-01-14,A001,fundamental,hidden,,hold,0,,rule portfolio bound,neutral,,hold,0,rule,False,hold,0,,,,,,,buy,0.6666666666666666,0.0
+2026-01-14,A002,fundamental,hidden,,hold,0,,rule portfolio bound,neutral,,hold,0,rule,False,hold,0,,,,,,,buy,0.6666666666666666,0.0
+2026-01-14,A003,technical,hidden,,hold,0,,rule signal below threshold,neutral,,hold,0,rule,False,hold,0,,,,,,,buy,0.6666666666666666,0.0
+2026-01-14,A004,technical,hidden,,buy,6,102.73,seeded fundamental or momentum rule,bullish,O00000123,filled,6,rule,False,buy,6,,,,,,,buy,0.6666666666666666,0.003026752587385273
+2026-01-14,A005,technical,hidden,,hold,0,,rule signal below threshold,neutral,,hold,0,rule,False,hold,0,,,,,,,buy,0.6666666666666666,0.0
+2026-01-14,A006,technical,hidden,,sell,1,102.11,seeded fundamental or momentum rule,bearish,O00000126,expired,0,rule,False,sell,1,,,,,,,buy,0.6666666666666666,0.003026752587385273
+2026-01-14,A007,technical,hidden,,buy,3,102.73,seeded fundamental or momentum rule,bullish,O00000127,filled,3,rule,False,buy,3,,,,,,,buy,0.6666666666666666,0.003026752587385273
+2026-01-14,A008,technical,hidden,,hold,0,,rule signal below threshold,neutral,,hold,0,rule,False,hold,0,,,,,,,buy,0.6666666666666666,0.0
+2026-01-14,A009,technical,hidden,,sell,7,102.11,seeded fundamental or momentum rule,bearish,O00000124,filled,7,rule,False,sell,7,,,,,,,buy,0.6666666666666666,0.003026752587385273
+2026-01-14,A010,technical,hidden,,sell,7,102.11,seeded fundamental or momentum rule,bearish,O00000125,expired,6,rule,False,sell,7,,,,,,,buy,0.6666666666666666,0.003026752587385273
+2026-01-14,A011,fundamental,hidden,,hold,0,,rule portfolio bound,neutral,,hold,0,rule,False,hold,0,,,,,,,buy,0.6666666666666666,0.0
+2026-01-14,A012,fundamental,hidden,,hold,0,,rule portfolio bound,neutral,,hold,0,rule,False,hold,0,,,,,,,buy,0.6666666666666666,0.0
+2026-01-14,A013,technical,hidden,,hold,0,,rule portfolio bound,neutral,,hold,0,rule,False,hold,0,,,,,,,buy,0.6666666666666666,0.0
+2026-01-14,A014,fundamental,hidden,,hold,0,,rule portfolio bound,neutral,,hold,0,rule,False,hold,0,,,,,,,buy,0.6666666666666666,0.0
+2026-01-14,A015,fundamental,hidden,,hold,0,,rule portfolio bound,neutral,,hold,0,rule,False,hold,0,,,,,,,buy,0.6666666666666666,0.0
+2026-01-14,A016,fundamental,hidden,,hold,0,,rule portfolio bound,neutral,,hold,0,rule,False,hold,0,,,,,,,buy,0.6666666666666666,0.0
+2026-01-14,A017,fundamental,hidden,,hold,0,,rule portfolio bound,neutral,,hold,0,rule,False,hold,0,,,,,,,buy,0.6666666666666666,0.0
+2026-01-14,A018,fundamental,hidden,,hold,0,,rule portfolio bound,neutral,,hold,0,rule,False,hold,0,,,,,,,buy,0.6666666666666666,0.0
+2026-01-14,A019,fundamental,hidden,,hold,0,,rule portfolio bound,neutral,,hold,0,rule,False,hold,0,,,,,,,buy,0.6666666666666666,0.0
+2026-01-15,A000,technical,hidden,,hold,0,,rule signal below threshold,neutral,,hold,0,rule,False,hold,0,,,,,,,,0.0,0.0
+2026-01-15,A001,fundamental,hidden,,hold,0,,rule portfolio bound,neutral,,hold,0,rule,False,hold,0,,,,,,,,0.0,0.0
+2026-01-15,A002,fundamental,hidden,,hold,0,,rule portfolio bound,neutral,,hold,0,rule,False,hold,0,,,,,,,,0.0,0.0
+2026-01-15,A003,technical,hidden,,sell,3,101.8,seeded fundamental or momentum rule,bearish,O00000133,expired,0,rule,False,sell,3,,,,,,,,0.0,0.0030359416315738352
+2026-01-15,A004,technical,hidden,,sell,6,101.8,seeded fundamental or momentum rule,bearish,O00000130,expired,0,rule,False,sell,6,,,,,,,,0.0,0.0030359416315738352
+2026-01-15,A005,technical,hidden,,hold,0,,rule portfolio bound,neutral,,hold,0,rule,False,hold,0,,,,,,,,0.0,0.0
+2026-01-15,A006,technical,hidden,,buy,3,102.42,seeded fundamental or momentum rule,bullish,O00000134,filled,3,rule,False,buy,3,,,,,,,,0.0,0.003035941631573724
+2026-01-15,A007,technical,hidden,,sell,3,101.8,seeded fundamental or momentum rule,bearish,O00000131,expired,0,rule,False,sell,3,,,,,,,,0.0,0.0030359416315738352
+2026-01-15,A008,technical,hidden,,sell,4,101.8,seeded fundamental or momentum rule,bearish,O00000129,expired,3,rule,False,sell,4,,,,,,,,0.0,0.0030359416315738352
+2026-01-15,A009,technical,hidden,,sell,4,101.8,seeded fundamental or momentum rule,bearish,O00000132,expired,0,rule,False,sell,4,,,,,,,,0.0,0.0030359416315738352
+2026-01-15,A010,technical,hidden,,hold,0,,rule signal below threshold,neutral,,hold,0,rule,False,hold,0,,,,,,,,0.0,0.0
+2026-01-15,A011,fundamental,hidden,,hold,0,,rule portfolio bound,neutral,,hold,0,rule,False,hold,0,,,,,,,,0.0,0.0
+2026-01-15,A012,fundamental,hidden,,hold,0,,rule portfolio bound,neutral,,hold,0,rule,False,hold,0,,,,,,,,0.0,0.0
+2026-01-15,A013,technical,hidden,,hold,0,,rule portfolio bound,neutral,,hold,0,rule,False,hold,0,,,,,,,,0.0,0.0
+2026-01-15,A014,fundamental,hidden,,hold,0,,rule portfolio bound,neutral,,hold,0,rule,False,hold,0,,,,,,,,0.0,0.0
+2026-01-15,A015,fundamental,hidden,,hold,0,,rule portfolio bound,neutral,,hold,0,rule,False,hold,0,,,,,,,,0.0,0.0
+2026-01-15,A016,fundamental,hidden,,hold,0,,rule portfolio bound,neutral,,hold,0,rule,False,hold,0,,,,,,,,0.0,0.0
+2026-01-15,A017,fundamental,hidden,,hold,0,,rule portfolio bound,neutral,,hold,0,rule,False,hold,0,,,,,,,,0.0,0.0
+2026-01-15,A018,fundamental,hidden,,hold,0,,rule portfolio bound,neutral,,hold,0,rule,False,hold,0,,,,,,,,0.0,0.0
+2026-01-15,A019,fundamental,hidden,,hold,0,,rule portfolio bound,neutral,,hold,0,rule,False,hold,0,,,,,,,,0.0,0.0
+2026-01-16,A000,technical,hidden,,hold,0,,rule signal below threshold,neutral,,hold,0,rule,False,hold,0,,,,,,,sell,0.7391304347826086,0.0
+2026-01-16,A001,fundamental,hidden,,hold,0,,rule portfolio bound,neutral,,hold,0,rule,False,hold,0,,,,,,,sell,0.7391304347826086,0.0
+2026-01-16,A002,fundamental,hidden,,hold,0,,rule portfolio bound,neutral,,hold,0,rule,False,hold,0,,,,,,,sell,0.7391304347826086,0.0
+2026-01-16,A003,technical,hidden,,sell,3,101.49,seeded fundamental or momentum rule,bearish,O00000138,filled,3,rule,False,sell,3,,,,,,,sell,0.7391304347826086,0.0030451866404714867
+2026-01-16,A004,technical,hidden,,hold,0,,rule signal below threshold,neutral,,hold,0,rule,False,hold,0,,,,,,,sell,0.7391304347826086,0.0
+2026-01-16,A005,technical,hidden,,hold,0,,rule signal below threshold,neutral,,hold,0,rule,False,hold,0,,,,,,,sell,0.7391304347826086,0.0
+2026-01-16,A006,technical,hidden,,buy,3,102.11,seeded fundamental or momentum rule,bullish,O00000135,filled,3,rule,False,buy,3,,,,,,,sell,0.7391304347826086,0.0030451866404714867
+2026-01-16,A007,technical,hidden,,sell,3,101.49,seeded fundamental or momentum rule,bearish,O00000137,filled,3,rule,False,sell,3,,,,,,,sell,0.7391304347826086,0.0030451866404714867
+2026-01-16,A008,technical,hidden,,hold,0,,rule signal below threshold,neutral,,hold,0,rule,False,hold,0,,,,,,,sell,0.7391304347826086,0.0
+2026-01-16,A009,technical,hidden,,buy,7,102.11,seeded fundamental or momentum rule,bullish,O00000136,expired,6,rule,False,buy,7,,,,,,,sell,0.7391304347826086,0.0030451866404714867
+2026-01-16,A010,technical,hidden,,sell,3,101.49,seeded fundamental or momentum rule,bearish,O00000139,filled,3,rule,False,sell,3,,,,,,,sell,0.7391304347826086,0.0030451866404714867
+2026-01-16,A011,fundamental,hidden,,hold,0,,rule portfolio bound,neutral,,hold,0,rule,False,hold,0,,,,,,,sell,0.7391304347826086,0.0
+2026-01-16,A012,fundamental,hidden,,hold,0,,rule portfolio bound,neutral,,hold,0,rule,False,hold,0,,,,,,,sell,0.7391304347826086,0.0
+2026-01-16,A013,technical,hidden,,hold,0,,rule signal below threshold,neutral,,hold,0,rule,False,hold,0,,,,,,,sell,0.7391304347826086,0.0
+2026-01-16,A014,fundamental,hidden,,hold,0,,rule portfolio bound,neutral,,hold,0,rule,False,hold,0,,,,,,,sell,0.7391304347826086,0.0
+2026-01-16,A015,fundamental,hidden,,hold,0,,rule portfolio bound,neutral,,hold,0,rule,False,hold,0,,,,,,,sell,0.7391304347826086,0.0
+2026-01-16,A016,fundamental,hidden,,hold,0,,rule portfolio bound,neutral,,hold,0,rule,False,hold,0,,,,,,,sell,0.7391304347826086,0.0
+2026-01-16,A017,fundamental,hidden,,hold,0,,rule portfolio bound,neutral,,hold,0,rule,False,hold,0,,,,,,,sell,0.7391304347826086,0.0
+2026-01-16,A018,fundamental,hidden,,hold,0,,rule portfolio bound,neutral,,hold,0,rule,False,hold,0,,,,,,,sell,0.7391304347826086,0.0
+2026-01-16,A019,fundamental,hidden,,hold,0,,rule portfolio bound,neutral,,hold,0,rule,False,hold,0,,,,,,,sell,0.7391304347826086,0.0
+2026-01-17,A000,technical,hidden,,hold,0,,rule signal below threshold,neutral,,hold,0,rule,False,hold,0,,,,,,,,0.0,0.0
+2026-01-17,A001,fundamental,hidden,,hold,0,,rule portfolio bound,neutral,,hold,0,rule,False,hold,0,,,,,,,,0.0,0.0
+2026-01-17,A002,fundamental,hidden,,hold,0,,rule portfolio bound,neutral,,hold,0,rule,False,hold,0,,,,,,,,0.0,0.0
+2026-01-17,A003,technical,hidden,,buy,3,102.42,seeded fundamental or momentum rule,bullish,O00000140,expired,1,rule,False,buy,3,,,,,,,,0.0,0.003035941631573724
+2026-01-17,A004,technical,hidden,,buy,5,102.42,seeded fundamental or momentum rule,bullish,O00000143,expired,0,rule,False,buy,5,,,,,,,,0.0,0.003035941631573724
+2026-01-17,A005,technical,hidden,,hold,0,,rule signal below threshold,neutral,,hold,0,rule,False,hold,0,,,,,,,,0.0,0.0
+2026-01-17,A006,technical,hidden,,hold,0,,rule signal below threshold,neutral,,hold,0,rule,False,hold,0,,,,,,,,0.0,0.0
+2026-01-17,A007,technical,hidden,,hold,0,,rule portfolio bound,neutral,,hold,0,rule,False,hold,0,,,,,,,,0.0,0.0
+2026-01-17,A008,technical,hidden,,sell,1,101.8,seeded fundamental or momentum rule,bearish,O00000142,filled,1,rule,False,sell,1,,,,,,,,0.0,0.0030359416315738352
+2026-01-17,A009,technical,hidden,,buy,1,102.42,seeded fundamental or momentum rule,bullish,O00000144,expired,0,rule,False,buy,1,,,,,,,,0.0,0.003035941631573724
+2026-01-17,A010,technical,hidden,,buy,7,102.42,seeded fundamental or momentum rule,bullish,O00000141,expired,0,rule,False,buy,7,,,,,,,,0.0,0.003035941631573724
+2026-01-17,A011,fundamental,hidden,,hold,0,,rule portfolio bound,neutral,,hold,0,rule,False,hold,0,,,,,,,,0.0,0.0
+2026-01-17,A012,fundamental,hidden,,hold,0,,rule portfolio bound,neutral,,hold,0,rule,False,hold,0,,,,,,,,0.0,0.0
+2026-01-17,A013,technical,hidden,,hold,0,,rule portfolio bound,neutral,,hold,0,rule,False,hold,0,,,,,,,,0.0,0.0
+2026-01-17,A014,fundamental,hidden,,hold,0,,rule portfolio bound,neutral,,hold,0,rule,False,hold,0,,,,,,,,0.0,0.0
+2026-01-17,A015,fundamental,hidden,,hold,0,,rule portfolio bound,neutral,,hold,0,rule,False,hold,0,,,,,,,,0.0,0.0
+2026-01-17,A016,fundamental,hidden,,hold,0,,rule portfolio bound,neutral,,hold,0,rule,False,hold,0,,,,,,,,0.0,0.0
+2026-01-17,A017,fundamental,hidden,,buy,5,102.42,seeded fundamental or momentum rule,bullish,O00000145,expired,0,rule,False,buy,5,,,,,,,,0.0,0.003035941631573724
+2026-01-17,A018,fundamental,hidden,,hold,0,,rule portfolio bound,neutral,,hold,0,rule,False,hold,0,,,,,,,,0.0,0.0
+2026-01-17,A019,fundamental,hidden,,hold,0,,rule portfolio bound,neutral,,hold,0,rule,False,hold,0,,,,,,,,0.0,0.0
+2026-01-18,A000,technical,hidden,,buy,3,102.73,seeded fundamental or momentum rule,bullish,O00000149,expired,1,rule,False,buy,3,,,,,,,buy,0.9090909090909091,0.003026752587385273
+2026-01-18,A001,fundamental,hidden,,hold,0,,rule portfolio bound,neutral,,hold,0,rule,False,hold,0,,,,,,,buy,0.9090909090909091,0.0
+2026-01-18,A002,fundamental,hidden,,hold,0,,rule portfolio bound,neutral,,hold,0,rule,False,hold,0,,,,,,,buy,0.9090909090909091,0.0
+2026-01-18,A003,technical,hidden,,sell,3,102.11,seeded fundamental or momentum rule,bearish,O00000148,filled,3,rule,False,sell,3,,,,,,,buy,0.9090909090909091,0.003026752587385273
+2026-01-18,A004,technical,hidden,,sell,6,102.11,seeded fundamental or momentum rule,bearish,O00000150,filled,6,rule,False,sell,6,,,,,,,buy,0.9090909090909091,0.003026752587385273
+2026-01-18,A005,technical,hidden,,hold,0,,rule signal below threshold,neutral,,hold,0,rule,False,hold,0,,,,,,,buy,0.9090909090909091,0.0
+2026-01-18,A006,technical,hidden,,buy,3,102.73,seeded fundamental or momentum rule,bullish,O00000151,expired,0,rule,False,buy,3,,,,,,,buy,0.9090909090909091,0.003026752587385273
+2026-01-18,A007,technical,hidden,,buy,3,102.73,seeded fundamental or momentum rule,bullish,O00000146,filled,3,rule,False,buy,3,,,,,,,buy,0.9090909090909091,0.003026752587385273
+2026-01-18,A008,technical,hidden,,buy,5,102.73,seeded fundamental or momentum rule,bullish,O00000147,filled,5,rule,False,buy,5,,,,,,,buy,0.9090909090909091,0.003026752587385273
+2026-01-18,A009,technical,hidden,,buy,1,102.73,seeded fundamental or momentum rule,bullish,O00000152,expired,0,rule,False,buy,1,,,,,,,buy,0.9090909090909091,0.003026752587385273
+2026-01-18,A010,technical,hidden,,hold,0,,rule signal below threshold,neutral,,hold,0,rule,False,hold,0,,,,,,,buy,0.9090909090909091,0.0
+2026-01-18,A011,fundamental,hidden,,hold,0,,rule portfolio bound,neutral,,hold,0,rule,False,hold,0,,,,,,,buy,0.9090909090909091,0.0
+2026-01-18,A012,fundamental,hidden,,hold,0,,rule portfolio bound,neutral,,hold,0,rule,False,hold,0,,,,,,,buy,0.9090909090909091,0.0
+2026-01-18,A013,technical,hidden,,hold,0,,rule signal below threshold,neutral,,hold,0,rule,False,hold,0,,,,,,,buy,0.9090909090909091,0.0
+2026-01-18,A014,fundamental,hidden,,hold,0,,rule portfolio bound,neutral,,hold,0,rule,False,hold,0,,,,,,,buy,0.9090909090909091,0.0
+2026-01-18,A015,fundamental,hidden,,hold,0,,rule portfolio bound,neutral,,hold,0,rule,False,hold,0,,,,,,,buy,0.9090909090909091,0.0
+2026-01-18,A016,fundamental,hidden,,hold,0,,rule portfolio bound,neutral,,hold,0,rule,False,hold,0,,,,,,,buy,0.9090909090909091,0.0
+2026-01-18,A017,fundamental,hidden,,hold,0,,rule portfolio bound,neutral,,hold,0,rule,False,hold,0,,,,,,,buy,0.9090909090909091,0.0
+2026-01-18,A018,fundamental,hidden,,hold,0,,rule portfolio bound,neutral,,hold,0,rule,False,hold,0,,,,,,,buy,0.9090909090909091,0.0
+2026-01-18,A019,fundamental,hidden,,hold,0,,rule portfolio bound,neutral,,hold,0,rule,False,hold,0,,,,,,,buy,0.9090909090909091,0.0
+2026-01-19,A000,technical,hidden,,hold,0,,rule signal below threshold,neutral,,hold,0,rule,False,hold,0,,,,,,,buy,0.25,0.0
+2026-01-19,A001,fundamental,hidden,,hold,0,,rule portfolio bound,neutral,,hold,0,rule,False,hold,0,,,,,,,buy,0.25,0.0
+2026-01-19,A002,fundamental,hidden,,hold,0,,rule portfolio bound,neutral,,hold,0,rule,False,hold,0,,,,,,,buy,0.25,0.0
+2026-01-19,A003,technical,hidden,,sell,3,102.42,seeded fundamental or momentum rule,bearish,O00000155,filled,3,rule,False,sell,3,,,,,,,buy,0.25,0.0030176190012655146
+2026-01-19,A004,technical,hidden,,hold,0,,rule portfolio bound,neutral,,hold,0,rule,False,hold,0,,,,,,,buy,0.25,0.0
+2026-01-19,A005,technical,hidden,,hold,0,,rule portfolio bound,neutral,,hold,0,rule,False,hold,0,,,,,,,buy,0.25,0.0
+2026-01-19,A006,technical,hidden,,hold,0,,rule signal below threshold,neutral,,hold,0,rule,False,hold,0,,,,,,,buy,0.25,0.0
+2026-01-19,A007,technical,hidden,,buy,3,103.04,seeded fundamental or momentum rule,bullish,O00000153,filled,3,rule,False,buy,3,,,,,,,buy,0.25,0.0030176190012654036
+2026-01-19,A008,technical,hidden,,buy,5,103.04,seeded fundamental or momentum rule,bullish,O00000156,expired,0,rule,False,buy,5,,,,,,,buy,0.25,0.0030176190012654036
+2026-01-19,A009,technical,hidden,,buy,1,103.04,seeded fundamental or momentum rule,bullish,O00000154,expired,0,rule,False,buy,1,,,,,,,buy,0.25,0.0030176190012654036
+2026-01-19,A010,technical,hidden,,buy,7,103.04,seeded fundamental or momentum rule,bullish,O00000157,expired,0,rule,False,buy,7,,,,,,,buy,0.25,0.0030176190012654036
+2026-01-19,A011,fundamental,hidden,,hold,0,,rule portfolio bound,neutral,,hold,0,rule,False,hold,0,,,,,,,buy,0.25,0.0
+2026-01-19,A012,fundamental,hidden,,hold,0,,rule portfolio bound,neutral,,hold,0,rule,False,hold,0,,,,,,,buy,0.25,0.0
+2026-01-19,A013,technical,hidden,,hold,0,,rule signal below threshold,neutral,,hold,0,rule,False,hold,0,,,,,,,buy,0.25,0.0
+2026-01-19,A014,fundamental,hidden,,hold,0,,rule portfolio bound,neutral,,hold,0,rule,False,hold,0,,,,,,,buy,0.25,0.0
+2026-01-19,A015,fundamental,hidden,,hold,0,,rule portfolio bound,neutral,,hold,0,rule,False,hold,0,,,,,,,buy,0.25,0.0
+2026-01-19,A016,fundamental,hidden,,hold,0,,rule portfolio bound,neutral,,hold,0,rule,False,hold,0,,,,,,,buy,0.25,0.0
+2026-01-19,A017,fundamental,hidden,,hold,0,,rule portfolio bound,neutral,,hold,0,rule,False,hold,0,,,,,,,buy,0.25,0.0
+2026-01-19,A018,fundamental,hidden,,hold,0,,rule portfolio bound,neutral,,hold,0,rule,False,hold,0,,,,,,,buy,0.25,0.0
+2026-01-19,A019,fundamental,hidden,,hold,0,,rule portfolio bound,neutral,,hold,0,rule,False,hold,0,,,,,,,buy,0.25,0.0
+2026-01-20,A000,technical,hidden,,buy,2,103.35,seeded fundamental or momentum rule,bullish,O00000160,expired,0,rule,False,buy,2,,,,,,,buy,0.6842105263157895,0.0030085403726707316
+2026-01-20,A001,fundamental,hidden,,hold,0,,rule portfolio bound,neutral,,hold,0,rule,False,hold,0,,,,,,,buy,0.6842105263157895,0.0
+2026-01-20,A002,fundamental,hidden,,hold,0,,rule portfolio bound,neutral,,hold,0,rule,False,hold,0,,,,,,,buy,0.6842105263157895,0.0
+2026-01-20,A003,technical,hidden,,buy,3,103.35,seeded fundamental or momentum rule,bullish,O00000166,expired,0,rule,False,buy,3,,,,,,,buy,0.6842105263157895,0.0030085403726707316
+2026-01-20,A004,technical,hidden,,buy,6,103.35,seeded fundamental or momentum rule,bullish,O00000163,expired,0,rule,False,buy,6,,,,,,,buy,0.6842105263157895,0.0030085403726707316
+2026-01-20,A005,technical,hidden,,buy,4,103.35,seeded fundamental or momentum rule,bullish,O00000165,expired,0,rule,False,buy,4,,,,,,,buy,0.6842105263157895,0.0030085403726707316
+2026-01-20,A006,technical,hidden,,buy,3,103.35,seeded fundamental or momentum rule,bullish,O00000162,expired,0,rule,False,buy,3,,,,,,,buy,0.6842105263157895,0.0030085403726707316
+2026-01-20,A007,technical,hidden,,hold,0,,rule signal below threshold,neutral,,hold,0,rule,False,hold,0,,,,,,,buy,0.6842105263157895,0.0
+2026-01-20,A008,technical,hidden,,buy,5,103.35,seeded fundamental or momentum rule,bullish,O00000159,expired,0,rule,False,buy,5,,,,,,,buy,0.6842105263157895,0.0030085403726707316
+2026-01-20,A009,technical,hidden,,buy,1,103.35,seeded fundamental or momentum rule,bullish,O00000161,expired,0,rule,False,buy,1,,,,,,,buy,0.6842105263157895,0.0030085403726707316
+2026-01-20,A010,technical,hidden,,buy,7,103.35,seeded fundamental or momentum rule,bullish,O00000164,expired,0,rule,False,buy,7,,,,,,,buy,0.6842105263157895,0.0030085403726707316
+2026-01-20,A011,fundamental,hidden,,hold,0,,rule portfolio bound,neutral,,hold,0,rule,False,hold,0,,,,,,,buy,0.6842105263157895,0.0
+2026-01-20,A012,fundamental,hidden,,hold,0,,rule portfolio bound,neutral,,hold,0,rule,False,hold,0,,,,,,,buy,0.6842105263157895,0.0
+2026-01-20,A013,technical,hidden,,buy,3,103.35,seeded fundamental or momentum rule,bullish,O00000158,expired,0,rule,False,buy,3,,,,,,,buy,0.6842105263157895,0.0030085403726707316
+2026-01-20,A014,fundamental,hidden,,hold,0,,rule portfolio bound,neutral,,hold,0,rule,False,hold,0,,,,,,,buy,0.6842105263157895,0.0
+2026-01-20,A015,fundamental,hidden,,hold,0,,rule portfolio bound,neutral,,hold,0,rule,False,hold,0,,,,,,,buy,0.6842105263157895,0.0
+2026-01-20,A016,fundamental,hidden,,hold,0,,rule portfolio bound,neutral,,hold,0,rule,False,hold,0,,,,,,,buy,0.6842105263157895,0.0
+2026-01-20,A017,fundamental,hidden,,hold,0,,rule portfolio bound,neutral,,hold,0,rule,False,hold,0,,,,,,,buy,0.6842105263157895,0.0
+2026-01-20,A018,fundamental,hidden,,hold,0,,rule portfolio bound,neutral,,hold,0,rule,False,hold,0,,,,,,,buy,0.6842105263157895,0.0
+2026-01-20,A019,fundamental,hidden,,hold,0,,rule portfolio bound,neutral,,hold,0,rule,False,hold,0,,,,,,,buy,0.6842105263157895,0.0
+2026-01-21,A000,technical,hidden,,buy,2,103.35,seeded fundamental or momentum rule,bullish,O00000173,expired,0,rule,False,buy,2,,,,,,,buy,1.0,0.0030085403726707316
+2026-01-21,A001,fundamental,hidden,,hold,0,,rule portfolio bound,neutral,,hold,0,rule,False,hold,0,,,,,,,buy,1.0,0.0
+2026-01-21,A002,fundamental,hidden,,hold,0,,rule portfolio bound,neutral,,hold,0,rule,False,hold,0,,,,,,,buy,1.0,0.0
+2026-01-21,A003,technical,hidden,,buy,3,103.35,seeded fundamental or momentum rule,bullish,O00000171,expired,0,rule,False,buy,3,,,,,,,buy,1.0,0.0030085403726707316
+2026-01-21,A004,technical,hidden,,buy,6,103.35,seeded fundamental or momentum rule,bullish,O00000169,expired,0,rule,False,buy,6,,,,,,,buy,1.0,0.0030085403726707316
+2026-01-21,A005,technical,hidden,,buy,4,103.35,seeded fundamental or momentum rule,bullish,O00000167,expired,0,rule,False,buy,4,,,,,,,buy,1.0,0.0030085403726707316
+2026-01-21,A006,technical,hidden,,buy,3,103.35,seeded fundamental or momentum rule,bullish,O00000168,expired,0,rule,False,buy,3,,,,,,,buy,1.0,0.0030085403726707316
+2026-01-21,A007,technical,hidden,,buy,3,103.35,seeded fundamental or momentum rule,bullish,O00000175,expired,0,rule,False,buy,3,,,,,,,buy,1.0,0.0030085403726707316
+2026-01-21,A008,technical,hidden,,buy,5,103.35,seeded fundamental or momentum rule,bullish,O00000174,expired,0,rule,False,buy,5,,,,,,,buy,1.0,0.0030085403726707316
+2026-01-21,A009,technical,hidden,,buy,1,103.35,seeded fundamental or momentum rule,bullish,O00000172,expired,0,rule,False,buy,1,,,,,,,buy,1.0,0.0030085403726707316
+2026-01-21,A010,technical,hidden,,buy,7,103.35,seeded fundamental or momentum rule,bullish,O00000176,expired,0,rule,False,buy,7,,,,,,,buy,1.0,0.0030085403726707316
+2026-01-21,A011,fundamental,hidden,,hold,0,,rule portfolio bound,neutral,,hold,0,rule,False,hold,0,,,,,,,buy,1.0,0.0
+2026-01-21,A012,fundamental,hidden,,hold,0,,rule portfolio bound,neutral,,hold,0,rule,False,hold,0,,,,,,,buy,1.0,0.0
+2026-01-21,A013,technical,hidden,,buy,3,103.35,seeded fundamental or momentum rule,bullish,O00000170,expired,0,rule,False,buy,3,,,,,,,buy,1.0,0.0030085403726707316
+2026-01-21,A014,fundamental,hidden,,hold,0,,rule portfolio bound,neutral,,hold,0,rule,False,hold,0,,,,,,,buy,1.0,0.0
+2026-01-21,A015,fundamental,hidden,,hold,0,,rule portfolio bound,neutral,,hold,0,rule,False,hold,0,,,,,,,buy,1.0,0.0
+2026-01-21,A016,fundamental,hidden,,hold,0,,rule portfolio bound,neutral,,hold,0,rule,False,hold,0,,,,,,,buy,1.0,0.0
+2026-01-21,A017,fundamental,hidden,,hold,0,,rule portfolio bound,neutral,,hold,0,rule,False,hold,0,,,,,,,buy,1.0,0.0
+2026-01-21,A018,fundamental,hidden,,hold,0,,rule portfolio bound,neutral,,hold,0,rule,False,hold,0,,,,,,,buy,1.0,0.0
+2026-01-21,A019,fundamental,hidden,,hold,0,,rule portfolio bound,neutral,,hold,0,rule,False,hold,0,,,,,,,buy,1.0,0.0
+2026-01-22,A000,technical,hidden,,buy,2,103.35,seeded fundamental or momentum rule,bullish,O00000180,expired,0,rule,False,buy,2,,,,,,,buy,1.0,0.0030085403726707316
+2026-01-22,A001,fundamental,hidden,,hold,0,,rule portfolio bound,neutral,,hold,0,rule,False,hold,0,,,,,,,buy,1.0,0.0
+2026-01-22,A002,fundamental,hidden,,hold,0,,rule portfolio bound,neutral,,hold,0,rule,False,hold,0,,,,,,,buy,1.0,0.0
+2026-01-22,A003,technical,hidden,,buy,3,103.35,seeded fundamental or momentum rule,bullish,O00000184,expired,0,rule,False,buy,3,,,,,,,buy,1.0,0.0030085403726707316
+2026-01-22,A004,technical,hidden,,buy,6,103.35,seeded fundamental or momentum rule,bullish,O00000181,expired,0,rule,False,buy,6,,,,,,,buy,1.0,0.0030085403726707316
+2026-01-22,A005,technical,hidden,,buy,4,103.35,seeded fundamental or momentum rule,bullish,O00000178,expired,0,rule,False,buy,4,,,,,,,buy,1.0,0.0030085403726707316
+2026-01-22,A006,technical,hidden,,hold,0,,rule signal below threshold,neutral,,hold,0,rule,False,hold,0,,,,,,,buy,1.0,0.0
+2026-01-22,A007,technical,hidden,,buy,3,103.35,seeded fundamental or momentum rule,bullish,O00000182,expired,0,rule,False,buy,3,,,,,,,buy,1.0,0.0030085403726707316
+2026-01-22,A008,technical,hidden,,buy,5,103.35,seeded fundamental or momentum rule,bullish,O00000179,expired,0,rule,False,buy,5,,,,,,,buy,1.0,0.0030085403726707316
+2026-01-22,A009,technical,hidden,,buy,1,103.35,seeded fundamental or momentum rule,bullish,O00000183,expired,0,rule,False,buy,1,,,,,,,buy,1.0,0.0030085403726707316
+2026-01-22,A010,technical,hidden,,hold,0,,rule signal below threshold,neutral,,hold,0,rule,False,hold,0,,,,,,,buy,1.0,0.0
+2026-01-22,A011,fundamental,hidden,,hold,0,,rule portfolio bound,neutral,,hold,0,rule,False,hold,0,,,,,,,buy,1.0,0.0
+2026-01-22,A012,fundamental,hidden,,hold,0,,rule portfolio bound,neutral,,hold,0,rule,False,hold,0,,,,,,,buy,1.0,0.0
+2026-01-22,A013,technical,hidden,,buy,3,103.35,seeded fundamental or momentum rule,bullish,O00000177,expired,0,rule,False,buy,3,,,,,,,buy,1.0,0.0030085403726707316
+2026-01-22,A014,fundamental,hidden,,hold,0,,rule portfolio bound,neutral,,hold,0,rule,False,hold,0,,,,,,,buy,1.0,0.0
+2026-01-22,A015,fundamental,hidden,,hold,0,,rule portfolio bound,neutral,,hold,0,rule,False,hold,0,,,,,,,buy,1.0,0.0
+2026-01-22,A016,fundamental,hidden,,hold,0,,rule portfolio bound,neutral,,hold,0,rule,False,hold,0,,,,,,,buy,1.0,0.0
+2026-01-22,A017,fundamental,hidden,,hold,0,,rule portfolio bound,neutral,,hold,0,rule,False,hold,0,,,,,,,buy,1.0,0.0
+2026-01-22,A018,fundamental,hidden,,hold,0,,rule portfolio bound,neutral,,hold,0,rule,False,hold,0,,,,,,,buy,1.0,0.0
+2026-01-22,A019,fundamental,hidden,,hold,0,,rule portfolio bound,neutral,,hold,0,rule,False,hold,0,,,,,,,buy,1.0,0.0
+2026-01-23,A000,technical,hidden,,sell,4,102.73,seeded fundamental or momentum rule,bearish,O00000192,filled,4,rule,False,sell,4,,,,,,,buy,1.0,0.0030085403726708426
+2026-01-23,A001,fundamental,hidden,,hold,0,,rule portfolio bound,neutral,,hold,0,rule,False,hold,0,,,,,,,buy,1.0,0.0
+2026-01-23,A002,fundamental,hidden,,hold,0,,rule portfolio bound,neutral,,hold,0,rule,False,hold,0,,,,,,,buy,1.0,0.0
+2026-01-23,A003,technical,hidden,,buy,3,103.35,seeded fundamental or momentum rule,bullish,O00000189,expired,0,rule,False,buy,3,,,,,,,buy,1.0,0.0030085403726707316
+2026-01-23,A004,technical,hidden,,buy,6,103.35,seeded fundamental or momentum rule,bullish,O00000188,expired,3,rule,False,buy,6,,,,,,,buy,1.0,0.0030085403726707316
+2026-01-23,A005,technical,hidden,,buy,4,103.35,seeded fundamental or momentum rule,bullish,O00000191,expired,0,rule,False,buy,4,,,,,,,buy,1.0,0.0030085403726707316
+2026-01-23,A006,technical,hidden,,sell,3,102.73,seeded fundamental or momentum rule,bearish,O00000186,filled,3,rule,False,sell,3,,,,,,,buy,1.0,0.0030085403726708426
+2026-01-23,A007,technical,hidden,,hold,0,,rule signal below threshold,neutral,,hold,0,rule,False,hold,0,,,,,,,buy,1.0,0.0
+2026-01-23,A008,technical,hidden,,buy,5,103.35,seeded fundamental or momentum rule,bullish,O00000193,expired,0,rule,False,buy,5,,,,,,,buy,1.0,0.0030085403726707316
+2026-01-23,A009,technical,hidden,,buy,1,103.35,seeded fundamental or momentum rule,bullish,O00000187,filled,1,rule,False,buy,1,,,,,,,buy,1.0,0.0030085403726707316
+2026-01-23,A010,technical,hidden,,buy,7,103.35,seeded fundamental or momentum rule,bullish,O00000190,expired,0,rule,False,buy,7,,,,,,,buy,1.0,0.0030085403726707316
+2026-01-23,A011,fundamental,hidden,,hold,0,,rule portfolio bound,neutral,,hold,0,rule,False,hold,0,,,,,,,buy,1.0,0.0
+2026-01-23,A012,fundamental,hidden,,hold,0,,rule portfolio bound,neutral,,hold,0,rule,False,hold,0,,,,,,,buy,1.0,0.0
+2026-01-23,A013,technical,hidden,,buy,3,103.35,seeded fundamental or momentum rule,bullish,O00000185,filled,3,rule,False,buy,3,,,,,,,buy,1.0,0.0030085403726707316
+2026-01-23,A014,fundamental,hidden,,hold,0,,rule portfolio bound,neutral,,hold,0,rule,False,hold,0,,,,,,,buy,1.0,0.0
+2026-01-23,A015,fundamental,hidden,,hold,0,,rule portfolio bound,neutral,,hold,0,rule,False,hold,0,,,,,,,buy,1.0,0.0
+2026-01-23,A016,fundamental,hidden,,hold,0,,rule portfolio bound,neutral,,hold,0,rule,False,hold,0,,,,,,,buy,1.0,0.0
+2026-01-23,A017,fundamental,hidden,,hold,0,,rule portfolio bound,neutral,,hold,0,rule,False,hold,0,,,,,,,buy,1.0,0.0
+2026-01-23,A018,fundamental,hidden,,hold,0,,rule portfolio bound,neutral,,hold,0,rule,False,hold,0,,,,,,,buy,1.0,0.0
+2026-01-23,A019,fundamental,hidden,,hold,0,,rule portfolio bound,neutral,,hold,0,rule,False,hold,0,,,,,,,buy,1.0,0.0
+2026-01-24,A000,technical,hidden,,buy,4,103.66,seeded fundamental or momentum rule,bullish,O00000196,expired,0,rule,False,buy,4,,,,,,,buy,0.6111111111111112,0.002999516207063291
+2026-01-24,A001,fundamental,hidden,,hold,0,,rule portfolio bound,neutral,,hold,0,rule,False,hold,0,,,,,,,buy,0.6111111111111112,0.0
+2026-01-24,A002,fundamental,hidden,,hold,0,,rule portfolio bound,neutral,,hold,0,rule,False,hold,0,,,,,,,buy,0.6111111111111112,0.0
+2026-01-24,A003,technical,hidden,,buy,3,103.66,seeded fundamental or momentum rule,bullish,O00000195,expired,0,rule,False,buy,3,,,,,,,buy,0.6111111111111112,0.002999516207063291
+2026-01-24,A004,technical,hidden,,buy,6,103.66,seeded fundamental or momentum rule,bullish,O00000194,expired,5,rule,False,buy,6,,,,,,,buy,0.6111111111111112,0.002999516207063291
+2026-01-24,A005,technical,hidden,,hold,0,,rule portfolio bound,neutral,,hold,0,rule,False,hold,0,,,,,,,buy,0.6111111111111112,0.0
+2026-01-24,A006,technical,hidden,,hold,0,,rule signal below threshold,neutral,,hold,0,rule,False,hold,0,,,,,,,buy,0.6111111111111112,0.0
+2026-01-24,A007,technical,hidden,,buy,3,103.66,seeded fundamental or momentum rule,bullish,O00000198,expired,0,rule,False,buy,3,,,,,,,buy,0.6111111111111112,0.002999516207063291
+2026-01-24,A008,technical,hidden,,sell,5,103.04,seeded fundamental or momentum rule,bearish,O00000199,filled,5,rule,False,sell,5,,,,,,,buy,0.6111111111111112,0.002999516207063291
+2026-01-24,A009,technical,hidden,,hold,0,,rule portfolio bound,neutral,,hold,0,rule,False,hold,0,,,,,,,buy,0.6111111111111112,0.0
+2026-01-24,A010,technical,hidden,,buy,7,103.66,seeded fundamental or momentum rule,bullish,O00000197,expired,0,rule,False,buy,7,,,,,,,buy,0.6111111111111112,0.002999516207063291
+2026-01-24,A011,fundamental,hidden,,hold,0,,rule portfolio bound,neutral,,hold,0,rule,False,hold,0,,,,,,,buy,0.6111111111111112,0.0
+2026-01-24,A012,fundamental,hidden,,hold,0,,rule portfolio bound,neutral,,hold,0,rule,False,hold,0,,,,,,,buy,0.6111111111111112,0.0
+2026-01-24,A013,technical,hidden,,hold,0,,rule signal below threshold,neutral,,hold,0,rule,False,hold,0,,,,,,,buy,0.6111111111111112,0.0
+2026-01-24,A014,fundamental,hidden,,hold,0,,rule portfolio bound,neutral,,hold,0,rule,False,hold,0,,,,,,,buy,0.6111111111111112,0.0
+2026-01-24,A015,fundamental,hidden,,hold,0,,rule portfolio bound,neutral,,hold,0,rule,False,hold,0,,,,,,,buy,0.6111111111111112,0.0
+2026-01-24,A016,fundamental,hidden,,hold,0,,rule portfolio bound,neutral,,hold,0,rule,False,hold,0,,,,,,,buy,0.6111111111111112,0.0
+2026-01-24,A017,fundamental,hidden,,hold,0,,rule portfolio bound,neutral,,hold,0,rule,False,hold,0,,,,,,,buy,0.6111111111111112,0.0
+2026-01-24,A018,fundamental,hidden,,hold,0,,rule portfolio bound,neutral,,hold,0,rule,False,hold,0,,,,,,,buy,0.6111111111111112,0.0
+2026-01-24,A019,fundamental,hidden,,hold,0,,rule portfolio bound,neutral,,hold,0,rule,False,hold,0,,,,,,,buy,0.6111111111111112,0.0
+2026-01-25,A000,technical,hidden,,hold,0,,rule signal below threshold,neutral,,hold,0,rule,False,hold,0,,,,,,,buy,0.6428571428571429,0.0
+2026-01-25,A001,fundamental,hidden,,hold,0,,rule portfolio bound,neutral,,hold,0,rule,False,hold,0,,,,,,,buy,0.6428571428571429,0.0
+2026-01-25,A002,fundamental,hidden,,hold,0,,rule portfolio bound,neutral,,hold,0,rule,False,hold,0,,,,,,,buy,0.6428571428571429,0.0
+2026-01-25,A003,technical,hidden,,buy,3,103.97,seeded fundamental or momentum rule,bullish,O00000206,expired,0,rule,False,buy,3,,,,,,,buy,0.6428571428571429,0.0029905460158210495
+2026-01-25,A004,technical,hidden,,buy,3,103.97,seeded fundamental or momentum rule,bullish,O00000201,expired,0,rule,False,buy,3,,,,,,,buy,0.6428571428571429,0.0029905460158210495
+2026-01-25,A005,technical,hidden,,buy,4,103.97,seeded fundamental or momentum rule,bullish,O00000204,expired,0,rule,False,buy,4,,,,,,,buy,0.6428571428571429,0.0029905460158210495
+2026-01-25,A006,technical,hidden,,buy,3,103.97,seeded fundamental or momentum rule,bullish,O00000202,expired,0,rule,False,buy,3,,,,,,,buy,0.6428571428571429,0.0029905460158210495
+2026-01-25,A007,technical,hidden,,hold,0,,rule signal below threshold,neutral,,hold,0,rule,False,hold,0,,,,,,,buy,0.6428571428571429,0.0
+2026-01-25,A008,technical,hidden,,buy,5,103.97,seeded fundamental or momentum rule,bullish,O00000203,expired,0,rule,False,buy,5,,,,,,,buy,0.6428571428571429,0.0029905460158210495
+2026-01-25,A009,technical,hidden,,hold,0,,rule portfolio bound,neutral,,hold,0,rule,False,hold,0,,,,,,,buy,0.6428571428571429,0.0
+2026-01-25,A010,technical,hidden,,buy,7,103.97,seeded fundamental or momentum rule,bullish,O00000200,expired,0,rule,False,buy,7,,,,,,,buy,0.6428571428571429,0.0029905460158210495
+2026-01-25,A011,fundamental,hidden,,hold,0,,rule portfolio bound,neutral,,hold,0,rule,False,hold,0,,,,,,,buy,0.6428571428571429,0.0
+2026-01-25,A012,fundamental,hidden,,hold,0,,rule portfolio bound,neutral,,hold,0,rule,False,hold,0,,,,,,,buy,0.6428571428571429,0.0
+2026-01-25,A013,technical,hidden,,buy,3,103.97,seeded fundamental or momentum rule,bullish,O00000205,expired,0,rule,False,buy,3,,,,,,,buy,0.6428571428571429,0.0029905460158210495
+2026-01-25,A014,fundamental,hidden,,hold,0,,rule portfolio bound,neutral,,hold,0,rule,False,hold,0,,,,,,,buy,0.6428571428571429,0.0
+2026-01-25,A015,fundamental,hidden,,hold,0,,rule portfolio bound,neutral,,hold,0,rule,False,hold,0,,,,,,,buy,0.6428571428571429,0.0
+2026-01-25,A016,fundamental,hidden,,hold,0,,rule portfolio bound,neutral,,hold,0,rule,False,hold,0,,,,,,,buy,0.6428571428571429,0.0
+2026-01-25,A017,fundamental,hidden,,hold,0,,rule portfolio bound,neutral,,hold,0,rule,False,hold,0,,,,,,,buy,0.6428571428571429,0.0
+2026-01-25,A018,fundamental,hidden,,hold,0,,rule portfolio bound,neutral,,hold,0,rule,False,hold,0,,,,,,,buy,0.6428571428571429,0.0
+2026-01-25,A019,fundamental,hidden,,hold,0,,rule portfolio bound,neutral,,hold,0,rule,False,hold,0,,,,,,,buy,0.6428571428571429,0.0
+2026-01-26,A000,technical,hidden,,buy,4,103.97,seeded fundamental or momentum rule,bullish,O00000207,expired,0,rule,False,buy,4,,,,,,,buy,1.0,0.0029905460158210495
+2026-01-26,A001,fundamental,hidden,,hold,0,,rule portfolio bound,neutral,,hold,0,rule,False,hold,0,,,,,,,buy,1.0,0.0
+2026-01-26,A002,fundamental,hidden,,hold,0,,rule portfolio bound,neutral,,hold,0,rule,False,hold,0,,,,,,,buy,1.0,0.0
+2026-01-26,A003,technical,hidden,,buy,3,103.97,seeded fundamental or momentum rule,bullish,O00000212,expired,0,rule,False,buy,3,,,,,,,buy,1.0,0.0029905460158210495
+2026-01-26,A004,technical,hidden,,buy,3,103.97,seeded fundamental or momentum rule,bullish,O00000210,expired,0,rule,False,buy,3,,,,,,,buy,1.0,0.0029905460158210495
+2026-01-26,A005,technical,hidden,,hold,0,,rule portfolio bound,neutral,,hold,0,rule,False,hold,0,,,,,,,buy,1.0,0.0
+2026-01-26,A006,technical,hidden,,buy,3,103.97,seeded fundamental or momentum rule,bullish,O00000209,expired,0,rule,False,buy,3,,,,,,,buy,1.0,0.0029905460158210495
+2026-01-26,A007,technical,hidden,,buy,3,103.97,seeded fundamental or momentum rule,bullish,O00000214,expired,0,rule,False,buy,3,,,,,,,buy,1.0,0.0029905460158210495
+2026-01-26,A008,technical,hidden,,buy,5,103.97,seeded fundamental or momentum rule,bullish,O00000208,expired,0,rule,False,buy,5,,,,,,,buy,1.0,0.0029905460158210495
+2026-01-26,A009,technical,hidden,,hold,0,,rule portfolio bound,neutral,,hold,0,rule,False,hold,0,,,,,,,buy,1.0,0.0
+2026-01-26,A010,technical,hidden,,buy,7,103.97,seeded fundamental or momentum rule,bullish,O00000211,expired,0,rule,False,buy,7,,,,,,,buy,1.0,0.0029905460158210495
+2026-01-26,A011,fundamental,hidden,,hold,0,,rule portfolio bound,neutral,,hold,0,rule,False,hold,0,,,,,,,buy,1.0,0.0
+2026-01-26,A012,fundamental,hidden,,hold,0,,rule portfolio bound,neutral,,hold,0,rule,False,hold,0,,,,,,,buy,1.0,0.0
+2026-01-26,A013,technical,hidden,,buy,3,103.97,seeded fundamental or momentum rule,bullish,O00000213,expired,0,rule,False,buy,3,,,,,,,buy,1.0,0.0029905460158210495
+2026-01-26,A014,fundamental,hidden,,hold,0,,rule portfolio bound,neutral,,hold,0,rule,False,hold,0,,,,,,,buy,1.0,0.0
+2026-01-26,A015,fundamental,hidden,,hold,0,,rule portfolio bound,neutral,,hold,0,rule,False,hold,0,,,,,,,buy,1.0,0.0
+2026-01-26,A016,fundamental,hidden,,hold,0,,rule portfolio bound,neutral,,hold,0,rule,False,hold,0,,,,,,,buy,1.0,0.0
+2026-01-26,A017,fundamental,hidden,,hold,0,,rule portfolio bound,neutral,,hold,0,rule,False,hold,0,,,,,,,buy,1.0,0.0
+2026-01-26,A018,fundamental,hidden,,hold,0,,rule portfolio bound,neutral,,hold,0,rule,False,hold,0,,,,,,,buy,1.0,0.0
+2026-01-26,A019,fundamental,hidden,,hold,0,,rule portfolio bound,neutral,,hold,0,rule,False,hold,0,,,,,,,buy,1.0,0.0
+2026-01-27,A000,technical,hidden,,hold,0,,rule signal below threshold,neutral,,hold,0,rule,False,hold,0,,,,,,,buy,1.0,0.0
+2026-01-27,A001,fundamental,hidden,,hold,0,,rule portfolio bound,neutral,,hold,0,rule,False,hold,0,,,,,,,buy,1.0,0.0
+2026-01-27,A002,fundamental,hidden,,hold,0,,rule portfolio bound,neutral,,hold,0,rule,False,hold,0,,,,,,,buy,1.0,0.0
+2026-01-27,A003,technical,hidden,,buy,3,103.97,seeded fundamental or momentum rule,bullish,O00000216,expired,0,rule,False,buy,3,,,,,,,buy,1.0,0.0029905460158210495
+2026-01-27,A004,technical,hidden,,hold,0,,rule signal below threshold,neutral,,hold,0,rule,False,hold,0,,,,,,,buy,1.0,0.0
+2026-01-27,A005,technical,hidden,,buy,4,103.97,seeded fundamental or momentum rule,bullish,O00000217,expired,0,rule,False,buy,4,,,,,,,buy,1.0,0.0029905460158210495
+2026-01-27,A006,technical,hidden,,hold,0,,rule signal below threshold,neutral,,hold,0,rule,False,hold,0,,,,,,,buy,1.0,0.0
+2026-01-27,A007,technical,hidden,,hold,0,,rule signal below threshold,neutral,,hold,0,rule,False,hold,0,,,,,,,buy,1.0,0.0
+2026-01-27,A008,technical,hidden,,hold,0,,rule portfolio bound,neutral,,hold,0,rule,False,hold,0,,,,,,,buy,1.0,0.0
+2026-01-27,A009,technical,hidden,,hold,0,,rule portfolio bound,neutral,,hold,0,rule,False,hold,0,,,,,,,buy,1.0,0.0
+2026-01-27,A010,technical,hidden,,buy,7,103.97,seeded fundamental or momentum rule,bullish,O00000218,expired,0,rule,False,buy,7,,,,,,,buy,1.0,0.0029905460158210495
+2026-01-27,A011,fundamental,hidden,,hold,0,,rule portfolio bound,neutral,,hold,0,rule,False,hold,0,,,,,,,buy,1.0,0.0
+2026-01-27,A012,fundamental,hidden,,hold,0,,rule portfolio bound,neutral,,hold,0,rule,False,hold,0,,,,,,,buy,1.0,0.0
+2026-01-27,A013,technical,hidden,,buy,3,103.97,seeded fundamental or momentum rule,bullish,O00000215,expired,0,rule,False,buy,3,,,,,,,buy,1.0,0.0029905460158210495
+2026-01-27,A014,fundamental,hidden,,hold,0,,rule portfolio bound,neutral,,hold,0,rule,False,hold,0,,,,,,,buy,1.0,0.0
+2026-01-27,A015,fundamental,hidden,,hold,0,,rule portfolio bound,neutral,,hold,0,rule,False,hold,0,,,,,,,buy,1.0,0.0
+2026-01-27,A016,fundamental,hidden,,hold,0,,rule portfolio bound,neutral,,hold,0,rule,False,hold,0,,,,,,,buy,1.0,0.0
+2026-01-27,A017,fundamental,hidden,,hold,0,,rule portfolio bound,neutral,,hold,0,rule,False,hold,0,,,,,,,buy,1.0,0.0
+2026-01-27,A018,fundamental,hidden,,hold,0,,rule portfolio bound,neutral,,hold,0,rule,False,hold,0,,,,,,,buy,1.0,0.0
+2026-01-27,A019,fundamental,hidden,,hold,0,,rule portfolio bound,neutral,,hold,0,rule,False,hold,0,,,,,,,buy,1.0,0.0
+2026-01-28,A000,technical,hidden,,buy,4,103.97,seeded fundamental or momentum rule,bullish,O00000221,expired,0,rule,False,buy,4,,,,,,,buy,1.0,0.0029905460158210495
+2026-01-28,A001,fundamental,hidden,,hold,0,,rule portfolio bound,neutral,,hold,0,rule,False,hold,0,,,,,,,buy,1.0,0.0
+2026-01-28,A002,fundamental,hidden,,hold,0,,rule portfolio bound,neutral,,hold,0,rule,False,hold,0,,,,,,,buy,1.0,0.0
+2026-01-28,A003,technical,hidden,,sell,3,103.35,seeded fundamental or momentum rule,bearish,O00000224,filled,3,rule,False,sell,3,,,,,,,buy,1.0,0.0029905460158209385
+2026-01-28,A004,technical,hidden,,buy,3,103.97,seeded fundamental or momentum rule,bullish,O00000223,expired,0,rule,False,buy,3,,,,,,,buy,1.0,0.0029905460158210495
+2026-01-28,A005,technical,hidden,,buy,4,103.97,seeded fundamental or momentum rule,bullish,O00000220,expired,0,rule,False,buy,4,,,,,,,buy,1.0,0.0029905460158210495
+2026-01-28,A006,technical,hidden,,buy,3,103.97,seeded fundamental or momentum rule,bullish,O00000222,expired,0,rule,False,buy,3,,,,,,,buy,1.0,0.0029905460158210495
+2026-01-28,A007,technical,hidden,,hold,0,,rule signal below threshold,neutral,,hold,0,rule,False,hold,0,,,,,,,buy,1.0,0.0
+2026-01-28,A008,technical,hidden,,buy,5,103.97,seeded fundamental or momentum rule,bullish,O00000219,expired,3,rule,False,buy,5,,,,,,,buy,1.0,0.0029905460158210495
+2026-01-28,A009,technical,hidden,,hold,0,,rule portfolio bound,neutral,,hold,0,rule,False,hold,0,,,,,,,buy,1.0,0.0
+2026-01-28,A010,technical,hidden,,hold,0,,rule portfolio bound,neutral,,hold,0,rule,False,hold,0,,,,,,,buy,1.0,0.0
+2026-01-28,A011,fundamental,hidden,,hold,0,,rule portfolio bound,neutral,,hold,0,rule,False,hold,0,,,,,,,buy,1.0,0.0
+2026-01-28,A012,fundamental,hidden,,hold,0,,rule portfolio bound,neutral,,hold,0,rule,False,hold,0,,,,,,,buy,1.0,0.0
+2026-01-28,A013,technical,hidden,,hold,0,,rule signal below threshold,neutral,,hold,0,rule,False,hold,0,,,,,,,buy,1.0,0.0
+2026-01-28,A014,fundamental,hidden,,hold,0,,rule portfolio bound,neutral,,hold,0,rule,False,hold,0,,,,,,,buy,1.0,0.0
+2026-01-28,A015,fundamental,hidden,,hold,0,,rule portfolio bound,neutral,,hold,0,rule,False,hold,0,,,,,,,buy,1.0,0.0
+2026-01-28,A016,fundamental,hidden,,hold,0,,rule portfolio bound,neutral,,hold,0,rule,False,hold,0,,,,,,,buy,1.0,0.0
+2026-01-28,A017,fundamental,hidden,,hold,0,,rule portfolio bound,neutral,,hold,0,rule,False,hold,0,,,,,,,buy,1.0,0.0
+2026-01-28,A018,fundamental,hidden,,hold,0,,rule portfolio bound,neutral,,hold,0,rule,False,hold,0,,,,,,,buy,1.0,0.0
+2026-01-28,A019,fundamental,hidden,,hold,0,,rule portfolio bound,neutral,,hold,0,rule,False,hold,0,,,,,,,buy,1.0,0.0
+2026-01-29,A000,technical,hidden,,hold,0,,rule signal below threshold,neutral,,hold,0,rule,False,hold,0,,,,,,,buy,0.7272727272727273,0.0
+2026-01-29,A001,fundamental,hidden,,hold,0,,rule portfolio bound,neutral,,hold,0,rule,False,hold,0,,,,,,,buy,0.7272727272727273,0.0
+2026-01-29,A002,fundamental,hidden,,hold,0,,rule portfolio bound,neutral,,hold,0,rule,False,hold,0,,,,,,,buy,0.7272727272727273,0.0
+2026-01-29,A003,technical,hidden,,buy,3,104.28,seeded fundamental or momentum rule,bullish,O00000228,expired,0,rule,False,buy,3,,,,,,,buy,0.7272727272727273,0.0029816293161488705
+2026-01-29,A004,technical,hidden,,buy,3,104.28,seeded fundamental or momentum rule,bullish,O00000229,expired,0,rule,False,buy,3,,,,,,,buy,0.7272727272727273,0.0029816293161488705
+2026-01-29,A005,technical,hidden,,hold,0,,rule portfolio bound,neutral,,hold,0,rule,False,hold,0,,,,,,,buy,0.7272727272727273,0.0
+2026-01-29,A006,technical,hidden,,buy,3,104.28,seeded fundamental or momentum rule,bullish,O00000226,expired,0,rule,False,buy,3,,,,,,,buy,0.7272727272727273,0.0029816293161488705
+2026-01-29,A007,technical,hidden,,buy,3,104.28,seeded fundamental or momentum rule,bullish,O00000230,expired,0,rule,False,buy,3,,,,,,,buy,0.7272727272727273,0.0029816293161488705
+2026-01-29,A008,technical,hidden,,sell,3,103.66,seeded fundamental or momentum rule,bearish,O00000227,filled,3,rule,False,sell,3,,,,,,,buy,0.7272727272727273,0.0029816293161488705
+2026-01-29,A009,technical,hidden,,hold,0,,rule signal below threshold,neutral,,hold,0,rule,False,hold,0,,,,,,,buy,0.7272727272727273,0.0
+2026-01-29,A010,technical,hidden,,buy,7,104.28,seeded fundamental or momentum rule,bullish,O00000225,expired,3,rule,False,buy,7,,,,,,,buy,0.7272727272727273,0.0029816293161488705
+2026-01-29,A011,fundamental,hidden,,hold,0,,rule portfolio bound,neutral,,hold,0,rule,False,hold,0,,,,,,,buy,0.7272727272727273,0.0
+2026-01-29,A012,fundamental,hidden,,hold,0,,rule portfolio bound,neutral,,hold,0,rule,False,hold,0,,,,,,,buy,0.7272727272727273,0.0
+2026-01-29,A013,technical,hidden,,buy,3,104.28,seeded fundamental or momentum rule,bullish,O00000231,expired,0,rule,False,buy,3,,,,,,,buy,0.7272727272727273,0.0029816293161488705
+2026-01-29,A014,fundamental,hidden,,hold,0,,rule portfolio bound,neutral,,hold,0,rule,False,hold,0,,,,,,,buy,0.7272727272727273,0.0
+2026-01-29,A015,fundamental,hidden,,hold,0,,rule portfolio bound,neutral,,hold,0,rule,False,hold,0,,,,,,,buy,0.7272727272727273,0.0
+2026-01-29,A016,fundamental,hidden,,hold,0,,rule portfolio bound,neutral,,hold,0,rule,False,hold,0,,,,,,,buy,0.7272727272727273,0.0
+2026-01-29,A017,fundamental,hidden,,hold,0,,rule portfolio bound,neutral,,hold,0,rule,False,hold,0,,,,,,,buy,0.7272727272727273,0.0
+2026-01-29,A018,fundamental,hidden,,hold,0,,rule portfolio bound,neutral,,hold,0,rule,False,hold,0,,,,,,,buy,0.7272727272727273,0.0
+2026-01-29,A019,fundamental,hidden,,hold,0,,rule portfolio bound,neutral,,hold,0,rule,False,hold,0,,,,,,,buy,0.7272727272727273,0.0
+2026-01-30,A000,technical,hidden,,hold,0,,rule signal below threshold,neutral,,hold,0,rule,False,hold,0,,,,,,,buy,0.76,0.0
+2026-01-30,A001,fundamental,hidden,,hold,0,,rule portfolio bound,neutral,,hold,0,rule,False,hold,0,,,,,,,buy,0.76,0.0
+2026-01-30,A002,fundamental,hidden,,hold,0,,rule portfolio bound,neutral,,hold,0,rule,False,hold,0,,,,,,,buy,0.76,0.0
+2026-01-30,A003,technical,hidden,,buy,3,104.59,seeded fundamental or momentum rule,bullish,O00000236,expired,0,rule,False,buy,3,,,,,,,buy,0.76,0.002972765630993468
+2026-01-30,A004,technical,hidden,,buy,3,104.59,seeded fundamental or momentum rule,bullish,O00000237,expired,0,rule,False,buy,3,,,,,,,buy,0.76,0.002972765630993468
+2026-01-30,A005,technical,hidden,,buy,4,104.59,seeded fundamental or momentum rule,bullish,O00000238,expired,0,rule,False,buy,4,,,,,,,buy,0.76,0.002972765630993468
+2026-01-30,A006,technical,hidden,,buy,3,104.59,seeded fundamental or momentum rule,bullish,O00000232,filled,3,rule,False,buy,3,,,,,,,buy,0.76,0.002972765630993468
+2026-01-30,A007,technical,hidden,,buy,3,104.59,seeded fundamental or momentum rule,bullish,O00000234,expired,0,rule,False,buy,3,,,,,,,buy,0.76,0.002972765630993468
+2026-01-30,A008,technical,hidden,,hold,0,,rule portfolio bound,neutral,,hold,0,rule,False,hold,0,,,,,,,buy,0.76,0.0
+2026-01-30,A009,technical,hidden,,hold,0,,rule portfolio bound,neutral,,hold,0,rule,False,hold,0,,,,,,,buy,0.76,0.0
+2026-01-30,A010,technical,hidden,,buy,7,104.59,seeded fundamental or momentum rule,bullish,O00000233,expired,0,rule,False,buy,7,,,,,,,buy,0.76,0.002972765630993468
+2026-01-30,A011,fundamental,hidden,,hold,0,,rule portfolio bound,neutral,,hold,0,rule,False,hold,0,,,,,,,buy,0.76,0.0
+2026-01-30,A012,fundamental,hidden,,hold,0,,rule portfolio bound,neutral,,hold,0,rule,False,hold,0,,,,,,,buy,0.76,0.0
+2026-01-30,A013,technical,hidden,,sell,3,103.97,seeded fundamental or momentum rule,bearish,O00000235,filled,3,rule,False,sell,3,,,,,,,buy,0.76,0.002972765630993468
+2026-01-30,A014,fundamental,hidden,,hold,0,,rule portfolio bound,neutral,,hold,0,rule,False,hold,0,,,,,,,buy,0.76,0.0
+2026-01-30,A015,fundamental,hidden,,hold,0,,rule portfolio bound,neutral,,hold,0,rule,False,hold,0,,,,,,,buy,0.76,0.0
+2026-01-30,A016,fundamental,hidden,,hold,0,,rule portfolio bound,neutral,,hold,0,rule,False,hold,0,,,,,,,buy,0.76,0.0
+2026-01-30,A017,fundamental,hidden,,hold,0,,rule portfolio bound,neutral,,hold,0,rule,False,hold,0,,,,,,,buy,0.76,0.0
+2026-01-30,A018,fundamental,hidden,,hold,0,,rule portfolio bound,neutral,,hold,0,rule,False,hold,0,,,,,,,buy,0.76,0.0
+2026-01-30,A019,fundamental,hidden,,hold,0,,rule portfolio bound,neutral,,hold,0,rule,False,hold,0,,,,,,,buy,0.76,0.0

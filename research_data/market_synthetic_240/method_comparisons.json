@@ -1,0 +1,441 @@
+{
+  "dimensions": [
+    "return_bps",
+    "volume_btc",
+    "published_print_count",
+    "mean_spread_bps",
+    "mean_visible_bid_depth_5bps_btc",
+    "mean_visible_ask_depth_5bps_btc",
+    "quantity_pressure"
+  ],
+  "difference_direction": "M1 minus M0 at identical ordering and delay",
+  "interpretation": "Descriptive comparison against one synthetic stationary book/empty tape with unit scales; no pass threshold, market generalization, LLM gain or winner selection.",
+  "pairs": [
+    {
+      "ordering": "S1",
+      "delay_ms": 0,
+      "expected_seeds": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19
+      ],
+      "methods": {
+        "M0": {
+          "received_paths": 20,
+          "complete": true,
+          "energy_score": 9.288567277550785,
+          "price_energy_score": 0.0,
+          "raw_mean_over_fixed100_path_blocks": [
+            0.0,
+            60.0,
+            787.1,
+            2.0,
+            4.680065000000001,
+            4.679735000000002,
+            -0.0035666666666666663
+          ],
+          "missing_or_failed_seeds": []
+        },
+        "M1": {
+          "received_paths": 20,
+          "complete": true,
+          "energy_score": 9.296506070630434,
+          "price_energy_score": 0.0,
+          "raw_mean_over_fixed100_path_blocks": [
+            0.0,
+            60.0,
+            787.09,
+            2.0,
+            4.681770833333335,
+            4.682262500000002,
+            -0.00485
+          ],
+          "missing_or_failed_seeds": []
+        }
+      },
+      "both_complete": true,
+      "M1_minus_M0_energy_score": 0.007938793079649287,
+      "M1_minus_M0_raw_mean": [
+        0.0,
+        0.0,
+        -0.009999999999990905,
+        0.0,
+        0.0017058333333341835,
+        0.002527500000000238,
+        -0.0012833333333333338
+      ]
+    },
+    {
+      "ordering": "S1",
+      "delay_ms": 1000,
+      "expected_seeds": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19
+      ],
+      "methods": {
+        "M0": {
+          "received_paths": 20,
+          "complete": true,
+          "energy_score": 9.288567277550785,
+          "price_energy_score": 0.0,
+          "raw_mean_over_fixed100_path_blocks": [
+            0.0,
+            60.0,
+            787.1,
+            2.0,
+            4.680065000000001,
+            4.679735000000002,
+            -0.0035666666666666663
+          ],
+          "missing_or_failed_seeds": []
+        },
+        "M1": {
+          "received_paths": 20,
+          "complete": true,
+          "energy_score": 9.296427479370998,
+          "price_energy_score": 0.0,
+          "raw_mean_over_fixed100_path_blocks": [
+            0.0,
+            60.0,
+            787.09,
+            2.0,
+            4.682437500000001,
+            4.682929166666667,
+            -0.00485
+          ],
+          "missing_or_failed_seeds": []
+        }
+      },
+      "both_complete": true,
+      "M1_minus_M0_energy_score": 0.007860201820212964,
+      "M1_minus_M0_raw_mean": [
+        0.0,
+        0.0,
+        -0.009999999999990905,
+        0.0,
+        0.0023724999999998886,
+        0.0031941666666650548,
+        -0.0012833333333333338
+      ]
+    },
+    {
+      "ordering": "S1",
+      "delay_ms": 5000,
+      "expected_seeds": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19
+      ],
+      "methods": {
+        "M0": {
+          "received_paths": 20,
+          "complete": true,
+          "energy_score": 9.288567277550785,
+          "price_energy_score": 0.0,
+          "raw_mean_over_fixed100_path_blocks": [
+            0.0,
+            60.0,
+            787.1,
+            2.0,
+            4.680065000000001,
+            4.679735000000002,
+            -0.0035666666666666663
+          ],
+          "missing_or_failed_seeds": []
+        },
+        "M1": {
+          "received_paths": 20,
+          "complete": true,
+          "energy_score": 9.295173790375316,
+          "price_energy_score": 0.0,
+          "raw_mean_over_fixed100_path_blocks": [
+            0.0,
+            60.0,
+            787.09,
+            2.0,
+            4.701770833333333,
+            4.682262500000001,
+            -0.00485
+          ],
+          "missing_or_failed_seeds": []
+        }
+      },
+      "both_complete": true,
+      "M1_minus_M0_energy_score": 0.006606512824530952,
+      "M1_minus_M0_raw_mean": [
+        0.0,
+        0.0,
+        -0.009999999999990905,
+        0.0,
+        0.02170583333333198,
+        0.0025274999999993497,
+        -0.0012833333333333338
+      ]
+    },
+    {
+      "ordering": "S2",
+      "delay_ms": 0,
+      "expected_seeds": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19
+      ],
+      "methods": {
+        "M0": {
+          "received_paths": 20,
+          "complete": true,
+          "energy_score": 9.281952942916126,
+          "price_energy_score": 0.0,
+          "raw_mean_over_fixed100_path_blocks": [
+            0.0,
+            60.0,
+            787.1,
+            2.0,
+            4.730233333333333,
+            4.729533333333335,
+            -0.0035666666666666663
+          ],
+          "missing_or_failed_seeds": []
+        },
+        "M1": {
+          "received_paths": 20,
+          "complete": true,
+          "energy_score": 9.28980467860956,
+          "price_energy_score": 0.0,
+          "raw_mean_over_fixed100_path_blocks": [
+            0.0,
+            60.0,
+            787.09,
+            2.0,
+            4.732000000000006,
+            4.732000000000006,
+            -0.00485
+          ],
+          "missing_or_failed_seeds": []
+        }
+      },
+      "both_complete": true,
+      "M1_minus_M0_energy_score": 0.007851735693433781,
+      "M1_minus_M0_raw_mean": [
+        0.0,
+        0.0,
+        -0.009999999999990905,
+        0.0,
+        0.0017666666666737996,
+        0.00246666666667128,
+        -0.0012833333333333338
+      ]
+    },
+    {
+      "ordering": "S2",
+      "delay_ms": 1000,
+      "expected_seeds": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19
+      ],
+      "methods": {
+        "M0": {
+          "received_paths": 20,
+          "complete": true,
+          "energy_score": 9.281952942916126,
+          "price_energy_score": 0.0,
+          "raw_mean_over_fixed100_path_blocks": [
+            0.0,
+            60.0,
+            787.1,
+            2.0,
+            4.730233333333333,
+            4.729533333333335,
+            -0.0035666666666666663
+          ],
+          "missing_or_failed_seeds": []
+        },
+        "M1": {
+          "received_paths": 20,
+          "complete": true,
+          "energy_score": 9.28972683428172,
+          "price_energy_score": 0.0,
+          "raw_mean_over_fixed100_path_blocks": [
+            0.0,
+            60.0,
+            787.09,
+            2.0,
+            4.732666666666665,
+            4.732666666666667,
+            -0.00485
+          ],
+          "missing_or_failed_seeds": []
+        }
+      },
+      "both_complete": true,
+      "M1_minus_M0_energy_score": 0.007773891365593144,
+      "M1_minus_M0_raw_mean": [
+        0.0,
+        0.0,
+        -0.009999999999990905,
+        0.0,
+        0.002433333333332399,
+        0.003133333333331656,
+        -0.0012833333333333338
+      ]
+    },
+    {
+      "ordering": "S2",
+      "delay_ms": 5000,
+      "expected_seeds": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19
+      ],
+      "methods": {
+        "M0": {
+          "received_paths": 20,
+          "complete": true,
+          "energy_score": 9.281952942916126,
+          "price_energy_score": 0.0,
+          "raw_mean_over_fixed100_path_blocks": [
+            0.0,
+            60.0,
+            787.1,
+            2.0,
+            4.730233333333333,
+            4.729533333333335,
+            -0.0035666666666666663
+          ],
+          "missing_or_failed_seeds": []
+        },
+        "M1": {
+          "received_paths": 20,
+          "complete": true,
+          "energy_score": 9.288486343028612,
+          "price_energy_score": 0.0,
+          "raw_mean_over_fixed100_path_blocks": [
+            0.0,
+            60.0,
+            787.09,
+            2.0,
+            4.752000000000001,
+            4.732000000000004,
+            -0.00485
+          ],
+          "missing_or_failed_seeds": []
+        }
+      },
+      "both_complete": true,
+      "M1_minus_M0_energy_score": 0.006533400112486376,
+      "M1_minus_M0_raw_mean": [
+        0.0,
+        0.0,
+        -0.009999999999990905,
+        0.0,
+        0.021766666666668044,
+        0.0024666666666686154,
+        -0.0012833333333333338
+      ]
+    }
+  ]
+}

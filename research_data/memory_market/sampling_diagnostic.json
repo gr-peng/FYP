@@ -1,0 +1,46 @@
+{
+  "reference_process": "Freeze each observed branch's p-list; draw fresh independent uniforms once per listed opportunity.",
+  "branches": {
+    "account_public_task_15": {
+      "fixed_opportunity_count": 4,
+      "reference_expected_buy_count": 2.245,
+      "reference_buy_count_variance": 0.976175,
+      "reference_buy_count_distribution": [
+        0.03625599999999998,
+        0.18905599999999997,
+        0.365896,
+        0.31101600000000007,
+        0.09777600000000004
+      ],
+      "recorded_buy_count": 2
+    },
+    "plus_current_period_17": {
+      "fixed_opportunity_count": 4,
+      "reference_expected_buy_count": 2.2800000000000002,
+      "reference_buy_count_variance": 0.97905,
+      "reference_buy_count_distribution": [
+        0.03406610499999999,
+        0.18118983,
+        0.36075888,
+        0.31864833000000004,
+        0.10533685500000001
+      ],
+      "recorded_buy_count": 2
+    },
+    "plus_completed_history_23": {
+      "fixed_opportunity_count": 4,
+      "reference_expected_buy_count": 2.27,
+      "reference_buy_count_variance": 0.95855,
+      "reference_buy_count_distribution": [
+        0.032681249999999995,
+        0.1825,
+        0.3671375,
+        0.3175,
+        0.10018125
+      ],
+      "recorded_buy_count": 2
+    }
+  },
+  "new_model_POSTs": 0,
+  "limits": "Observed states/gates depend on earlier draws. This is not the conditional law of the original market, a confidence interval or changed-state forecasts. No alternative trades or profits are generated."
+}

@@ -1,0 +1,666 @@
+{
+  "branches": {
+    "account_public_task_15": {
+      "denominators": {
+        "potential_opportunities": 12,
+        "externally_offered": 12,
+        "blocked": 8,
+        "probability_callbacks": 4,
+        "accepted_submissions": 4,
+        "rejected_submissions": 0
+      },
+      "rp_metrics": {
+        "definition_version": "rp-slide11-explicit-v1",
+        "evidence_kind": "invented_execution_demo_fixed_quote_carry_forward_mark",
+        "price_observations": 7,
+        "log_returns": {
+          "status": "available",
+          "value": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "reason": null
+        },
+        "cumulative_log_return": {
+          "status": "available",
+          "value": 0.0,
+          "reason": null
+        },
+        "maximum_price_drawdown_fraction": {
+          "status": "available",
+          "value": 0.0,
+          "reason": null
+        },
+        "mean_squared_price_reference_deviation": {
+          "status": "available",
+          "value": 10.714285714285715,
+          "reason": null
+        },
+        "execution": {
+          "accepted_order_count": 4,
+          "submitted_side_quantity": 10,
+          "orders_with_any_fill": 0,
+          "fully_filled_orders": 0,
+          "single_side_trade_volume": 0,
+          "filled_side_quantity": 0,
+          "executed_order_fraction": {
+            "status": "available",
+            "value": 0.0,
+            "reason": null
+          },
+          "fully_filled_order_fraction": {
+            "status": "available",
+            "value": 0.0,
+            "reason": null
+          },
+          "filled_side_quantity_fraction": {
+            "status": "available",
+            "value": 0.0,
+            "reason": null
+          }
+        },
+        "definitions": {
+          "log_returns": "ln(Pt)-ln(Pt-1), per observed interval",
+          "deviation": "mean((price-reference)^2), raw price squared units",
+          "drawdown": "max(1-price/running_peak); reporting requires at least2 observations",
+          "executed_order_fraction": "accepted orders with any fill / accepted orders",
+          "filled_side_quantity_fraction": "filled buy+sell side quantity / submitted side quantity",
+          "single_side_trade_volume": "sum trade quantity, each matched quantity counted once"
+        },
+        "limits": [
+          "Supplied references are not authenticated true asset values.",
+          "Order acceptance and interval completeness are input evidence conventions, not external authentication or reconstructed cash settlement.",
+          "HOLD/rejected intentions and rows without order IDs cannot supply order counts.",
+          "Synthetic diagnostics do not establish human alignment or market realism."
+        ]
+      },
+      "accounts_final": {
+        "invented_alpha": {
+          "cash": "540",
+          "shares": 4,
+          "available_cash": "540",
+          "available_shares": 4,
+          "marked_equity": "740"
+        },
+        "invented_beta": {
+          "cash": "540",
+          "shares": 4,
+          "available_cash": "540",
+          "available_shares": 4,
+          "marked_equity": "740"
+        }
+      }
+    },
+    "plus_current_period_17": {
+      "denominators": {
+        "potential_opportunities": 12,
+        "externally_offered": 12,
+        "blocked": 8,
+        "probability_callbacks": 4,
+        "accepted_submissions": 4,
+        "rejected_submissions": 0
+      },
+      "rp_metrics": {
+        "definition_version": "rp-slide11-explicit-v1",
+        "evidence_kind": "invented_execution_demo_fixed_quote_carry_forward_mark",
+        "price_observations": 7,
+        "log_returns": {
+          "status": "available",
+          "value": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "reason": null
+        },
+        "cumulative_log_return": {
+          "status": "available",
+          "value": 0.0,
+          "reason": null
+        },
+        "maximum_price_drawdown_fraction": {
+          "status": "available",
+          "value": 0.0,
+          "reason": null
+        },
+        "mean_squared_price_reference_deviation": {
+          "status": "available",
+          "value": 10.714285714285715,
+          "reason": null
+        },
+        "execution": {
+          "accepted_order_count": 4,
+          "submitted_side_quantity": 10,
+          "orders_with_any_fill": 0,
+          "fully_filled_orders": 0,
+          "single_side_trade_volume": 0,
+          "filled_side_quantity": 0,
+          "executed_order_fraction": {
+            "status": "available",
+            "value": 0.0,
+            "reason": null
+          },
+          "fully_filled_order_fraction": {
+            "status": "available",
+            "value": 0.0,
+            "reason": null
+          },
+          "filled_side_quantity_fraction": {
+            "status": "available",
+            "value": 0.0,
+            "reason": null
+          }
+        },
+        "definitions": {
+          "log_returns": "ln(Pt)-ln(Pt-1), per observed interval",
+          "deviation": "mean((price-reference)^2), raw price squared units",
+          "drawdown": "max(1-price/running_peak); reporting requires at least2 observations",
+          "executed_order_fraction": "accepted orders with any fill / accepted orders",
+          "filled_side_quantity_fraction": "filled buy+sell side quantity / submitted side quantity",
+          "single_side_trade_volume": "sum trade quantity, each matched quantity counted once"
+        },
+        "limits": [
+          "Supplied references are not authenticated true asset values.",
+          "Order acceptance and interval completeness are input evidence conventions, not external authentication or reconstructed cash settlement.",
+          "HOLD/rejected intentions and rows without order IDs cannot supply order counts.",
+          "Synthetic diagnostics do not establish human alignment or market realism."
+        ]
+      },
+      "accounts_final": {
+        "invented_alpha": {
+          "cash": "540",
+          "shares": 4,
+          "available_cash": "540",
+          "available_shares": 4,
+          "marked_equity": "740"
+        },
+        "invented_beta": {
+          "cash": "540",
+          "shares": 4,
+          "available_cash": "540",
+          "available_shares": 4,
+          "marked_equity": "740"
+        }
+      }
+    },
+    "plus_completed_history_23": {
+      "denominators": {
+        "potential_opportunities": 12,
+        "externally_offered": 12,
+        "blocked": 8,
+        "probability_callbacks": 4,
+        "accepted_submissions": 4,
+        "rejected_submissions": 0
+      },
+      "rp_metrics": {
+        "definition_version": "rp-slide11-explicit-v1",
+        "evidence_kind": "invented_execution_demo_fixed_quote_carry_forward_mark",
+        "price_observations": 7,
+        "log_returns": {
+          "status": "available",
+          "value": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "reason": null
+        },
+        "cumulative_log_return": {
+          "status": "available",
+          "value": 0.0,
+          "reason": null
+        },
+        "maximum_price_drawdown_fraction": {
+          "status": "available",
+          "value": 0.0,
+          "reason": null
+        },
+        "mean_squared_price_reference_deviation": {
+          "status": "available",
+          "value": 10.714285714285715,
+          "reason": null
+        },
+        "execution": {
+          "accepted_order_count": 4,
+          "submitted_side_quantity": 10,
+          "orders_with_any_fill": 0,
+          "fully_filled_orders": 0,
+          "single_side_trade_volume": 0,
+          "filled_side_quantity": 0,
+          "executed_order_fraction": {
+            "status": "available",
+            "value": 0.0,
+            "reason": null
+          },
+          "fully_filled_order_fraction": {
+            "status": "available",
+            "value": 0.0,
+            "reason": null
+          },
+          "filled_side_quantity_fraction": {
+            "status": "available",
+            "value": 0.0,
+            "reason": null
+          }
+        },
+        "definitions": {
+          "log_returns": "ln(Pt)-ln(Pt-1), per observed interval",
+          "deviation": "mean((price-reference)^2), raw price squared units",
+          "drawdown": "max(1-price/running_peak); reporting requires at least2 observations",
+          "executed_order_fraction": "accepted orders with any fill / accepted orders",
+          "filled_side_quantity_fraction": "filled buy+sell side quantity / submitted side quantity",
+          "single_side_trade_volume": "sum trade quantity, each matched quantity counted once"
+        },
+        "limits": [
+          "Supplied references are not authenticated true asset values.",
+          "Order acceptance and interval completeness are input evidence conventions, not external authentication or reconstructed cash settlement.",
+          "HOLD/rejected intentions and rows without order IDs cannot supply order counts.",
+          "Synthetic diagnostics do not establish human alignment or market realism."
+        ]
+      },
+      "accounts_final": {
+        "invented_alpha": {
+          "cash": "540",
+          "shares": 4,
+          "available_cash": "540",
+          "available_shares": 4,
+          "marked_equity": "740"
+        },
+        "invented_beta": {
+          "cash": "540",
+          "shares": 4,
+          "available_cash": "540",
+          "available_shares": 4,
+          "marked_equity": "740"
+        }
+      }
+    }
+  },
+  "menu_pairs": [
+    {
+      "arm": "account_public_task_15",
+      "agent_id": "invented_alpha",
+      "tick": 0,
+      "slot": 0,
+      "buy_first": 0.62,
+      "sell_first": 0.5,
+      "mean_buy_probability": 0.56,
+      "buy_first_minus_sell_first": 0.12,
+      "uniform": 0.30083737541245636,
+      "menu_directions_disagree_at_observed_uniform": false
+    },
+    {
+      "arm": "account_public_task_15",
+      "agent_id": "invented_beta",
+      "tick": 0,
+      "slot": 1,
+      "sell_first": 0.65,
+      "buy_first": 0.55,
+      "mean_buy_probability": 0.6000000000000001,
+      "buy_first_minus_sell_first": -0.09999999999999998,
+      "uniform": 0.47569455729687127,
+      "menu_directions_disagree_at_observed_uniform": false
+    },
+    {
+      "arm": "plus_current_period_17",
+      "agent_id": "invented_alpha",
+      "tick": 0,
+      "slot": 0,
+      "sell_first": 0.52,
+      "buy_first": 0.62,
+      "mean_buy_probability": 0.5700000000000001,
+      "buy_first_minus_sell_first": 0.09999999999999998,
+      "uniform": 0.30083737541245636,
+      "menu_directions_disagree_at_observed_uniform": false
+    },
+    {
+      "arm": "plus_current_period_17",
+      "agent_id": "invented_beta",
+      "tick": 0,
+      "slot": 1,
+      "buy_first": 0.5,
+      "sell_first": 0.58,
+      "mean_buy_probability": 0.54,
+      "buy_first_minus_sell_first": -0.07999999999999996,
+      "uniform": 0.47569455729687127,
+      "menu_directions_disagree_at_observed_uniform": false
+    },
+    {
+      "arm": "plus_completed_history_23",
+      "agent_id": "invented_alpha",
+      "tick": 0,
+      "slot": 0,
+      "buy_first": 0.5,
+      "sell_first": 0.5,
+      "mean_buy_probability": 0.5,
+      "buy_first_minus_sell_first": 0.0,
+      "uniform": 0.30083737541245636,
+      "menu_directions_disagree_at_observed_uniform": false
+    },
+    {
+      "arm": "plus_completed_history_23",
+      "agent_id": "invented_beta",
+      "tick": 0,
+      "slot": 1,
+      "sell_first": 0.5,
+      "buy_first": 0.5,
+      "mean_buy_probability": 0.5,
+      "buy_first_minus_sell_first": 0.0,
+      "uniform": 0.47569455729687127,
+      "menu_directions_disagree_at_observed_uniform": false
+    },
+    {
+      "arm": "account_public_task_15",
+      "agent_id": "invented_alpha",
+      "tick": 3,
+      "slot": 6,
+      "buy_first": 0.55,
+      "sell_first": 0.65,
+      "mean_buy_probability": 0.6000000000000001,
+      "buy_first_minus_sell_first": -0.09999999999999998,
+      "uniform": 0.697425683597601,
+      "menu_directions_disagree_at_observed_uniform": false
+    },
+    {
+      "arm": "account_public_task_15",
+      "agent_id": "invented_beta",
+      "tick": 3,
+      "slot": 7,
+      "sell_first": 0.55,
+      "buy_first": 0.42,
+      "mean_buy_probability": 0.485,
+      "buy_first_minus_sell_first": -0.13000000000000006,
+      "uniform": 0.7794122084961369,
+      "menu_directions_disagree_at_observed_uniform": false
+    },
+    {
+      "arm": "plus_current_period_17",
+      "agent_id": "invented_alpha",
+      "tick": 3,
+      "slot": 6,
+      "sell_first": 0.55,
+      "buy_first": 0.62,
+      "mean_buy_probability": 0.585,
+      "buy_first_minus_sell_first": 0.06999999999999995,
+      "uniform": 0.697425683597601,
+      "menu_directions_disagree_at_observed_uniform": false
+    },
+    {
+      "arm": "plus_current_period_17",
+      "agent_id": "invented_beta",
+      "tick": 3,
+      "slot": 7,
+      "buy_first": 0.62,
+      "sell_first": 0.55,
+      "mean_buy_probability": 0.585,
+      "buy_first_minus_sell_first": 0.06999999999999995,
+      "uniform": 0.7794122084961369,
+      "menu_directions_disagree_at_observed_uniform": false
+    },
+    {
+      "arm": "plus_completed_history_23",
+      "agent_id": "invented_alpha",
+      "tick": 3,
+      "slot": 6,
+      "buy_first": 0.62,
+      "sell_first": 0.55,
+      "mean_buy_probability": 0.585,
+      "buy_first_minus_sell_first": 0.06999999999999995,
+      "uniform": 0.697425683597601,
+      "menu_directions_disagree_at_observed_uniform": false
+    },
+    {
+      "arm": "plus_completed_history_23",
+      "agent_id": "invented_beta",
+      "tick": 3,
+      "slot": 7,
+      "sell_first": 0.65,
+      "buy_first": 0.72,
+      "mean_buy_probability": 0.685,
+      "buy_first_minus_sell_first": 0.06999999999999995,
+      "uniform": 0.7794122084961369,
+      "menu_directions_disagree_at_observed_uniform": false
+    }
+  ],
+  "adjacent_branch_comparisons": [
+    {
+      "left": "account_public_task_15",
+      "right": "plus_current_period_17",
+      "opportunities": [
+        {
+          "tick": 0,
+          "agent_id": "invented_alpha",
+          "same_full_predecision_state": true,
+          "left_status": "accepted",
+          "right_status": "accepted",
+          "both_accepted": true,
+          "directions_differ": false
+        },
+        {
+          "tick": 0,
+          "agent_id": "invented_beta",
+          "same_full_predecision_state": true,
+          "left_status": "accepted",
+          "right_status": "accepted",
+          "both_accepted": true,
+          "directions_differ": false
+        },
+        {
+          "tick": 1,
+          "agent_id": "invented_alpha",
+          "same_full_predecision_state": true,
+          "left_status": "blocked_external_opportunity",
+          "right_status": "blocked_external_opportunity",
+          "both_accepted": false,
+          "directions_differ": null
+        },
+        {
+          "tick": 1,
+          "agent_id": "invented_beta",
+          "same_full_predecision_state": true,
+          "left_status": "blocked_external_opportunity",
+          "right_status": "blocked_external_opportunity",
+          "both_accepted": false,
+          "directions_differ": null
+        },
+        {
+          "tick": 2,
+          "agent_id": "invented_alpha",
+          "same_full_predecision_state": true,
+          "left_status": "blocked_external_opportunity",
+          "right_status": "blocked_external_opportunity",
+          "both_accepted": false,
+          "directions_differ": null
+        },
+        {
+          "tick": 2,
+          "agent_id": "invented_beta",
+          "same_full_predecision_state": true,
+          "left_status": "blocked_external_opportunity",
+          "right_status": "blocked_external_opportunity",
+          "both_accepted": false,
+          "directions_differ": null
+        },
+        {
+          "tick": 3,
+          "agent_id": "invented_alpha",
+          "same_full_predecision_state": true,
+          "left_status": "accepted",
+          "right_status": "accepted",
+          "both_accepted": true,
+          "directions_differ": false
+        },
+        {
+          "tick": 3,
+          "agent_id": "invented_beta",
+          "same_full_predecision_state": true,
+          "left_status": "accepted",
+          "right_status": "accepted",
+          "both_accepted": true,
+          "directions_differ": false
+        },
+        {
+          "tick": 4,
+          "agent_id": "invented_alpha",
+          "same_full_predecision_state": true,
+          "left_status": "blocked_external_opportunity",
+          "right_status": "blocked_external_opportunity",
+          "both_accepted": false,
+          "directions_differ": null
+        },
+        {
+          "tick": 4,
+          "agent_id": "invented_beta",
+          "same_full_predecision_state": true,
+          "left_status": "blocked_external_opportunity",
+          "right_status": "blocked_external_opportunity",
+          "both_accepted": false,
+          "directions_differ": null
+        },
+        {
+          "tick": 5,
+          "agent_id": "invented_alpha",
+          "same_full_predecision_state": true,
+          "left_status": "blocked_external_opportunity",
+          "right_status": "blocked_external_opportunity",
+          "both_accepted": false,
+          "directions_differ": null
+        },
+        {
+          "tick": 5,
+          "agent_id": "invented_beta",
+          "same_full_predecision_state": true,
+          "left_status": "blocked_external_opportunity",
+          "right_status": "blocked_external_opportunity",
+          "both_accepted": false,
+          "directions_differ": null
+        }
+      ]
+    },
+    {
+      "left": "plus_current_period_17",
+      "right": "plus_completed_history_23",
+      "opportunities": [
+        {
+          "tick": 0,
+          "agent_id": "invented_alpha",
+          "same_full_predecision_state": true,
+          "left_status": "accepted",
+          "right_status": "accepted",
+          "both_accepted": true,
+          "directions_differ": false
+        },
+        {
+          "tick": 0,
+          "agent_id": "invented_beta",
+          "same_full_predecision_state": true,
+          "left_status": "accepted",
+          "right_status": "accepted",
+          "both_accepted": true,
+          "directions_differ": false
+        },
+        {
+          "tick": 1,
+          "agent_id": "invented_alpha",
+          "same_full_predecision_state": true,
+          "left_status": "blocked_external_opportunity",
+          "right_status": "blocked_external_opportunity",
+          "both_accepted": false,
+          "directions_differ": null
+        },
+        {
+          "tick": 1,
+          "agent_id": "invented_beta",
+          "same_full_predecision_state": true,
+          "left_status": "blocked_external_opportunity",
+          "right_status": "blocked_external_opportunity",
+          "both_accepted": false,
+          "directions_differ": null
+        },
+        {
+          "tick": 2,
+          "agent_id": "invented_alpha",
+          "same_full_predecision_state": true,
+          "left_status": "blocked_external_opportunity",
+          "right_status": "blocked_external_opportunity",
+          "both_accepted": false,
+          "directions_differ": null
+        },
+        {
+          "tick": 2,
+          "agent_id": "invented_beta",
+          "same_full_predecision_state": true,
+          "left_status": "blocked_external_opportunity",
+          "right_status": "blocked_external_opportunity",
+          "both_accepted": false,
+          "directions_differ": null
+        },
+        {
+          "tick": 3,
+          "agent_id": "invented_alpha",
+          "same_full_predecision_state": true,
+          "left_status": "accepted",
+          "right_status": "accepted",
+          "both_accepted": true,
+          "directions_differ": false
+        },
+        {
+          "tick": 3,
+          "agent_id": "invented_beta",
+          "same_full_predecision_state": true,
+          "left_status": "accepted",
+          "right_status": "accepted",
+          "both_accepted": true,
+          "directions_differ": false
+        },
+        {
+          "tick": 4,
+          "agent_id": "invented_alpha",
+          "same_full_predecision_state": true,
+          "left_status": "blocked_external_opportunity",
+          "right_status": "blocked_external_opportunity",
+          "both_accepted": false,
+          "directions_differ": null
+        },
+        {
+          "tick": 4,
+          "agent_id": "invented_beta",
+          "same_full_predecision_state": true,
+          "left_status": "blocked_external_opportunity",
+          "right_status": "blocked_external_opportunity",
+          "both_accepted": false,
+          "directions_differ": null
+        },
+        {
+          "tick": 5,
+          "agent_id": "invented_alpha",
+          "same_full_predecision_state": true,
+          "left_status": "blocked_external_opportunity",
+          "right_status": "blocked_external_opportunity",
+          "both_accepted": false,
+          "directions_differ": null
+        },
+        {
+          "tick": 5,
+          "agent_id": "invented_beta",
+          "same_full_predecision_state": true,
+          "left_status": "blocked_external_opportunity",
+          "right_status": "blocked_external_opportunity",
+          "both_accepted": false,
+          "directions_differ": null
+        }
+      ]
+    }
+  ],
+  "new_analysis_POSTs": 0
+}

@@ -54,9 +54,12 @@ DO NOT rerun them. Complete manifests are
 `outputs/crypto_execution_diagnostic_20261011/train_summary_20261013_v1/manifest.json`.
 There are 4,371,215 unique prints and 21,856,075 five-delay rows. See
 [full three-day report](crypto_execution_full_train_results_20261015.md).
-The independent full-batch audit is currently running; it separately checks all
-stored integer-derived residuals/aggregates and fixed 128 prints per day against
-raw dictionary-book reconstruction. Do not claim every raw book/print was independently
+The independent full-batch audit completed with exit 0: 87,422,104 integer-derived
+residual values and 9,360 quantiles matched, as did all fixed aggregates; 384 fixed
+prints / 1,920 delay states passed raw dictionary-book reconstruction. Receipt
+`outputs/crypto_execution_full_review_20261015/review_v1/review_receipt_v1.json`
+SHA256 is `d5e52f7ff15dcef08b400baea89bafde1b4d3698c3a06b7175664859221e2c5f`.
+See `docs/crypto_execution_full_train_review_20261015.md`. Do not claim every raw book/print was independently
 replayed. Shared cross-L1 equal-day MAE improves by 0.158056bps at zero delay;
 all shared eligible improvement is only 0.005669bps. November 3 all-shared P99 is
 worse for sweep at 0/50/100/250ms. These are conditional price-proxy results.
@@ -81,8 +84,9 @@ these source files while the run is active. Fitter/loader and the TRAIN target
 bridge/builder are undergoing separate independent synthetic reviews; no real
 model fit, target collection, generation or score has run. Root full suite `3383` exited 0 with 638 passed in 69.82s, log
 `/tmp/fyp_full_suite_20261015_v1.log`. This precedes the subsequent target-builder
-preflight-receipt binding correction; its focused 18 tests and Ruff also pass,
-and independent builder review is ongoing.
+preflight-receipt binding correction; after repairing both upstream and own prepared-receipt binding, the combined
+fitter/builder 94 tests pass in33.93s with Ruff. Independent final source reviews
+are ongoing, preserving their initial failure receipts.
 
 Next: finish these reviews; complete and independently validate the all-three-day
 extraction; freeze the fitter and provenance builder before any true fit or target

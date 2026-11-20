@@ -1,0 +1,35 @@
+{
+  "type": "post_result_descriptive_coverage_not_new_primary_test",
+  "branches": {
+    "account_public_task_15": {
+      "eligible_observations": 4,
+      "eligible_with_nonzero_current_submissions": 0,
+      "eligible_with_nonzero_completed_submissions": 2,
+      "eligible_seconds": [
+        0
+      ],
+      "actual_trade_records": 0,
+      "coverage_note": "Nonzero current history and fill-feedback not exercised in real pilot. Completed accepted submissions are exercised; earlier arm may withhold them."
+    },
+    "plus_current_period_17": {
+      "eligible_observations": 4,
+      "eligible_with_nonzero_current_submissions": 0,
+      "eligible_with_nonzero_completed_submissions": 2,
+      "eligible_seconds": [
+        0
+      ],
+      "actual_trade_records": 0,
+      "coverage_note": "Nonzero current history and fill-feedback not exercised in real pilot. Completed accepted submissions are exercised; earlier arm may withhold them."
+    },
+    "plus_completed_history_23": {
+      "eligible_observations": 4,
+      "eligible_with_nonzero_current_submissions": 0,
+      "eligible_with_nonzero_completed_submissions": 2,
+      "eligible_seconds": [
+        0
+      ],
+      "actual_trade_records": 0,
+      "coverage_note": "Nonzero current history and fill-feedback not exercised in real pilot. Completed accepted submissions are exercised; earlier arm may withhold them."
+    }
+  }
+}

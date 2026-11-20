@@ -1,0 +1,68 @@
+{
+  "cells": [
+    {
+      "agent_id": "A000",
+      "condition": "positive",
+      "valid": 3,
+      "target_counts": {
+        "fundamental": 0,
+        "technical": 3
+      },
+      "switch_count": 3,
+      "stay_count": 0
+    },
+    {
+      "agent_id": "A001",
+      "condition": "negative",
+      "valid": 3,
+      "target_counts": {
+        "fundamental": 0,
+        "technical": 3
+      },
+      "switch_count": 0,
+      "stay_count": 3
+    },
+    {
+      "agent_id": "A000",
+      "condition": "negative",
+      "valid": 3,
+      "target_counts": {
+        "fundamental": 3,
+        "technical": 0
+      },
+      "switch_count": 0,
+      "stay_count": 3
+    },
+    {
+      "agent_id": "A001",
+      "condition": "positive",
+      "valid": 3,
+      "target_counts": {
+        "fundamental": 3,
+        "technical": 0
+      },
+      "switch_count": 3,
+      "stay_count": 0
+    }
+  ],
+  "contrasts": [
+    {
+      "agent_id": "A000",
+      "original_style": "fundamental",
+      "alternative_style": "technical",
+      "complete": true,
+      "alternative_fraction_positive_minus_negative": 1.0,
+      "fundamental_fraction_positive_minus_negative": -1.0
+    },
+    {
+      "agent_id": "A001",
+      "original_style": "technical",
+      "alternative_style": "fundamental",
+      "complete": true,
+      "alternative_fraction_positive_minus_negative": 1.0,
+      "fundamental_fraction_positive_minus_negative": 1.0
+    }
+  ],
+  "requested_model": "DeepSeek-V4.1-Flash",
+  "new_POSTs": 12
+}

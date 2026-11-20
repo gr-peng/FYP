@@ -1,0 +1,56 @@
+{
+  "status": "independently_accepted",
+  "scope": "Saved E forecasts only; exploratory arithmetic, not an LLM or market test",
+  "actual_review": {
+    "bytes": 8843,
+    "sha256": "18a3b2801133540e4c2120d7e275db8cb912bf9c421ab5f638bee2d8a6081506"
+  },
+  "plot_review": {
+    "bytes": 1811,
+    "sha256": "70a571fe5c507a6e88d5df23f4c510b8fba68a5f9bcef8d064977bb77e67949a"
+  },
+  "primary_differences": {
+    "plus_current_period_17-minus-account_public_task_15": {
+      "total_error": -0.013937615738042126,
+      "personal_mean_bias": -0.010496894656666709,
+      "within_person_error": -0.0034407210813754197,
+      "prediction_variance": 0.011143145663076367,
+      "label_variance": 0.0,
+      "prediction_label_covariance": 0.00729193337222589
+    },
+    "plus_completed_history_23-minus-plus_current_period_17": {
+      "total_error": -0.01180871903512033,
+      "personal_mean_bias": -0.00934070187797223,
+      "within_person_error": -0.0024680171571480974,
+      "prediction_variance": 0.0021560540054017235,
+      "label_variance": 0.0,
+      "prediction_label_covariance": 0.002312035581274912
+    }
+  },
+  "population": {
+    "records": 63143,
+    "sessions": 51,
+    "session_person_units": 948,
+    "unique_recorded_codes": 948,
+    "single_target": {
+      "people": 1,
+      "balanced_weight": 0.000980392156862745
+    },
+    "constant_labels_including_single_target": {
+      "people": 12,
+      "balanced_weight": 0.0125
+    },
+    "constant_labels_multiple_targets": {
+      "people": 11,
+      "balanced_weight": 0.011519607843137256
+    }
+  },
+  "interpretation": "Both mean-propensity and within-person errors decline; the larger absolute reduction is the mean-propensity term. Prediction variance increases in both comparisons, outweighed by twice the increase in covariance. No causal, psychological or LLM claim.",
+  "new_model_POSTs": 0,
+  "budget_used": 349,
+  "budget_cap": 500,
+  "next_direction_before_results": {
+    "bytes": 7462,
+    "sha256": "5bcd539cfc6b1c8e37bcd8b0bde03a9f8ae3bdb0a1bbe564994ee74abaa22083"
+  }
+}

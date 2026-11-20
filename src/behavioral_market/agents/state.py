@@ -1,3 +1,4 @@
+import copy
 import random
 from dataclasses import asdict, dataclass, field
 
@@ -25,6 +26,7 @@ class AgentState:
     memory: list = field(default_factory=list)
     shadow_growth: float = 1.0
     peak_equity: float = 0.0
+    finite_review: dict | None = None
 
     def context(self):
         equity = float(self.portfolio.total_equity)
@@ -36,7 +38,9 @@ class AgentState:
                 for k, v in asdict(self.portfolio).items()
             },
             "memory": self.memory,
-            "counterfactual": {
+            "counterfactual": copy.deepcopy(self.finite_review)
+            if self.finite_review is not None
+            else {
                 "method": "long_cash_signal_proxy",
                 "actual_block_return": equity / self.block_start_equity - 1,
                 "alternative_block_return": self.shadow_growth - 1,

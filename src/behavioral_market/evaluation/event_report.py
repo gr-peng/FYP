@@ -15,7 +15,7 @@ from scipy.stats import mannwhitneyu
 from behavioral_market.data.archive import digest, write_json
 from behavioral_market.evaluation.metrics import event_study, path_metrics
 from behavioral_market.evaluation.usage import usage_report
-from behavioral_market.simulation.event_runner import ROOT, llm_config, load_dataset
+from behavioral_market.simulation.event_runner import ROOT, load_dataset
 
 
 def markdown_table(frame):
@@ -52,9 +52,114 @@ def simulated_event_cars(market, bars, studies, initial_price, symbol="NVDA"):
     return result
 
 
-def evaluate(config, directory, destination):
-    is_mock = directory.name == "mock"
-    provider = directory.name
+def _population_visibility(metadata, directory):
+    """Resolve recorded information availability without inferring remote exposure."""
+    snapshot_path = directory / "config_snapshot.json"
+    snapshot = json.loads(snapshot_path.read_text()) if snapshot_path.exists() else {}
+    if not isinstance(snapshot, dict):
+        raise ValueError("config snapshot must be an object")
+    sources = [("metadata", metadata)]
+    for name in ("behavior", "run"):
+        value = snapshot.get(name, {})
+        if not isinstance(value, dict):
+            raise ValueError(f"snapshot {name} must be an object")
+        sources.append((f"snapshot.{name}", value))
+    values = []
+    for name, source in sources:
+        if "mean_field_visibility" in source:
+            value = source["mean_field_visibility"]
+            if not isinstance(value, str) or value not in ("visible", "hidden"):
+                raise ValueError(f"invalid mean_field_visibility in {name}")
+            values.append(value)
+    explicit = "mean_field_visibility" in metadata
+    visibility = metadata["mean_field_visibility"] if explicit else "visible"
+    hidden_path = any(part.endswith("_mean_field_hidden") for part in directory.parts)
+    if any(value != visibility for value in values) or (hidden_path and visibility != "hidden"):
+        raise ValueError("contradictory or missing mean_field_visibility")
+    expected_supplied = None if metadata["treatment"] == "rule_abm" else visibility == "visible"
+    for name, source in sources:
+        if "prompt_mean_field_supplied" in source:
+            value = source["prompt_mean_field_supplied"]
+            if value is not expected_supplied:
+                raise ValueError(f"contradictory prompt_mean_field_supplied in {name}")
+    return {
+        "mean_field_visibility": visibility,
+        "mean_field_visibility_origin": "metadata" if explicit else "legacy_default_visible",
+        "prompt_mean_field_supplied": metadata.get("prompt_mean_field_supplied"),
+    }
+
+
+def _require_legacy_returns(metadata, directory):
+    """Missing metadata cannot override an explicit method in the saved config."""
+    sources = [metadata]
+    snapshot_path = directory / "config_snapshot.json"
+    if snapshot_path.exists():
+        snapshot = json.loads(snapshot_path.read_text())
+        if not isinstance(snapshot, dict):
+            raise ValueError("config snapshot must be an object")
+        sources.extend([snapshot.get("behavior", {}), snapshot.get("run", {})])
+    methods = []
+    for source in sources:
+        if not isinstance(source, dict):
+            raise ValueError("strategy return declarations must be objects")
+        if "strategy_return_method" in source:
+            method = source["strategy_return_method"]
+            if not isinstance(method, str) or not method:
+                raise ValueError("invalid strategy_return_method")
+            methods.append(method)
+        elif "finite_rule_pair" in source:
+            raise ValueError("finite_rule_pair has no declared strategy_return_method")
+        if "finite_rule_pair" in source and source.get("strategy_return_method") != (
+            "finite_rule_pair_assigned_quotes_v1"
+        ):
+            raise ValueError("contradictory finite_rule_pair and strategy_return_method")
+    if len(set(methods)) > 1:
+        raise ValueError("contradictory strategy_return_method")
+    if methods and methods[0] != "long_cash_signal_proxy":
+        raise ValueError(
+            "event_report does not yet support finite rule-pair runs; "
+            "use their method-labelled per-run outputs"
+        )
+
+
+def _run_description(metadata, directory, market, metrics):
+    """Keep descriptive evidence separate from the existing numerical tables."""
+    snapshot_path = directory / "config_snapshot.json"
+    snapshot = json.loads(snapshot_path.read_text()) if snapshot_path.exists() else {}
+    run = snapshot.get("run", {})
+
+    def declaration(field):
+        labels = sorted(
+            {
+                value
+                for value in [metadata.get(field), run.get(field)]
+                if isinstance(value, str) and value
+            }
+        )
+        return {
+            "value": labels[0] if len(labels) == 1 else None,
+            "status": "declared"
+            if len(labels) == 1
+            else ("conflicting" if labels else "unrecorded"),
+            "recorded_labels": labels,
+        }
+
+    return {
+        "agents_declared": metadata["n_agents"],
+        "sessions_declared": metadata.get("sessions"),
+        "market_rows": len(market),
+        "market_distinct_dates": int(market.session_date.nunique()),
+        "market_first_date": str(market.session_date.min()),
+        "market_last_date": str(market.session_date.max()),
+        "provider": declaration("provider"),
+        "model": declaration("model"),
+        "quality_recorded": metadata.get("quality"),
+        "order_fallback_rate_recorded": metrics.get("fallback_rate"),
+        "invalid_style_rate_recorded": metrics.get("invalid_style_rate"),
+    }
+
+
+def evaluate(config, directory, destination, *, pricing_path=None):
     bars, _, _, manifest_hash = load_dataset(config)
     destination.mkdir(parents=True, exist_ok=True)
     actual = bars[bars.symbol == config["data"]["primary_symbol"]].sort_values("session_date")
@@ -78,7 +183,7 @@ def evaluate(config, directory, destination):
     )
     studies.to_csv(destination / "real_event_study.csv", index=False)
     studies.to_parquet(destination / "real_event_study.parquet", index=False)
-    records, paths = [], {}
+    records, paths, path_rows, descriptions = [], {}, [], []
     for path in sorted(directory.rglob("run_metadata.json")):
         if "_superseded" in path.parts:
             continue
@@ -88,8 +193,12 @@ def evaluate(config, directory, destination):
             or metadata["n_agents"] != config["population"]["n_agents"]
         ):
             continue
+        _require_legacy_returns(metadata, path.parent)
         if metadata["data_manifest_hash"] != manifest_hash:
             raise ValueError("cannot aggregate runs from different data manifests")
+        visibility = _population_visibility(metadata, path.parent)
+        if not isinstance(metadata["source_hash"], str) or not metadata["source_hash"]:
+            raise ValueError("run source_hash must be recorded")
         for name, expected in metadata["artifact_hashes"].items():
             if digest((path.parent / name).read_bytes()) != expected:
                 raise ValueError("run artifact has been modified")
@@ -128,50 +237,97 @@ def evaluate(config, directory, destination):
         last = accounts[accounts.session_date == accounts.session_date.max()]
         metrics["mean_agent_return"] = float(last.total_equity.mean() / initial_equity - 1)
         metrics["mean_agent_realized_pnl"] = float(last.realized_pnl.mean())
-        record.update(metrics)
+        # Numerical metrics must not overwrite recorded run identities or exposure.
+        record = {**metrics, **record, **visibility}
+        identity_fields = (
+            "mode",
+            "treatment",
+            "seed",
+            "shock",
+            "event_condition",
+            "symbol",
+            "source_hash",
+            "mean_field_visibility",
+        )
+        key = tuple(record[field] for field in identity_fields)
+        if key in paths:
+            raise ValueError("duplicate run/seed identity within the same condition and source")
         records.append(record)
-        paths[
-            (
-                record["mode"],
-                record["treatment"],
-                record["seed"],
-                record["shock"],
-                record["event_condition"],
-                record["symbol"],
+        descriptions.append(
+            {
+                **{field: record[field] for field in identity_fields},
+                **_run_description(metadata, path.parent, market, metrics),
+            }
+        )
+        paths[key] = normalized
+        path_rows.extend(
+            {
+                **{field: record[field] for field in identity_fields},
+                "session_date": session,
+                "normalized_price": value * 100,
+            }
+            for session, value in zip(
+                [actual.session_date.iloc[0], *market.session_date.tolist()],
+                normalized,
+                strict=True,
             )
-        ] = normalized
+        )
     frame = pd.DataFrame(records)
     frame.to_csv(destination / "run_metrics.csv", index=False)
     frame.to_parquet(destination / "run_metrics.parquet", index=False)
-    pricing = (
-        json.loads((ROOT / "config/siliconflow_pricing_20260901.json").read_text())
-        if provider == "siliconflow"
-        else None
-    )
+    pd.DataFrame(path_rows).to_csv(destination / "normalized_paths.csv", index=False)
+    pricing = json.loads(pricing_path.read_text()) if pricing_path is not None else None
     usage = usage_report(directory, pricing)
     write_json(destination / "api_usage.json", usage)
     manifest = json.loads((ROOT / config["data"]["manifest"]).read_text())
+    context = {
+        "included_runs": len(records),
+        "agents_declared": sorted({d["agents_declared"] for d in descriptions}),
+        "seed_values": sorted({r["seed"] for r in records}),
+        "source_hashes": sorted({r["source_hash"] for r in records}),
+        "mean_field_visibilities": sorted({r["mean_field_visibility"] for r in records}),
+        "calendar_declared_in_evaluation_config": config["data"].get("calendar"),
+        "planned_completion": None,
+        "planned_completion_reason": "No complete frozen planned-key set has been verified.",
+        "input_bars": {
+            "rows": len(bars),
+            "symbols": int(bars.symbol.nunique()),
+            "first_date": str(bars.session_date.min()),
+            "last_date": str(bars.session_date.max()),
+        },
+        "reference_prices": {
+            "symbol": config["data"]["primary_symbol"],
+            "first_date": str(actual.session_date.iloc[0]),
+            "last_date": str(actual.session_date.iloc[-1]),
+            "date_count": len(actual),
+        },
+        "runs": descriptions,
+        "usage_scope": "All response logs under the supplied directory, including logs outside included runs.",
+        "recorded_noncached_responses": usage["calls"],
+        "recorded_local_cache_hits": usage["local_cache_hits"],
+        "response_model_labels": usage["models_reported"],
+        "pricing_assumption_source": pricing["source"] if pricing is not None else None,
+    }
+    write_json(destination / "report_context.json", context)
+    seed_values = ", ".join(map(str, context["seed_values"])) or "未记录"
+    agent_counts = ", ".join(map(str, context["agents_declared"])) or "未记录"
+    calendar = context["calendar_declared_in_evaluation_config"] or "未记录"
+    dates = context["reference_prices"]
     report = [
-        "# Meta Compute 2026：真实数据与工程模拟校验"
-        if is_mock
-        else "# Meta Compute 2026：真实数据与 LLM 初轮实验报告",
+        "# 模拟研究记录报告",
         "",
-        (
-            "本报告中的代理决策由确定性 MockLLMClient 生成，仅用于端到端工程校验；不是硅基流动模型的行为结果。"
-            if is_mock
-            else "本报告由归档数据、逐单日志和已完成的运行自动生成。规则基线、mock 与真实 API 分目录保存。"
-        ),
-        "## 数据与事件时钟",
+        "本报告只描述本次纳入的记录。运行说明中的配置、响应记录中的标签和实际模型行为是不同证据；缺失内容保留未知。",
+        "## 纳入范围与输入数据",
         "",
-        f"行情：{len(bars)} 条日线、{bars.symbol.nunique()} 只标的。预热 2026-04-01 起，实验 2026-06-15 至 2026-07-17，共 23 个 XNYS 交易日。",
-        "E1：7 月 1 日 10:39 ET 发布，7 月 2 日开盘首次可见；E2：7 月 9 日 14:04 ET 发布，7 月 10 日开盘首次可见。事件研究以发布日计算；agent 反应以首次可见交易日计算。",
-        "[E1 原始报道](https://news.bloomberglaw.com/artificial-intelligence/meta-is-building-a-cloud-business-to-sell-excess-ai-compute-1)；[E2 原始报道](https://news.bloomberglaw.com/artificial-intelligence/metas-zuckerberg-says-exploring-ai-cloud-business-makes-sense)。",
+        f"本次纳入 {len(records)} 次完整状态运行；每次记录声明的模拟账户数：{agent_counts}。",
+        f"随机种子：{len(context['seed_values'])} 个（{seed_values}）；源码版本：{len(context['source_hashes'])} 个；群体汇总条件：{', '.join(context['mean_field_visibilities']) or '未记录'}。",
+        "计划完成度：未知。尚未核对包含全部条件的冻结运行键清单，不能用部分参数的乘积充当计划总数。",
+        f"输入行情：{len(bars)} 条记录、{bars.symbol.nunique()} 只标的，日期 {context['input_bars']['first_date']} 至 {context['input_bars']['last_date']}。",
+        f"评估配置声明的日历：{calendar}。下面按市场表实际记录的日期计数；这不等于已验证的逐账户下单或复盘次数。",
         *["- " + issue for issue in manifest["issues"]],
+        "## 输入参考行情与计算约定",
         "",
-        "SEC companyfacts 按 filed < 决策日期筛选，晚于时点的披露和更正不可见。GDELT 仅用于线索归档，seendate 不冒充发布时间。",
-        "## 真实市场",
-        "",
-        f"{config['data']['primary_symbol']} 从 6 月 12 日收盘到 7 月 17 日收盘收益 {real_metrics['return']:.2%}，窗口最大回撤 {real_metrics['max_drawdown']:.2%}。",
+        f"{config['data']['primary_symbol']} 的参考价格范围为 {dates['first_date']} 至 {dates['last_date']}，含 {dates['date_count']} 个记录日期；该范围收益 {real_metrics['return']:.2%}，最大回撤 {real_metrics['max_drawdown']:.2%}。",
         markdown_table(
             studies[(studies.symbol == config["data"]["primary_symbol"])][
                 [
@@ -185,23 +341,20 @@ def evaluate(config, directory, destination):
             ]
         ),
         "",
-        "CAR 使用 4 月 1 日至 6 月 12 日的日收益估计截距和 beta，按交易日窗口求异常收益之和；使用价格收益，未计股息。",
+        "上表事件日期和收益窗口沿用当前评估代码的固定计算约定，不是本批记录对消息发布时间或代理首次可见时间的证明。事件收益比较会用到事后参考行情；本报告没有逐条核验代理当时实际收到的信息。",
     ]
     if not len(frame):
-        report += ["", "当前还没有符合规模要求的完整模拟运行；上方仅为真实数据事件研究。"]
+        report += ["", "当前没有符合筛选条件且状态完整的模拟运行；上方仅描述输入参考行情。"]
     else:
-        expected = (
-            len(config["suite"]["treatments"])
-            * len(config["suite"]["seeds"])
-            * (1 + len(config["suite"]["shocks"]))
-        )
-        if len(frame) < expected:
-            report += [
-                "",
-                f"当前仅完成 {len(frame)}/{expected} 次计划运行；",
-                "尚未完成的情景不参与下列均值和检验。此次部分结果不能代表完整矩阵。",
-            ]
-        groups = ["symbol", "event_condition", "mode", "treatment", "shock", "source_hash"]
+        groups = [
+            "symbol",
+            "event_condition",
+            "mode",
+            "treatment",
+            "shock",
+            "source_hash",
+            "mean_field_visibility",
+        ]
         selected = [
             "return",
             "max_drawdown",
@@ -224,8 +377,8 @@ def evaluate(config, directory, destination):
         )
         uncertainties.to_csv(destination / "group_uncertainty.csv")
         comparisons = []
-        for (symbol, condition, mode, shock, code), group in frame.groupby(
-            ["symbol", "event_condition", "mode", "shock", "source_hash"]
+        for (symbol, condition, mode, shock, code, visibility), group in frame.groupby(
+            ["symbol", "event_condition", "mode", "shock", "source_hash", "mean_field_visibility"]
         ):
             low, high = (
                 group[group.treatment == "low_herding"],
@@ -240,36 +393,67 @@ def evaluate(config, directory, destination):
                 "mean_agent_return",
             ]:
                 x, y = low[metric].to_numpy(), high[metric].to_numpy()
-                if len(x) and len(y):
-                    u = mannwhitneyu(x, y, alternative="two-sided", method="auto")
-                    pairs = low[["seed", metric]].merge(
-                        high[["seed", metric]], on="seed", suffixes=("_low", "_high")
-                    )
-                    comparisons.append(
-                        {
-                            "mode": mode,
-                            "symbol": symbol,
-                            "event_condition": condition,
-                            "shock": shock,
-                            "metric": metric,
-                            "n_low": len(x),
-                            "n_high": len(y),
-                            "MWU_p": float(u.pvalue),
-                            "cliffs_delta_low_minus_high": float(
-                                np.sign(x[:, None] - y[None, :]).mean()
-                            ),
-                            "paired_mean_high_minus_low": float(
-                                (pairs[metric + "_high"] - pairs[metric + "_low"]).mean()
-                            ),
-                            "source_hash": code,
-                        }
-                    )
+                pairs = low[["seed", metric]].merge(
+                    high[["seed", metric]],
+                    on="seed",
+                    suffixes=("_low", "_high"),
+                    validate="one_to_one",
+                )
+                available = bool(len(x) and len(y))
+                u = (
+                    mannwhitneyu(x, y, alternative="two-sided", method="auto")
+                    if available
+                    else None
+                )
+                comparisons.append(
+                    {
+                        "mode": mode,
+                        "symbol": symbol,
+                        "event_condition": condition,
+                        "shock": shock,
+                        "metric": metric,
+                        "n_low": len(x),
+                        "n_high": len(y),
+                        "n_pairs": len(pairs),
+                        "comparison_status": "paired_available"
+                        if len(pairs)
+                        else ("no_common_seed" if available else "missing_treatment"),
+                        "mean_field_visibility": visibility,
+                        "MWU_p": float(u.pvalue) if u is not None else None,
+                        "cliffs_delta_low_minus_high": float(
+                            np.sign(x[:, None] - y[None, :]).mean()
+                        )
+                        if available
+                        else None,
+                        "paired_mean_high_minus_low": float(
+                            (pairs[metric + "_high"] - pairs[metric + "_low"]).mean()
+                        )
+                        if len(pairs)
+                        else None,
+                        "source_hash": code,
+                    }
+                )
         pd.DataFrame(comparisons).to_csv(destination / "treatment_comparisons.csv", index=False)
         report += [
             "",
-            "## 实际完成的运行",
+            "## 纳入记录的数值比较",
             "",
-            f"完成 {len(frame)} 次主规模运行，每次 {config['population']['n_agents']} agents、23 次交易决策及 2 次风格复盘/agent。",
+            markdown_table(
+                pd.DataFrame(
+                    [
+                        {
+                            "方式": d["mode"],
+                            "设置": d["treatment"],
+                            "种子": d["seed"],
+                            "群体条件": d["mean_field_visibility"],
+                            "记录日期数": d["market_distinct_dates"],
+                            "起始日期": d["market_first_date"],
+                            "末尾日期": d["market_last_date"],
+                        }
+                        for d in descriptions
+                    ]
+                )
+            ),
             markdown_table(
                 averages[
                     [
@@ -278,6 +462,8 @@ def evaluate(config, directory, destination):
                         "event_condition",
                         "treatment",
                         "shock",
+                        "source_hash",
+                        "mean_field_visibility",
                         "runs",
                         "return",
                         "max_drawdown",
@@ -288,12 +474,34 @@ def evaluate(config, directory, destination):
                 ]
             ),
             "",
-            "表内为 seed 均值；各 seed 明细、标准差及范围见 run_metrics.csv、group_uncertainty.csv。历史回放价格固定，因此各组市场价格指标相同；该阶段比较的是交易、持仓和风格变化。",
-            "内生 CDA 只有这批 agent 提供流动性，不补造市商、成交或外部价格。低成交量、价格停滞也是结果，需要与行为效果分开解释。",
-            "CAR_difference_e1_1 / e2_1 是以对应资产的真实预事件 beta 和真实 QQQ 事后基准计算的模拟 CAR 减真实 CAR；仅在评估时读取基准的未来日线，未传给 agent。历史回放差值应为零。E1/E2 的模型可见日分别比报道日晚一个交易日。",
-            f"降级运行（订单 fallback >5%）：{int((frame.quality == 'degraded').sum())}。",
-            "比较以运行/seed 为单位，禁止把 690 个 agent-day 当作 690 个独立样本。MWU 与 Cliff's delta 为探索性指标；同 seed 成对差异单独报告。3 个 seed 功效很低，多重比较未经校正，不能据此宣布稳健因果关系。",
+            "表内为同条件、同源码版本的运行均值；各次明细、波动范围及配对数见 run_metrics.csv、group_uncertainty.csv 和 treatment_comparisons.csv。按输入行情回放的价格由输入给定；内部撮合方式的价格来自该运行的订单。",
+            "mean_field_visibility 的 visible/hidden 是配置的滞后群体汇总可见/隐藏条件。提示中是否实际提供汇总，须结合 prompt_mean_field_supplied；规则程序不经客户端提示，后者为空，规则仍使用原观察。两字段都不证明远端调用或信息被使用。两种条件和不同源码版本分别统计、配对及画线。旧记录缺少条件字段时，只有没有矛盾信息才按旧默认 visible 解析，并在明细标为 legacy_default_visible；这只是兼容解析，不能证明实际曝光。提示记录缺失时也保留空值。",
+            "事件窗口差值沿用评估代码的计算方法；参考行情在这里用于事后比较，不能单凭差值认定消息的真实影响或模型的行为改善。低成交和价格停滞需结合逐单记录解释。",
+            f"记录标为降级的运行：{int((frame.quality == 'degraded').sum())} 次。降级标签本身不能说明是哪一种失败；下方只列已有的订单回退及策略答复失败比例，缺失记为未记录。",
+            "比较以运行记录及相同随机种子的配对为单位，不能把账户每天的动作都当成互相独立的样本。检验和差异指标仅作探索；样本规模与配对数应逐组查看，不能据此宣布稳健因果关系。",
         ]
+        degraded = [d for d in descriptions if d["quality_recorded"] == "degraded"]
+        if degraded:
+            report.append(
+                markdown_table(
+                    pd.DataFrame(
+                        [
+                            {
+                                "设置": d["treatment"],
+                                "种子": d["seed"],
+                                "群体条件": d["mean_field_visibility"],
+                                "订单回退比例（记录值）": "未记录"
+                                if d["order_fallback_rate_recorded"] is None
+                                else f"{d['order_fallback_rate_recorded']:.1%}",
+                                "策略答复无效率（记录值）": "未记录"
+                                if d["invalid_style_rate_recorded"] is None
+                                else f"{d['invalid_style_rate_recorded']:.1%}",
+                            }
+                            for d in degraded
+                        ]
+                    )
+                )
+            )
         endogenous = frame[frame["mode"] == "endogenous"]
         if len(endogenous):
             shock_values = sorted(endogenous.shock.unique(), reverse=True)
@@ -301,25 +509,42 @@ def evaluate(config, directory, destination):
                 len(shock_values), 1, figsize=(10, 4 * len(shock_values)), squeeze=False
             )
             for ax, shock in zip(axes[:, 0], shock_values, strict=True):
-                ax.plot(actual.session_date, actual_normalized * 100, "k--", label=f"Real {config['data']['primary_symbol']}")
-                for treatment in sorted(endogenous.treatment.unique()):
+                ax.plot(
+                    actual.session_date,
+                    actual_normalized * 100,
+                    "k--",
+                    label=f"Input reference {config['data']['primary_symbol']}",
+                )
+                identities = (
+                    endogenous[["treatment", "source_hash", "mean_field_visibility"]]
+                    .drop_duplicates()
+                    .sort_values(["treatment", "source_hash", "mean_field_visibility"])
+                )
+                for treatment, code, visibility in identities.itertuples(index=False, name=None):
                     values = [
                         v
-                        for (m, t, _, s, condition, symbol), v in paths.items()
-                        if m == "endogenous" and t == treatment and s == shock
-                        and condition == "e1_e2" and symbol == config["data"]["primary_symbol"]
+                        for (m, t, _, s, condition, symbol, source, exposure), v in paths.items()
+                        if m == "endogenous"
+                        and t == treatment
+                        and s == shock
+                        and condition == "e1_e2"
+                        and symbol == config["data"]["primary_symbol"]
+                        and source == code
+                        and exposure == visibility
                     ]
                     if values:
                         stack = np.array(values) * 100
-                        ax.plot(actual.session_date, stack.mean(axis=0), label=treatment)
+                        ax.plot(
+                            actual.session_date,
+                            stack.mean(axis=0),
+                            label=f"{treatment} / {visibility} / {code}",
+                        )
                         ax.fill_between(
                             actual.session_date, stack.min(axis=0), stack.max(axis=0), alpha=0.12
                         )
-                for day in ["2026-07-02", "2026-07-10"]:
-                    ax.axvline(day, color="grey", alpha=0.3)
                 ax.set(
-                    title=f"Fundamental shock {shock:.0%}; mean and seed range",
-                    ylabel="June 12 close = 100",
+                    title=f"Declared shock {shock:.0%}; mean and seed range",
+                    ylabel=f"{dates['first_date']} close = 100",
                 )
                 ax.tick_params(axis="x", rotation=65)
                 ax.legend(fontsize=8)
@@ -328,32 +553,32 @@ def evaluate(config, directory, destination):
             fig.savefig(destination / "normalized_paths.svg")
             plt.close(fig)
             report += ["", "![价格路径与 seed 范围](normalized_paths.png)"]
+    for field, label in [("provider", "服务来源声明"), ("model", "模型名称声明")]:
+        declared = sorted(
+            {d[field]["value"] for d in descriptions if d[field]["value"] is not None}
+        )
+        missing = sum(d[field]["status"] == "unrecorded" for d in descriptions)
+        conflicting = sum(d[field]["status"] == "conflicting" for d in descriptions)
+        report.append(
+            f"{label}：{', '.join(declared) or '未记录'}；未记录 {missing} 次，声明冲突 {conflicting} 次。"
+        )
     report += [
         "",
-        "## API 与复现",
+        "## 响应记录与复现范围",
         "",
+        "上面的运行统计只含符合筛选条件的完整记录；这里的用量汇总覆盖整个指定目录下的响应日志，可能包括预检、未完成或未纳入的运行。两者不能直接混同。",
+        f"目录内非缓存响应记录 {usage['calls']} 条，记录为 HTTP 200 的有 {usage['successful_http_calls']} 条，其他状态或传输失败记录 {usage['failed_calls']} 条，其中重试标记 {usage['retry_calls']} 条；本地缓存命中记录 {usage['local_cache_hits']} 条。记录的输入 {usage['input_tokens']:,} tokens，输出 {usage['output_tokens']:,} tokens。",
+        f"非缓存响应中的模型标签：{', '.join(usage['models_reported']) or '此范围未记录标签'}。标签和运行声明都不构成模型身份或真实远端调用的独立证明；没有日志也不能反推从未调用。请求配置与实际返回模式需分别核实，本报告没有验证实际思考模式。",
         (
-            "模型：确定性 MockLLMClient，无真实 LLM API 调用。"
-            if is_mock
-            else f"Provider：{provider}；模型：{llm_config(config, provider)['model']}；temperature={config['llm']['temperature']}，max_tokens={config['llm']['max_tokens']}，thinking 关闭，全局并发上限 {config['llm']['max_concurrency']}。"
-        ),
-        f"已记录的 chat/completions 响应 {usage['calls']} 次，HTTP 200 有 {usage['successful_http_calls']} 次，非 200/传输失败 {usage['failed_calls']} 次，其中重试请求 {usage['retry_calls']} 次；本地缓存命中 {usage['local_cache_hits']} 次。输入 {usage['input_tokens']:,} tokens，输出 {usage['output_tokens']:,} tokens。",
-        (
-            f"按调用时段与可见缓存 token 估算费用 ¥{usage['estimated_cost_cny']:.4f}，不等同到账单实扣。[定价公告](https://docs.siliconflow.cn/docs/release-notes/overview)。"
+            f"按显式指定的归档价格统一套价估算 ¥{usage['estimated_cost_cny']:.4f}；这是整个用量目录的价格假设，不证明服务商匹配，也不等同到账单实扣。归档来源：{pricing['source']}。"
             if pricing
-            else "中转站价格规则未归档，因此只报告 token 用量，不估算费用。"
+            else "未显式指定归档价格，只报告用量记录，不估算费用。"
         ),
-        "单 agent 预检也计入 API 用量，但不混入 30-agent 主实验统计。请求/响应、trace、usage、配置、源码 hash、Git commit、数据 hash 及依赖版本均保存在 outputs 下；原始行情与新闻存 data/raw，模型响应存输出日志及 .cache。API key 仅存在本地忽略文件 .env。",
-        (
-            "9 月 14 日内生并行批次曾触发 429 限流，随后出现 HTTP 402，未完成运行保留以供断点续跑。早期日志的 requested_at 是响应结束时刻；后续版本分别记录派发和接收时间。价格只是公告价估算，未返回 usage 的在途请求无法计费估算。"
-            if provider == "siliconflow"
-            else "此中转站批次独立完成全部 48 次主运行，不与 SiliconFlow 的部分批次合并统计。瞬时 502 和连接错误按预定策略重试；没有出现 429。中转站未提供可归档的价格规则，因此不估算费用。"
-        ),
-        "## 结论边界与后续实验",
+        "本报告没有核验旧批次的故障经过、限流历史或实际账单。逐次运行的说明来源、记录日期与已知失败比例见 report_context.json；原数值表和价格路径另行保存，便于复查。",
+        "## 结论边界",
         "",
-        "这是有限事件新闻、30-agent、多 seed 的首轮真实 API 实验。没有完成人类行为数据校准，因此不包含 Calibrated treatment，也不宣称人类行为有效性。基础价值是实验前收盘价锚加情景冲击，并非估值预测。",
-        "首轮采用 E1+E2；E1-only、20/50/100 agents、20 seeds 与真实行为校准属于后续验证。真实市场的同期收益不能归因于单一新闻；归档输入无未来泄漏也不能证明模型预训练未记住历史事件。",
-        "反事实风格收益采用确定性的无摩擦 long/cash 代理，风格复盘会暴露该代理误差；不是对另一个 LLM 账户的真实回测。",
+        "本报告描述当前记录及其数值比较，尚未核验真人行为校准、模型是否使用群体信息或模拟市场是否接近真实市场。跟风设置的名称不能代替行为证据。",
+        "研究结论仍需独立的行为和市场验证；输入记录的时间顺序检查也不能排除模型预训练记忆。不能将参考行情的同期变化直接归因于某一条消息。",
         "",
     ]
     (destination / "REPORT.md").write_text("\n\n".join(report), encoding="utf-8")
@@ -364,6 +589,10 @@ def evaluate(config, directory, destination):
             "completed_runs": len(records),
             "real_metrics": real_metrics,
             "source_hashes": sorted({r["source_hash"] for r in records}),
+            "mean_field_visibilities": sorted({r["mean_field_visibility"] for r in records}),
+            "legacy_default_visible_runs": sum(
+                r["mean_field_visibility_origin"] == "legacy_default_visible" for r in records
+            ),
         },
     )
     print(f"report: {destination / 'REPORT.md'}; complete runs={len(records)}")
@@ -377,10 +606,15 @@ def main():
     parser.add_argument("--config", type=Path, default=ROOT / "config/meta_compute_2026.json")
     parser.add_argument("--directory", type=Path)
     parser.add_argument("--destination", type=Path)
+    parser.add_argument(
+        "--pricing", type=Path, help="Explicit archived rates; omitted means no cost estimate"
+    )
     args = parser.parse_args()
     config = json.loads(args.config.read_text())
     directory = args.directory or ROOT / "outputs/meta_compute_2026" / args.provider
-    evaluate(config, directory, args.destination or directory / "evaluation")
+    evaluate(
+        config, directory, args.destination or directory / "evaluation", pricing_path=args.pricing
+    )
 
 
 if __name__ == "__main__":

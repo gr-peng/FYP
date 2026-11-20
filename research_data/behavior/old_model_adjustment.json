@@ -1,0 +1,63 @@
+{
+  "status": "independently_accepted_present_derived_table_exploration",
+  "new_model_POSTs": 0,
+  "cumulative_POSTs": 349,
+  "records": 400,
+  "sessions": 16,
+  "fitted_corrections": 32,
+  "output_probabilities": 1600,
+  "archived_metrics_recomputed": 493,
+  "actual_review_sha256": "8e0f0b4e1ad974f6f50ec875f187be2bcd5ac6db556eca8e034cdde12d7cde69",
+  "scores": {
+    "raw": {
+      "brier_session_person_balanced": 0.22516127072005684,
+      "log_loss_session_person_balanced": 0.6422657018774409,
+      "predicted_buy_rate_session_person_balanced": 0.4609306731246184
+    },
+    "intercept": {
+      "brier_session_person_balanced": 0.22203991404958856,
+      "log_loss_session_person_balanced": 0.6348623575210364,
+      "predicted_buy_rate_session_person_balanced": 0.3931204515528415
+    },
+    "monotone": {
+      "brier_session_person_balanced": 0.22326615707426034,
+      "log_loss_session_person_balanced": 0.6382826516026062,
+      "predicted_buy_rate_session_person_balanced": 0.39352488532828156
+    },
+    "training_constant": {
+      "brier_session_person_balanced": 0.23969164906327886,
+      "log_loss_session_person_balanced": 0.6724536542678057,
+      "predicted_buy_rate_session_person_balanced": 0.3931485615079365
+    }
+  },
+  "primary_contrasts": {
+    "monotone-minus-raw": {
+      "difference": -0.001895113645796507,
+      "percentile_95": [
+        -0.007328525809368739,
+        0.002693174794356892
+      ],
+      "component_clusters": 16,
+      "draws": 10000,
+      "scope": "Descriptive conditional-on-fixed-OOF-predictions interval; no refitting or fit uncertainty; not simultaneous."
+    },
+    "monotone-minus-training_constant": {
+      "difference": -0.01642549198901852,
+      "percentile_95": [
+        -0.032225405710811894,
+        -0.0004214916132124995
+      ],
+      "component_clusters": 16,
+      "draws": 10000,
+      "scope": "Descriptive conditional-on-fixed-OOF-predictions interval; no refitting or fit uncertainty; not simultaneous."
+    }
+  },
+  "interpretation": [
+    "Primary monotone correction has a slightly lower average Brier than raw,but its descriptive interval crosseszero; stable improvement not established.",
+    "Intercept-only point estimate is lower but remains secondary; do not switch the primary contrast.",
+    "Raw itself already has lower point Brier than the component-training constant; correction did not create information."
+  ],
+  "provenance_limit": "Current saved table is consistent with archived IDs/aggregate receipts; original3200responses,individual human labels and two-menu averaging were not reauthenticated.",
+  "version_limit": "Historical metadata labels DeepSeek-V4-Flash,not current4.1; old development reuse is exploratory.",
+  "next_direction_fixed_before_results": "next_direction_before_recalibration_results.json"
+}

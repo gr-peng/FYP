@@ -20,6 +20,32 @@ class FatalAPIError(RuntimeError):
     pass
 
 
+class DuplicateJSONKey(ValueError):
+    pass
+
+
+def _strict_json(text):
+    def unique(pairs):
+        result = {}
+        for key, value in pairs:
+            if key in result:
+                raise DuplicateJSONKey("duplicate JSON field")
+            result[key] = value
+        return result
+
+    def reject_constant(value):
+        raise ValueError("non-finite JSON number")
+
+    return json.loads(text, object_pairs_hook=unique, parse_constant=reject_constant)
+
+
+def _response_json(text):
+    try:
+        return _strict_json(text)
+    except (ValueError, TypeError):
+        raise FatalAPIError("response JSON is malformed, ambiguous or non-finite") from None
+
+
 class RequestPacer:
     """One shared, evenly spaced dispatch schedule across all concurrent runs."""
 
@@ -180,7 +206,7 @@ class OpenAICompatibleClient:
         cache_file = self.cache / (key + ".json")
         self.log("llm_requests.jsonl", {**identity, "request_hash": key, "payload": payload})
         if cache_file.exists():
-            body = json.loads(cache_file.read_text())
+            body = _response_json(cache_file.read_text())
             self.validate_response_contract(body)
             self.log(
                 "llm_responses.jsonl",
@@ -221,7 +247,28 @@ class OpenAICompatibleClient:
                     float(value) if value and value.replace(".", "", 1).isdigit() else None
                 )
                 if status == 200:
-                    body = response.json()
+                    try:
+                        body = _response_json(response.text)
+                    except FatalAPIError:
+                        self.log(
+                            "llm_responses.jsonl",
+                            {
+                                **identity,
+                                "request_hash": key,
+                                "requested_at": dispatched_at,
+                                "response_received_at": datetime.now(UTC).isoformat(),
+                                "cached": False,
+                                "http_status": status,
+                                "trace_id": trace,
+                                "retry_count": attempt,
+                                "latency_seconds": time.perf_counter() - started,
+                                "retry_after_seconds": retry_after,
+                                "response": None,
+                                "response_text": response.text,
+                                "status": "invalid_response_json",
+                            },
+                        )
+                        raise
             except asyncio.CancelledError:
                 if dispatched_at is not None:
                     self.log(
@@ -277,8 +324,26 @@ class OpenAICompatibleClient:
         return None, {"status": "transport_exhausted", "request_hash": key}
 
     def validate_response_contract(self, body):
-        if body.get("model") != self.config["model"]:
+        if not isinstance(body, dict) or body.get("model") != self.config["model"]:
             raise FatalAPIError("response model does not match configured model")
+        choices = body.get("choices")
+        if (
+            not isinstance(choices, list)
+            or len(choices) != 1
+            or not isinstance(choices[0], dict)
+            or choices[0].get("finish_reason") != "stop"
+        ):
+            raise FatalAPIError("response requires exactly one choice finished with stop")
+        message = choices[0].get("message")
+        if not isinstance(message, dict) or not isinstance(message.get("content"), str):
+            raise FatalAPIError("response requires a text message")
+        try:
+            _strict_json(message["content"])
+        except DuplicateJSONKey:
+            raise FatalAPIError("decision JSON contains duplicate fields") from None
+        except ValueError:
+            # Ordinary invalid JSON still follows the existing schema-repair path.
+            pass
         if self.config.get("require_no_reasoning"):
             for choice in body.get("choices", []):
                 if choice.get("message", {}).get("reasoning_content"):

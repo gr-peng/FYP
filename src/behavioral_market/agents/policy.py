@@ -48,7 +48,11 @@ def rule_order(agent, observation, rng):
 
 
 def rule_style(agent):
-    gap = agent.shadow_growth - float(agent.portfolio.total_equity) / agent.block_start_equity
+    gap = (
+        agent.finite_review["gap"]
+        if agent.finite_review is not None
+        else agent.shadow_growth - float(agent.portfolio.total_equity) / agent.block_start_equity
+    )
     target = "technical" if agent.current_style == "fundamental" else "fundamental"
     switch = gap > 0.01
     return StyleDecision(
